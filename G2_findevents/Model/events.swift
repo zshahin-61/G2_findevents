@@ -12,7 +12,7 @@ struct eventsReponseObj: Codable,Hashable {
 }
 
 struct Stats: Codable,Hashable{
-    var average_price: Int
+    //var average_price: Double
 }
 
 struct Performer: Codable,Hashable{
@@ -54,7 +54,7 @@ struct Event: Codable,Hashable {
     var datetime_utc: String
     var venue: Venue
     var datetime_local: String
-    //var stats: Stats
+    var stats: Stats
     //var visible_at: String
     
 //    let links: [String]
