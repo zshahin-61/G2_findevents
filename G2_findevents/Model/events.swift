@@ -12,7 +12,7 @@ struct eventsReponseObj: Codable,Hashable {
 }
 
 struct Stats: Codable,Hashable{
-    //var average_price: Double
+    var average_price: Int?
 }
 
 struct Performer: Codable,Hashable{
