@@ -30,6 +30,7 @@
 		5A9C4E6B2A48A3D3001F7388 /* FirestoreController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9C4E6A2A48A3D3001F7388 /* FirestoreController.swift */; };
 		5A9C4E6D2A48A50C001F7388 /* FireAuthController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9C4E6C2A48A50C001F7388 /* FireAuthController.swift */; };
 		5A9C4E6F2A48A572001F7388 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9C4E6E2A48A572001F7388 /* UserProfile.swift */; };
+		5F8805192A4A3E45001A8C44 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8805182A4A3E45001A8C44 /* MapView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +54,7 @@
 		5A9C4E6A2A48A3D3001F7388 /* FirestoreController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreController.swift; sourceTree = "<group>"; };
 		5A9C4E6C2A48A50C001F7388 /* FireAuthController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireAuthController.swift; sourceTree = "<group>"; };
 		5A9C4E6E2A48A572001F7388 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
+		5F8805182A4A3E45001A8C44 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +133,7 @@
 			children = (
 				5A9C4E572A48A084001F7388 /* ContentView.swift */,
 				5A9C4E662A48A274001F7388 /* SignUpView.swift */,
+				5F8805182A4A3E45001A8C44 /* MapView.swift */,
 				5A9C4E682A48A2BA001F7388 /* SignInView.swift */,
 				5A9559142A4929B900A47D02 /* EventsListView.swift */,
 				5A9559162A4929CD00A47D02 /* MyEventsView.swift */,
@@ -233,6 +236,7 @@
 				5A9C4E6F2A48A572001F7388 /* UserProfile.swift in Sources */,
 				5A95590A2A49254800A47D02 /* events.swift in Sources */,
 				5A9559272A49EA4200A47D02 /* ProfileView.swift in Sources */,
+				5F8805192A4A3E45001A8C44 /* MapView.swift in Sources */,
 				5A9C4E672A48A274001F7388 /* SignUpView.swift in Sources */,
 				5A9559172A4929CD00A47D02 /* MyEventsView.swift in Sources */,
 				5A9C4E692A48A2BA001F7388 /* SignInView.swift in Sources */,
