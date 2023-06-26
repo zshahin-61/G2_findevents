@@ -2,39 +2,63 @@
 //  events.swift
 //  G2_findevents
 //
-//  Created by zahra SHAHIN on 2023-06-25.
+//  Created by Zahra SHAHIN - Golnaz Chehrazi on 2023-06-25.
 //
 
 import Foundation
 
-struct eventsReponseObj: Codable {
+struct eventsReponseObj: Codable,Hashable {
     var events:[Event]
 }
 
-struct Images: Codable {
-    let large: String?
-    let huge: String?
-    let small: String?
-    let medium: String?
+struct Stats: Codable,Hashable{
+    var average_price: Int
 }
 
-struct Venue: Codable {
-    let state: String
-    let name_v2: String
+struct Performer: Codable,Hashable{
+    var id: Int
+    var type: String
+    var name: String
+    var image: String
 }
 
-struct Location: Codable {
-    let lat: Double
-    let lon: Double
+struct Images: Codable,Hashable {
+    var large: String?
+    var huge: String?
+    var small: String?
+    var medium: String?
 }
 
-struct Event: Codable {
-    let type: String
-   // let id: Int
-    let datetime_utc: String
-//   let venue: Venue
+struct Venue: Codable,Hashable {
+    var id: Int
+    var state: String
+    var name_v2: String
+    var location: Location
+    var address: String
+    var counry: String
+    var city: String
+    var display_location: String
+    var url: String
+    
+}
+
+struct Location: Codable,Hashable {
+    var lat: Double
+    var lon: Double
+}
+
+struct Event: Codable,Hashable {
+    var id: Int
+    var type: String
+    var title: String
+    //var performers: [Performer]
+    var datetime_utc: String
+    //var venue: Venue
+    //var datetime_local: String
+    //var stats: Stats
+    //var visible_at: String
+    
 //    let links: [String]
-//    let location: Location
 //    let images: Images
 }
  
