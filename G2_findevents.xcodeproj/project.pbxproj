@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5A72C2A12A4A2CEA002607D2 /* toronto-events.json in Resources */ = {isa = PBXBuildFile; fileRef = 5A72C2A02A4A2CEA002607D2 /* toronto-events.json */; };
 		5A95590A2A49254800A47D02 /* events.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9559092A49254800A47D02 /* events.swift */; };
 		5A95590D2A4927E800A47D02 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 5A95590C2A4927E800A47D02 /* FirebaseAuth */; };
 		5A95590F2A4927E800A47D02 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 5A95590E2A4927E800A47D02 /* FirebaseDatabase */; };
@@ -34,7 +33,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		5A72C2A02A4A2CEA002607D2 /* toronto-events.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "toronto-events.json"; path = "../../toronto-events.json"; sourceTree = "<group>"; };
 		5A9559092A49254800A47D02 /* events.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = events.swift; sourceTree = "<group>"; };
 		5A9559142A4929B900A47D02 /* EventsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsListView.swift; sourceTree = "<group>"; };
 		5A9559162A4929CD00A47D02 /* MyEventsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyEventsView.swift; sourceTree = "<group>"; };
@@ -91,7 +89,6 @@
 		5A9C4E542A48A084001F7388 /* G2_findevents */ = {
 			isa = PBXGroup;
 			children = (
-				5A72C2A02A4A2CEA002607D2 /* toronto-events.json */,
 				5A9C4E652A48A09D001F7388 /* View */,
 				5A9C4E642A48A094001F7388 /* Controller */,
 				5A9C4E632A48A08D001F7388 /* Model */,
@@ -216,7 +213,6 @@
 			files = (
 				5A9C4E5D2A48A085001F7388 /* Preview Assets.xcassets in Resources */,
 				5A9C4E5A2A48A085001F7388 /* Assets.xcassets in Resources */,
-				5A72C2A12A4A2CEA002607D2 /* toronto-events.json in Resources */,
 				5A95591D2A492E3A00A47D02 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
