@@ -41,7 +41,7 @@ struct HomeView: View {
                         Text("My Friends")
                     }
             }
-            .navigationBarTitle("", displayMode: .inline) // Hide the navigation bar title
+            .navigationBarTitle("", displayMode: .inline) 
             .navigationBarItems(
                 leading: Button(action: {
                     // Perform sign out action here
