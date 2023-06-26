@@ -91,6 +91,7 @@
 		5A9C4E542A48A084001F7388 /* G2_findevents */ = {
 			isa = PBXGroup;
 			children = (
+				5A95591C2A492E3A00A47D02 /* GoogleService-Info.plist */,
 				5A9C4E652A48A09D001F7388 /* View */,
 				5A9C4E642A48A094001F7388 /* Controller */,
 				5A9C4E632A48A08D001F7388 /* Model */,
@@ -114,7 +115,6 @@
 			children = (
 				5A9C4E6E2A48A572001F7388 /* UserProfile.swift */,
 				5A9559092A49254800A47D02 /* events.swift */,
-				5A95591C2A492E3A00A47D02 /* GoogleService-Info.plist */,
 			);
 			path = Model;
 			sourceTree = "<group>";

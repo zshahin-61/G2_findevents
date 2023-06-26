@@ -21,7 +21,8 @@ struct G2_findeventsApp: App {
     }
     var body: some Scene {
         WindowGroup {
-            ContentView().environmentObject(authHelper)
+           //EventDetailsView()
+             ContentView().environmentObject(authHelper)
         }
     }
 }
