@@ -13,6 +13,9 @@ struct eventsReponseObj: Codable,Hashable {
 
 struct Stats: Codable,Hashable{
     var average_price: Int?
+    var median_price: Int?
+    var lowest_sg_base_price: Int?
+    var lowest_sg_base_price_good_deals: Int?
 }
 
 struct Performer: Codable,Hashable{
