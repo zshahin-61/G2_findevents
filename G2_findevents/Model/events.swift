@@ -51,12 +51,12 @@ struct Event: Codable,Hashable {
     var id: Int
     var type: String
     var title: String
-    //var performers: [Performer]
+    var performers: [Performer]
     var datetime_utc: String
     //var venue: Venue
-    //var datetime_local: String
+    var datetime_local: String
     //var stats: Stats
-    //var visible_at: String
+    var visible_at: String
     
 //    let links: [String]
 //    let images: Images
