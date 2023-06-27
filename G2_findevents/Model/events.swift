@@ -59,10 +59,6 @@ struct Event: Codable,Hashable {
     var datetime_local: String
     var stats: Stats
     
-    //var visible_at: String
-    
-//    let links: [String]
-//    let images: Images
 }
  
 

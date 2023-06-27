@@ -18,14 +18,13 @@ struct EventsListView: View {
             List {
                 // loop through each item in your datasource
                 ForEach(evntList, id:\.type) {
-                    currDigimon in
+                    currevents in
                     // UI for each row
                     HStack {
-                        //  name
-                        Text("\(currDigimon.type)")
+                        Text("\(currevents.title)")
                      Spacer()
                    
-                        Text("\(currDigimon.datetime_utc)")
+                        Text("\(currevents.datetime_utc)")
 
                     }
                     //                              AsyncImage(url:URL(string:currDigimon.))
@@ -85,9 +84,3 @@ struct EventsListView: View {
 
     }
 }// end ContentView struct
-
-//
-//
-//ERROR: Error decoding JSON: keyNotFound(CodingKeys(stringValue: "Events", intValue: nil), Swift.DecodingError.Context(codingPath: [], debugDescription: "No value associated with key CodingKeys(stringValue: \"Events\", intValue: nil) (\"Events\").", underlyingError: nil))
-
-

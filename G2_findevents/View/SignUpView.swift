@@ -89,9 +89,3 @@ struct SignUpView: View {
         return regex.evaluate(with: input)
     }
 }
-
-//struct SignUpView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        SignUpView()
-//    }
-//}

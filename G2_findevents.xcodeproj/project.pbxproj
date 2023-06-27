@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5A72C2A32A4A7F7F002607D2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5A72C2A22A4A7F7F002607D2 /* GoogleService-Info.plist */; };
 		5A95590A2A49254800A47D02 /* events.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9559092A49254800A47D02 /* events.swift */; };
 		5A95590D2A4927E800A47D02 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 5A95590C2A4927E800A47D02 /* FirebaseAuth */; };
 		5A95590F2A4927E800A47D02 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 5A95590E2A4927E800A47D02 /* FirebaseDatabase */; };
@@ -30,10 +31,11 @@
 		5A9C4E6D2A48A50C001F7388 /* FireAuthController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9C4E6C2A48A50C001F7388 /* FireAuthController.swift */; };
 		5A9C4E6F2A48A572001F7388 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9C4E6E2A48A572001F7388 /* UserProfile.swift */; };
 		5F8805192A4A3E45001A8C44 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8805182A4A3E45001A8C44 /* MapView.swift */; };
-		5F88051B2A4A6506001A8C44 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5F88051A2A4A6506001A8C44 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5A72C2A22A4A7F7F002607D2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5A72C2A42A4A7F84002607D2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5A9559092A49254800A47D02 /* events.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = events.swift; sourceTree = "<group>"; };
 		5A9559142A4929B900A47D02 /* EventsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsListView.swift; sourceTree = "<group>"; };
 		5A9559162A4929CD00A47D02 /* MyEventsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyEventsView.swift; sourceTree = "<group>"; };
@@ -54,7 +56,6 @@
 		5A9C4E6C2A48A50C001F7388 /* FireAuthController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireAuthController.swift; sourceTree = "<group>"; };
 		5A9C4E6E2A48A572001F7388 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		5F8805182A4A3E45001A8C44 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
-		5F88051A2A4A6506001A8C44 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Desktop/GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,7 +92,7 @@
 		5A9C4E542A48A084001F7388 /* G2_findevents */ = {
 			isa = PBXGroup;
 			children = (
-				5F88051A2A4A6506001A8C44 /* GoogleService-Info.plist */,
+				5A72C2A22A4A7F7F002607D2 /* GoogleService-Info.plist */,
 				5A9C4E652A48A09D001F7388 /* View */,
 				5A9C4E642A48A094001F7388 /* Controller */,
 				5A9C4E632A48A08D001F7388 /* Model */,
@@ -115,6 +116,7 @@
 			children = (
 				5A9C4E6E2A48A572001F7388 /* UserProfile.swift */,
 				5A9559092A49254800A47D02 /* events.swift */,
+				5A72C2A42A4A7F84002607D2 /* GoogleService-Info.plist */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -215,8 +217,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				5A9C4E5D2A48A085001F7388 /* Preview Assets.xcassets in Resources */,
-				5F88051B2A4A6506001A8C44 /* GoogleService-Info.plist in Resources */,
 				5A9C4E5A2A48A085001F7388 /* Assets.xcassets in Resources */,
+				5A72C2A32A4A7F7F002607D2 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
