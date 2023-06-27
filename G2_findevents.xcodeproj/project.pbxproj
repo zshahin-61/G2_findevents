@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5A72C2A62A4B1BFB002607D2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5A72C2A52A4B1BFB002607D2 /* GoogleService-Info.plist */; };
+		5A72C2A92A4B1E7C002607D2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5A72C2A82A4B1E7C002607D2 /* GoogleService-Info.plist */; };
 		5A95590A2A49254800A47D02 /* events.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9559092A49254800A47D02 /* events.swift */; };
 		5A95590D2A4927E800A47D02 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 5A95590C2A4927E800A47D02 /* FirebaseAuth */; };
 		5A95590F2A4927E800A47D02 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 5A95590E2A4927E800A47D02 /* FirebaseDatabase */; };
@@ -35,8 +35,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		5A72C2A52A4B1BFB002607D2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../GoogleService-Info.plist"; sourceTree = "<group>"; };
-		5A72C2A72A4B1BFF002607D2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5A72C2A82A4B1E7C002607D2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Desktop/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5A9559092A49254800A47D02 /* events.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = events.swift; sourceTree = "<group>"; };
 		5A9559142A4929B900A47D02 /* EventsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsListView.swift; sourceTree = "<group>"; };
 		5A9559162A4929CD00A47D02 /* MyEventsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyEventsView.swift; sourceTree = "<group>"; };
@@ -94,12 +93,11 @@
 		5A9C4E542A48A084001F7388 /* G2_findevents */ = {
 			isa = PBXGroup;
 			children = (
-				5A72C2A52A4B1BFB002607D2 /* GoogleService-Info.plist */,
 				5A9C4E652A48A09D001F7388 /* View */,
 				5A9C4E642A48A094001F7388 /* Controller */,
 				5A9C4E632A48A08D001F7388 /* Model */,
 				5A9C4E552A48A084001F7388 /* G2_findeventsApp.swift */,
-				5A72C2A72A4B1BFF002607D2 /* GoogleService-Info.plist */,
+				5A72C2A82A4B1E7C002607D2 /* GoogleService-Info.plist */,
 				5A9C4E592A48A085001F7388 /* Assets.xcassets */,
 				5A9C4E5B2A48A085001F7388 /* Preview Content */,
 			);
@@ -221,7 +219,7 @@
 			files = (
 				5A9C4E5D2A48A085001F7388 /* Preview Assets.xcassets in Resources */,
 				5A9C4E5A2A48A085001F7388 /* Assets.xcassets in Resources */,
-				5A72C2A62A4B1BFB002607D2 /* GoogleService-Info.plist in Resources */,
+				5A72C2A92A4B1E7C002607D2 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

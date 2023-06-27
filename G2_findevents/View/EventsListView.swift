@@ -9,36 +9,40 @@ import SwiftUI
 
 struct EventsListView: View {
     @State var evntList:[Event] = []
-    
-    
+    @State private var selectedCityIndex = 0
+    let cities = ["New York", "Pennsylvania"]
+  
     var body: some View {
-        VStack {
-            Text("All Events Near You")
+           VStack {
+               Text("All Events Near You")
+               
+               VStack {
+                   Picker("Chose Your City",selection:$selectedCityIndex ) {
+                       ForEach(0..<cities.count) { index in
+                           Text(cities[index])
+                       }
+                   }
+                   .pickerStyle(MenuPickerStyle())
 
-            List {
-                // loop through each item in your datasource
-                ForEach(evntList, id:\.type) {
-                    currevents in
-                    // UI for each row
-                    HStack {
-                        Text("\(currevents.title)")
-                     Spacer()
-                   
-                        Text("\(currevents.datetime_utc)")
-
-                    }
-                    //                              AsyncImage(url:URL(string:currDigimon.))
-                    
-                }
-                
-            }
-            
-        }.padding()
-            .onAppear(){
-                loadDataFromAPI()
-            }
-    }
-    
+                   List {
+                       ForEach(evntList, id: \.type) { currevents in
+                           NavigationLink(destination: EventDetailsView(event: currevents)) {
+                               HStack {
+                                   Text("\(currevents.title)")
+                                   Spacer()
+                                   Text("\(currevents.datetime_utc)")
+                               }
+                           }
+                       }
+                   }
+               }
+           }
+           .padding()
+           .onAppear() {
+               loadDataFromAPI()
+           }
+       }
+       
     
     func loadDataFromAPI() {
         print("Getting data from API")
