@@ -58,7 +58,10 @@ struct Event: Codable,Hashable {
     var venue: Venue
     var datetime_local: String
     var stats: Stats
-    
 }
+
+
+
+
  
 
