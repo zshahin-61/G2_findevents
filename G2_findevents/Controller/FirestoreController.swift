@@ -250,7 +250,6 @@ class FirestoreController: ObservableObject {
         }//else
     }
     
-    
     func insertMyEvent(newEvent : MyEvent){
         print(#function, "Inserting event: \(newEvent.title)")
         
