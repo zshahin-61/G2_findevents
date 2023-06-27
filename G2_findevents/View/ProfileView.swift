@@ -7,7 +7,7 @@
 
 import SwiftUI
 import PhotosUI
-//import URLImage
+import URLImage
 
 struct ProfileView: View {
     
@@ -27,7 +27,7 @@ struct ProfileView: View {
     
     @State private var showImagePicker = false
     @State private var selectedImage: UIImage?
-    //@State private var imageURL: URL? = nil
+    @State private var imageURL: URL? = nil
     
     var body: some View {
         VStack{
@@ -45,6 +45,17 @@ struct ProfileView: View {
                 TextField("Phone Number", text: self.$contactNumberFromUI)
                     .textInputAutocapitalization(.never)
                     .textFieldStyle(.roundedBorder)
+                
+                if let url = imageURL {
+                    URLImage(url) { image in
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 200, height: 200)
+                    }
+                } else {
+                    Text("No image available")
+                }
                 
                 if let err = errorMsg{
                     Text(err).foregroundColor(Color.red).bold()
@@ -103,15 +114,16 @@ struct ProfileView: View {
                 Text("Delete User Account")
             }.padding(5).font(.title2).foregroundColor(Color.white)//
                 .buttonBorderShape(.roundedRectangle(radius: 15)).buttonStyle(.bordered).background(Color.red)
-     
+            
                 .navigationBarTitle("", displayMode: .inline)
-                    .navigationBarItems(
-                        leading: Button(action: {
-                            rootScreen = .Home
-                        }) {
-                            Text("Back")
-                        })
-        }.padding().onAppear(){
+                .navigationBarItems(
+                    leading: Button(action: {
+                        rootScreen = .Home
+                    }) {
+                        Text("Back")
+                    })
+        }.padding()
+        .onAppear(){
             dbHelper.getUserProfile(withCompletion: { isSuccessful in
                 if (isSuccessful){
                     self.emailFromUI = dbHelper.userProfile!.id!
@@ -122,21 +134,12 @@ struct ProfileView: View {
                     self.errorMsg = nil
                     
                     // TODO: Show image from db
-                    //                if let image = selectedImage {
-                    //                    Image(uiImage: image)
-                    //                        .resizable()
-                    //                        .scaledToFit()
-                    //                }
-                    //                if let url = imageURL {
-                    //                                URLImage(url: url) { image in
-                    //                                    image
-                    //                                        .resizable()
-                    //                                        .aspectRatio(contentMode: .fit)
-                    //                                        .frame(width: 200, height: 200)
-                    //                                }
-                    //                            } else {
-                    //                                Text("No image available")
-                    //                            }
+                    if let imageURLString = dbHelper.userProfile!.image as? String,
+                                       let imageURL = URL(string: imageURLString) {
+                                        self.imageURL = imageURL
+                                    } else {
+                                        print("Invalid image URL format")
+                                    }
                 }
             })
         }
