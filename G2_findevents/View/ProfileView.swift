@@ -88,7 +88,7 @@ struct ProfileView: View {
                 ///////
                 ///
                 dbHelper.userProfile!.address = addressFromUI
-                //////IMage
+                //////Image
                 var imageData :Data? = nil
                 
                 if(selectedImage != nil )
@@ -97,10 +97,11 @@ struct ProfileView: View {
                     let imageName = "\(UUID().uuidString).jpg"
                     
                     imageData = image.jpegData(compressionQuality: 0.1)
+                    dbHelper.userProfile!.image = imageData
                 }
                 
                 ////////
-                dbHelper.userProfile!.image = imageData
+                
                 dbHelper.userProfile!.name = nameFromUI
                 dbHelper.userProfile!.contactNumber = contactNumberFromUI
                 
