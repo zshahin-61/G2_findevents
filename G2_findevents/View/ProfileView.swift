@@ -2,19 +2,140 @@
 //  ProfileView.swift
 //  G2_findevents
 //
-//  Created by zahra SHAHIN on 2023-06-26.
+//  Created by Golnaz Chehrazi on 2023-06-23.
 //
 
 import SwiftUI
+import PhotosUI
+//import URLImage
 
 struct ProfileView: View {
+    
+    @EnvironmentObject var authHelper : FireAuthController
+    @EnvironmentObject var dbHelper : FirestoreController
+    
+    @Environment(\.dismiss) var dismiss
+    
+    @State private var emailFromUI : String = ""
+    @State private var addressFromUI : String = ""
+    @State private var phoneFromUI : String = ""
+    @State private var displayNameFromUI : String = ""
+    
+    @State private var errorMsg : String? = nil
+    //@State private var selectedLink : Int? = nil
+    
+    @State private var showAlert = false
+    
+    @Binding var rootScreen : RootView
+    
+    @State private var showImagePicker = false
+    @State private var selectedImage: UIImage?
+    @State private var imageURL: URL? = nil
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-    }
-}
+        VStack{
+            Form{
+                Text("Dear user: \(self.emailFromUI)")
+                
+                TextField("Name", text: self.$displayNameFromUI)
+                    .textInputAutocapitalization(.never)
+                    .textFieldStyle(.roundedBorder)
+                
+                TextField("Address", text: self.$addressFromUI)
+                    .textInputAutocapitalization(.never)
+                    .textFieldStyle(.roundedBorder)
+                
+                TextField("Phone Number", text: self.$phoneFromUI)
+                    .textInputAutocapitalization(.never)
+                    .textFieldStyle(.roundedBorder)
+                
+                
+//                if let url = imageURL {
+//                                URLImage(url: url) { image in
+//                                    image
+//                                        .resizable()
+//                                        .aspectRatio(contentMode: .fit)
+//                                        .frame(width: 200, height: 200)
+//                                }
+//                            } else {
+//                                Text("No image available")
+//                            }
 
-struct ProfileView_Previews: PreviewProvider {
-    static var previews: some View {
-        ProfileView()
+                    
+                    if let err = errorMsg{
+                        Text(err).foregroundColor(Color.red).bold()
+                    }
+                    
+                    
+            
+            }
+            .autocorrectionDisabled(true)
+            
+            //HStack{
+                Button(action: {
+                    //validate the data such as no mandatory inputs, password rules, etc.
+                    
+                    //create user account on FirebaseAuth
+                    dbHelper.userProfile!.address = addressFromUI
+                    //////IMage
+                    var imageData :Data? = nil
+                    
+                    if(selectedImage != nil )
+                    {
+                        let image = selectedImage!
+                        let imageName = "\(UUID().uuidString).jpg"
+                        
+                        imageData = image.jpegData(compressionQuality: 0.1)
+                    }
+                    
+                    ////////
+                    dbHelper.userProfile!.image = imageData
+                    dbHelper.userProfile!.name = displayNameFromUI
+                    dbHelper.userProfile!.contactNumber = phoneFromUI
+                    
+                    self.dbHelper.updateUserProfile(userToUpdate: dbHelper.userProfile!)
+                    
+                    dismiss()
+                }){
+                    Text("Update Profile")
+                }.buttonStyle(.borderedProminent)
+                
+//                NavigationLink(destination: SignInView(rootScreen: $rootScreen).environmentObject(authHelper).environmentObject(dbHelper),tag: 1, selection: self.$selectedLink ){}
+                Spacer()
+                Button(action:{
+                    // TODO: 
+                    }){
+                        Image(systemName: "multiply.circle").foregroundColor(Color.white)
+                    Text("Delete User Account")
+                    }.padding(5).font(.title2).foregroundColor(Color.white)//
+                .buttonBorderShape(.roundedRectangle(radius: 15)).buttonStyle(.bordered).background(Color.red)
+                .alert(isPresented: $showAlert) {
+                    Alert(
+                        title: Text("Error :"),
+                        message: Text("before deleting your account you have to remove all cars in parking lots"),
+                        dismissButton: .default(Text("OK")){
+                            //dismiss()
+                        }
+                    )
+                }
+            
+        }.padding().onAppear(){
+            dbHelper.getUserProfile(withCompletion: { isSuccessful in
+                if (isSuccessful){
+                    self.emailFromUI = dbHelper.userProfile!.id!
+                    self.addressFromUI = dbHelper.userProfile!.address
+                    self.displayNameFromUI = dbHelper.userProfile!.name
+                    
+                    self.phoneFromUI = dbHelper.userProfile!.contactNumber
+                    self.errorMsg = nil
+                }
+            })
+        }
+    }
+    
+    func validateCarPlateNumber(_ input: String) -> Bool {
+        let pattern = "^[a-zA-Z0-9]{2,8}$"
+        let regex = NSPredicate(format: "SELF MATCHES %@", pattern)
+        return regex.evaluate(with: input)
     }
 }

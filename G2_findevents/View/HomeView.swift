@@ -50,7 +50,7 @@ struct HomeView: View {
                 }) {
                     Image(systemName: "person.crop.circle.badge.xmark")
                 },
-                trailing: NavigationLink(destination: ProfileView()) {
+                trailing: NavigationLink(destination: ProfileView(rootScreen: self.$rootScreen).environmentObject(dbHelper).environmentObject(authHelper)) {
                     Image(systemName: "person.crop.circle")
                 }
             )

@@ -18,8 +18,6 @@ struct SignUpView: View {
     @State private var addressFromUI : String = ""
     @State private var phoneFromUI : String = ""
     @State private var nameFromUI : String = ""
-    @State private var carPlateNumber : String = ""
-    @State private var cpnList : [String] = [String]()
     @State private var errorMsg : String? = nil
     
     @Binding var rootScreen : RootView
