@@ -14,28 +14,42 @@ struct EventsListView: View {
 
     @State var evntList:[Event] = []
     
-    @State private var selectedCityIndex = 0
+    @State private var selectedCity = ""
     let cities = ["New York", "Pennsylvania"]
-  
+    
+    var filteredEvents: [Event] {
+          if selectedCity.isEmpty {
+              // Show all events
+              return evntList
+          } else {
+              // Show events of the selected city
+              return evntList.filter { $0.venue.city.localizedCaseInsensitiveContains(selectedCity) }
+          }
+      }
+    
     var body: some View {
            VStack {
                Text("All Events Near You")
                
                VStack {
-                   Picker("Chose Your City",selection:$selectedCityIndex ) {
-                       ForEach(0..<cities.count) { index in
-                           Text(cities[index])
-                       }
-                   }
-                   .pickerStyle(MenuPickerStyle())
+                   TextField("Enter City", text: $selectedCity, onCommit: {
+                                     // Update the event list based on the selected city
+                                     loadDataFromAPI()
+                                 })
+                                 .textFieldStyle(RoundedBorderTextFieldStyle())
+                                 .padding()
+                                 
 
                    List {
-                       ForEach(evntList, id: \.type) { currevents in
+                       ForEach(filteredEvents, id: \.id) { currevents in
                            NavigationLink(destination: EventDetailsView(event: currevents).environmentObject(self.dbHelper)) {
                                HStack {
                                    Text("\(currevents.title)")
                                    Spacer()
-                                   Text("\(currevents.datetime_utc)")
+                                   Text("\(currevents.venue.city)")
+                                   Spacer()
+                                   Text("\(currevents.venue.country)")
+
                                }
                            }
                        }
