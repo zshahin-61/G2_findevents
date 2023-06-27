@@ -57,6 +57,8 @@ struct SignUpView: View {
            
             
             HStack{
+          
+                
                 Button(action:{
                     self.rootScreen = .Login
                 }){
@@ -65,28 +67,29 @@ struct SignUpView: View {
                     Text("Back").buttonStyle(.borderedProminent)
                 }
                 Spacer()
-
-                Button(action: {
-                    self.authHelper.signUp(email: self.email.lowercased(), password: self.password, withCompletion: { isSuccessful in
-                        if (isSuccessful){
-                            
-                            let user : UserProfile = UserProfile(id: self.email.lowercased(), name: self.nameFromUI, contactNumber: self.phoneFromUI, address: self.addressFromUI)
-                            
-                            self.dbHelper.createUserProfile(newUser: user)
-                            
-                            //show to home screen
-                            self.rootScreen = .Home
-                        }else{
-                            //show the alert with invalid username/password prompt
-                            print(#function, "unable to create user")
-                        }
-                    })
-                }){
-                    Text("Create Account")
-                }.buttonStyle(.borderedProminent)
-                    .disabled(self.password != self.confirmPassword || self.email.isEmpty || self.password.isEmpty || self.confirmPassword.isEmpty)
-              
+                
+                  Button(action: {
+                      self.authHelper.signUp(email: self.email.lowercased(), password: self.password, withCompletion: { isSuccessful in
+                          if (isSuccessful){
+                              
+                              let user : UserProfile = UserProfile(id: self.email.lowercased(), name: self.nameFromUI, contactNumber: self.phoneFromUI, address: self.addressFromUI)
+                              
+                              self.dbHelper.createUserProfile(newUser: user)
+                              
+                              //show to home screen
+                              self.rootScreen = .Home
+                          }else{
+                              //show the alert with invalid username/password prompt
+                              print(#function, "unable to create user")
+                          }
+                      })
+                  }){
+                      Text("Create Account")
+                  }.buttonStyle(.borderedProminent)
+                      .disabled(self.password != self.confirmPassword || self.email.isEmpty || self.password.isEmpty || self.confirmPassword.isEmpty)
+                                
             }
+           
         }
     }
     

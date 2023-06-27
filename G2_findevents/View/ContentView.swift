@@ -27,7 +27,7 @@ struct ContentView: View {
                 SignUpView(rootScreen: $root).environmentObject(self.authHelper).environmentObject(self.dbHelper)
             
             }
-        }
+        }.padding()
     }
 }
 
