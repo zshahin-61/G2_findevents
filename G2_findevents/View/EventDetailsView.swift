@@ -24,9 +24,7 @@ struct EventDetailsView: View {
                     .frame(width: 300, height: 150).border(.gray)
             List{
             Text("\(event.title)")
-                
                     Section(header: Text("Performers")){
-                        
                         ForEach(event.performers, id:\.self){ per in
                             Text(per.name)
                             //Text("type: \(per.type)")
@@ -34,12 +32,17 @@ struct EventDetailsView: View {
                         }
                     }
                     Text("Local Date:\(event.datetime_local)")
+                
+                if let price = event.stats.average_price{
+                    Text("Price: $\(price)")
+                }
                     
-                    Section(header:Text("Venue")){
+                Section(header:Text("Venue")){
                         Text("Name: \(event.venue.name)")
                         Text("Location: \(event.venue.display_location)")
                         Text("City: \(event.venue.city)")
                     }
+                
                 }//List
                 Spacer()
                 Button(action:{
