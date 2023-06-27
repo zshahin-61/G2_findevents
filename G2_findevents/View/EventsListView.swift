@@ -8,9 +8,12 @@
 import SwiftUI
 
 struct EventsListView: View {
+    @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var dbHelper : FirestoreController
     @EnvironmentObject var authHelper : FireAuthController
 
     @State var evntList:[Event] = []
+    
     @State private var selectedCityIndex = 0
     let cities = ["New York", "Pennsylvania"]
   
