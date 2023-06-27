@@ -307,5 +307,31 @@ class FirestoreController: ObservableObject {
         }
     }
     
+    func deleteAllMyEvents(){
+        print(#function, "Deleting All My Events")
+        
+        //get the email address of currently logged in user
+        self.loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL") ?? ""
+        
+        if (self.loggedInUserEmail.isEmpty){
+            print(#function, "Logged in user's email address not available. Can't delete event")
+        }
+        else{
+            do{
+                try self.db
+                    .collection(COLLECTION_USER_PROFILES)
+                    .document(self.loggedInUserEmail)
+                    .collection(COLLECTION_EVENTS).document().delete{ error in
+                        if let err = error {
+                            print(#function, "Unable to delete event from database : \(err)")
+                        }else{
+                            print(#function, "All logged in users events) successfully deleted from database")
+                        }
+                    }
+            }catch let err as NSError{
+                print(#function, "Unable to delete event from database : \(err)")
+            }
+        }
+    }
     
 }
