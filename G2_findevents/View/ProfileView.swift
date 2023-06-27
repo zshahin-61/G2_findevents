@@ -69,8 +69,8 @@ struct ProfileView: View {
             //HStack{
             Button(action: {
                 //validate the data such as no mandatory inputs, password rules, etc.
-                
-                //create user account on FirebaseAuth
+                ///////
+                ///
                 dbHelper.userProfile!.address = addressFromUI
                 //////IMage
                 var imageData :Data? = nil

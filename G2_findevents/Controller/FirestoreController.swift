@@ -114,7 +114,7 @@ class FirestoreController: ObservableObject {
                     .document(userToUpdate.id!)
                     .updateData([FIELD_NAME : userToUpdate.name,
                        FIELD_CONTACT_NUMBER : userToUpdate.contactNumber,
-                              FIELD_ADDRESS : userToUpdate.address ]){ error in
+                              FIELD_ADDRESS : userToUpdate.address, FIELD_USER_IMAGE: userToUpdate.image ]){ error in
                         
                         if let err = error {
                             print(#function, "Unable to update user profile in database : \(err)")
