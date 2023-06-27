@@ -64,6 +64,17 @@ struct EventDetailsView: View {
                 }){
                     Text(self.toggleBtnText)
                 }.buttonStyle(.borderedProminent)
+        }.onAppear(){
+            dbHelper.getMyEventsList()
+            if(dbHelper.myEventsList.contains(where: {$0.id == String(event.id)}))
+            {
+                toggleBtnText = "Cancel Attending"
+            }
+            else
+            {
+                toggleBtnText = "I will Attend"
+            }
+                
         }
     }
     // MARK: function for ToggleFavorite
