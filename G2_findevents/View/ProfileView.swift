@@ -7,7 +7,7 @@
 
 import SwiftUI
 import PhotosUI
-import URLImage
+//import URLImage
 
 struct ProfileView: View {
     
@@ -27,7 +27,8 @@ struct ProfileView: View {
     
     @State private var showImagePicker = false
     @State private var selectedImage: UIImage?
-    @State private var imageURL: URL? = nil
+    //@State private var imageURL: URL? = nil
+    @State private var imageData: Data?
     
     var body: some View {
         VStack{
@@ -46,13 +47,11 @@ struct ProfileView: View {
                     .textInputAutocapitalization(.never)
                     .textFieldStyle(.roundedBorder)
                 
-                if let url = imageURL {
-                    URLImage(url) { image in
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 200, height: 200)
-                    }
+                if let data = imageData,
+                   let uiImage = UIImage(data: data) {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
                 } else {
                     Text("No image available")
                 }
@@ -123,25 +122,24 @@ struct ProfileView: View {
                         Text("Back")
                     })
         }.padding()
-        .onAppear(){
-            dbHelper.getUserProfile(withCompletion: { isSuccessful in
-                if (isSuccessful){
-                    self.emailFromUI = dbHelper.userProfile!.id!
-                    self.addressFromUI = dbHelper.userProfile!.address
-                    self.nameFromUI = dbHelper.userProfile!.name
-                    
-                    self.contactNumberFromUI = dbHelper.userProfile!.contactNumber
-                    self.errorMsg = nil
-                    
-                    // TODO: Show image from db
-                    if let imageURLString = dbHelper.userProfile!.image as? String,
-                                       let imageURL = URL(string: imageURLString) {
-                                        self.imageURL = imageURL
-                                    } else {
-                                        print("Invalid image URL format")
-                                    }
-                }
-            })
-        }
+            .onAppear(){
+                dbHelper.getUserProfile(withCompletion: { isSuccessful in
+                    if (isSuccessful){
+                        self.emailFromUI = dbHelper.userProfile!.id!
+                        self.addressFromUI = dbHelper.userProfile!.address
+                        self.nameFromUI = dbHelper.userProfile!.name
+                        
+                        self.contactNumberFromUI = dbHelper.userProfile!.contactNumber
+                        self.errorMsg = nil
+                        
+                        // TODO: Show image from db
+                        if let imageData = dbHelper.userProfile!.image as? Data {
+                            self.imageData = imageData
+                        } else {
+                            print("Invalid image data format")
+                        }
+                    }
+                })
+            }
     }
 }
