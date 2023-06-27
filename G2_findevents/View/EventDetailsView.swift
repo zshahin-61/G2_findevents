@@ -14,6 +14,8 @@ struct EventDetailsView: View {
     
     var event: Event = Event(id: 6032999, type:"broadway_tickets_national", title: "Hamilton - Toronto", performers: [Performer(id: 97669, type: "theater_broadway_national_tours", name: "Hamilton", image: "https://seatgeek.com/images/performers-landscape/hamilton-328ab3/97669/huge.jpg")], datetime_utc: "2023-06-24T17:30:00", venue: Venue(id: 1971, state: "ON", name: "Princess of Wales Theatre Toronto", location: Location(lat: 43.647, lon: -79.3892), address: "300 King St. W", country: "Canada", city: "Toronto", display_location: "Toronto, Canada", url:"https://seatgeek.com/venues/princess-of-wales-theatre-toronto/tickets"),datetime_local: "2023-06-24T13:30:00", stats: Stats(average_price: 284, median_price:0 , lowest_sg_base_price: 0, lowest_sg_base_price_good_deals:0))
     
+    @State private var toggleBtnText : String = "I will Attend"
+    
     var body: some View {
         VStack{
             Text(event.type)
@@ -49,11 +51,18 @@ struct EventDetailsView: View {
                     
                     if(!dbHelper.myEventsList.contains(where: {$0.id == newEvent.id })){
                         dbHelper.insertMyEvent(newEvent: newEvent)
+                        toggleBtnText = "Cancel Attending"
+                        dbHelper.myEventsList.append(newEvent)
+                    }
+                    else{
+                        dbHelper.myEventsList.removeAll(where: {$0.id == newEvent.id})
+                        toggleBtnText = "I will attend"
+                        dbHelper.deleteMyEvent(eventToDelete: newEvent)
                     }
                     
                     
                 }){
-                    Text("I will Attend")
+                    Text(self.toggleBtnText)
                 }.buttonStyle(.borderedProminent)
         }
     }
