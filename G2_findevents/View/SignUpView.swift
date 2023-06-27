@@ -65,15 +65,11 @@ struct SignUpView: View {
                                 .resizable()
                                 .scaledToFit()
                         }
-                        //Button("Save Image") {
-                            
-                            //saveImageToFirestore()
-                        //}
                     }
                     .sheet(isPresented: $showImagePicker) {
-                        ImagePicker(selectedImage: $selectedImage)
+                        ImagePickerView(selectedImage: $selectedImage)
                     }
-            
+                    
             HStack{
                 Button(action:{
                     self.rootScreen = .Login

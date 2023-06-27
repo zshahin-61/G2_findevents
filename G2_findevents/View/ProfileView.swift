@@ -14,15 +14,12 @@ struct ProfileView: View {
     @EnvironmentObject var authHelper : FireAuthController
     @EnvironmentObject var dbHelper : FirestoreController
     
-    //@Environment(\.dismiss) var dismiss
-    
     @State private var emailFromUI : String = ""
     @State private var addressFromUI : String = ""
     @State private var contactNumberFromUI : String = ""
     @State private var nameFromUI : String = ""
     
     @State private var errorMsg : String? = nil
-    //@State private var selectedLink : Int? = nil
     
     @State private var showAlert = false
     
@@ -30,7 +27,7 @@ struct ProfileView: View {
     
     @State private var showImagePicker = false
     @State private var selectedImage: UIImage?
-    @State private var imageURL: URL? = nil
+    //@State private var imageURL: URL? = nil
     
     var body: some View {
         VStack{
@@ -49,26 +46,25 @@ struct ProfileView: View {
                     .textInputAutocapitalization(.never)
                     .textFieldStyle(.roundedBorder)
                 
-                VStack{
-                    Button("Select Image") {
-                        showImagePicker = true
-                    }
-                    if let image = selectedImage {
-                        Image(uiImage: image)
-                            .resizable()
-                            .scaledToFit()
-                    }
-                }
-                .sheet(isPresented: $showImagePicker) {
-                    ImagePicker(selectedImage: $selectedImage)
-                }
-                
-                
                 if let err = errorMsg{
                     Text(err).foregroundColor(Color.red).bold()
                 }
             }
             .autocorrectionDisabled(true)
+            
+            VStack{
+                Button("Select Image") {
+                    showImagePicker = true
+                }
+                if let image = selectedImage {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFit()
+                }
+            }
+            .sheet(isPresented: $showImagePicker) {
+                ImagePickerView(selectedImage: $selectedImage)
+            }
             
             //HStack{
             Button(action: {
@@ -107,7 +103,14 @@ struct ProfileView: View {
                 Text("Delete User Account")
             }.padding(5).font(.title2).foregroundColor(Color.white)//
                 .buttonBorderShape(.roundedRectangle(radius: 15)).buttonStyle(.bordered).background(Color.red)
-            
+     
+                .navigationBarTitle("", displayMode: .inline)
+                    .navigationBarItems(
+                        leading: Button(action: {
+                            rootScreen = .Home
+                        }) {
+                            Text("Back")
+                        })
         }.padding().onAppear(){
             dbHelper.getUserProfile(withCompletion: { isSuccessful in
                 if (isSuccessful){
@@ -119,7 +122,6 @@ struct ProfileView: View {
                     self.errorMsg = nil
                     
                     // TODO: Show image from db
-                    
                     //                if let image = selectedImage {
                     //                    Image(uiImage: image)
                     //                        .resizable()

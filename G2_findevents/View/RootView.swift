@@ -8,5 +8,5 @@
 import SwiftUI
 
 enum RootView{
-    case Login, Home, SignUp
+    case Login, Home, SignUp, Profile
 }

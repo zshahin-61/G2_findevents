@@ -50,9 +50,15 @@ struct HomeView: View {
                 }) {
                     Image(systemName: "person.crop.circle.badge.xmark")
                 },
-                trailing: NavigationLink(destination: ProfileView(rootScreen: self.$rootScreen).environmentObject(dbHelper).environmentObject(authHelper)) {
-                    Image(systemName: "person.crop.circle")
-                }
+                trailing:
+                    Button(action:{
+                        rootScreen = .Profile
+                    }){
+                        Image(systemName: "person.crop.circle")
+                    }
+//                    NavigationLink(destination: ProfileView(rootScreen: self.$rootScreen).environmentObject(dbHelper).environmentObject(authHelper)) {
+//                    Image(systemName: "person.crop.circle")
+//                }
             )
             .padding(.top, -50) // Adjust the padding to remove the gap
         }
