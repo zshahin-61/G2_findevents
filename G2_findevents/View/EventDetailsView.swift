@@ -43,8 +43,9 @@ struct EventDetailsView: View {
                 Button(action:{
                     // TODO: add to firestore
                     //var newEvent = Event()
-                    //var newEvent = MyEvent(id: String(event.id), event: event)
-                    dbHelper.insertEvent(newEvent: event)
+                    var newEvent = MyEvent(id: String(event.id), type: event.type, title: event.title, date: event.datetime_local, image: event.performers[0].image, location: event.venue.display_location)
+                    
+                    dbHelper.insertMyEvent(newEvent: newEvent)
                     
                 }){
                     Text("I will Attend")
