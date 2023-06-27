@@ -15,8 +15,8 @@ struct MyEventsView: View {
     var body: some View {
         VStack {
             Button(action:{
-                dbHelper.myEventsList.removeAll()
-                
+                //dbHelper.myEventsList.removeAll()
+                dbHelper.deleteAllMyEvents()
             }){
                 Text("Remove All")
             }.buttonStyle(.borderedProminent)
