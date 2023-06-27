@@ -31,7 +31,7 @@ struct EventsListView: View {
 
                    List {
                        ForEach(evntList, id: \.type) { currevents in
-                           NavigationLink(destination: EventDetailsView(event: currevents)) {
+                           NavigationLink(destination: EventDetailsView(event: currevents).environmentObject(self.dbHelper)) {
                                HStack {
                                    Text("\(currevents.title)")
                                    Spacer()
