@@ -4,64 +4,62 @@
 //
 //  Created by zahra SHAHIN on 2023-06-25.
 //
-
 import SwiftUI
+import MapKit
 
 struct EventsListView: View {
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var dbHelper : FirestoreController
-    @EnvironmentObject var authHelper : FireAuthController
-
-    @State var evntList:[Event] = []
-    
+    @EnvironmentObject var dbHelper: FirestoreController
+    @EnvironmentObject var authHelper: FireAuthController
+    @State var evntList: [Event] = []
     @State private var selectedCity = ""
-    let cities = ["New York", "Pennsylvania"]
-    
-    var filteredEvents: [Event] {
-          if selectedCity.isEmpty {
-              // Show all events
-              return evntList
-          } else {
-              // Show events of the selected city
-              return evntList.filter { $0.venue.city.localizedCaseInsensitiveContains(selectedCity) }
-          }
-      }
+    @State private var mapRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0), span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1))
     
     var body: some View {
-           VStack {
-               Text("All Events Near You")
-               
-               VStack {
-                   TextField("Enter City", text: $selectedCity, onCommit: {
-                                     // Update the event list based on the selected city
-                                     loadDataFromAPI()
-                                 })
-                                 .textFieldStyle(RoundedBorderTextFieldStyle())
-                                 .padding()
-                                 
-
-                   List {
-                       ForEach(filteredEvents, id: \.id) { currevents in
-                           NavigationLink(destination: EventDetailsView(event: currevents).environmentObject(self.dbHelper)) {
-                               HStack {
-                                   Text("\(currevents.title)")
-                                   Spacer()
-                                   Text("\(currevents.venue.city)")
-                                   Spacer()
-                                   Text("\(currevents.venue.country)")
-
-                               }
-                           }
-                       }
-                   }
-               }
-           }
-           .padding()
-           .onAppear() {
-               loadDataFromAPI()
-           }
-       }
-       
+        VStack {
+            Text("All Events Near You").font(.title)
+            VStack {
+                TextField("Enter City", text: $selectedCity, onCommit: {
+                    loadDataFromAPI()
+                })
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding()
+                
+                VStack {
+                    Text("Event Map")
+                        .font(.headline)
+                    if !evntList.isEmpty {
+                        Map(coordinateRegion: $mapRegion, annotationItems: evntList) { event in
+                            MapAnnotation(coordinate: CLLocationCoordinate2D(latitude: event.venue.location.lat, longitude: event.venue.location.lon)) {
+                                NavigationLink(destination: EventDetailsView(event: event).environmentObject(authHelper).environmentObject(self.dbHelper)) {
+                                    VStack {
+                                        Image(systemName: "mappin.circle.fill")
+                                            .foregroundColor(.red)
+                                            .font(.title)
+                                        Text(event.title)
+                                            .font(.caption)
+                                            .foregroundColor(.black)
+                                            .multilineTextAlignment(.center)
+                                            .padding(.horizontal, 4)
+                                    }
+                                }
+                            }
+                        }
+                        .frame(height: 300)
+                        .border(Color.gray)
+                        .onAppear {
+                            calculateMapRegion()
+                        }
+                    }
+                }
+                .padding()
+            }
+            .padding()
+            .onAppear {
+                loadDataFromAPI()
+            }
+        }
+    }
     
     func loadDataFromAPI() {
         print("Getting data from API")
@@ -85,25 +83,56 @@ struct EventsListView: View {
             }
             
             if let jsonData = data {
-                          print("data retreived")
-                          if let decodedResponse
-                              = try? JSONDecoder().decode(eventsReponseObj.self, from:jsonData) {
-                              // if conversion successful, then output it to the console
-                              DispatchQueue.main.async {
-                                  print(decodedResponse)
-                                  var recipes = decodedResponse.events
-                                  self.evntList = recipes
-                              }
-                          }
-                          else {
-                              print("ERROR: Error converting data to JSON")
-                          }
-                      }
-                      else {
-                          print("ERROR: Did not receive data from the API")
-                      }
-                  }
-                  task.resume()
-
+                print("Data retrieved")
+                if let decodedResponse = try? JSONDecoder().decode(eventsReponseObj.self, from: jsonData) {
+                    DispatchQueue.main.async {
+                        print(decodedResponse)
+                        let events = decodedResponse.events
+                        self.evntList = events
+                    }
+                } else {
+                    print("ERROR: Error converting data to JSON")
+                }
+            } else {
+                print("ERROR: Did not receive data from the API")
+            }
+        }
+        task.resume()
     }
-}// end ContentView struct
+    
+    func calculateMapRegion() {
+        guard let firstEvent = evntList.first else {
+            return
+        }
+        
+        var minLatitude = firstEvent.venue.location.lat
+        var maxLatitude = firstEvent.venue.location.lat
+        var minLongitude = firstEvent.venue.location.lon
+        var maxLongitude = firstEvent.venue.location.lon
+        
+        for event in evntList {
+            let latitude = event.venue.location.lat
+            let longitude = event.venue.location.lon
+            
+            if latitude < minLatitude {
+                minLatitude = latitude
+            }
+            
+            if latitude > maxLatitude {
+                maxLatitude = latitude
+            }
+            
+            if longitude < minLongitude {
+                minLongitude = longitude
+            }
+            
+            if longitude > maxLongitude {
+                maxLongitude = longitude
+            }
+        }
+        
+        let center = CLLocationCoordinate2D(latitude: (minLatitude + maxLatitude) / 2.0, longitude: (minLongitude + maxLongitude) / 2.0)
+        let span = MKCoordinateSpan(latitudeDelta: (maxLatitude - minLatitude) * 1.1, longitudeDelta: (maxLongitude - minLongitude) * 1.1)
+        mapRegion = MKCoordinateRegion(center: center, span: span)
+    }
+}

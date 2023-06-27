@@ -49,7 +49,7 @@ struct Venue: Codable,Hashable {
     var url: String
 }
 
-struct Event: Codable,Hashable {
+struct Event: Codable,Hashable,Identifiable {
     var id: Int
     var type: String
     var title: String

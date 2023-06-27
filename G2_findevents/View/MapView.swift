@@ -12,6 +12,8 @@ struct MapView: UIViewRepresentable {
     let latitude: Double
     let longitude: Double
     
+    @State var evntList:[Event] = []
+
     func makeUIView(context: Context) -> MKMapView {
         MKMapView(frame: .zero)
     }

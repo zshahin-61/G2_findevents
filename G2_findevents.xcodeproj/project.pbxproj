@@ -31,7 +31,6 @@
 		5A9C4E6F2A48A572001F7388 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9C4E6E2A48A572001F7388 /* UserProfile.swift */; };
 		5F8805192A4A3E45001A8C44 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8805182A4A3E45001A8C44 /* MapView.swift */; };
 		5F88051F2A4A84F7001A8C44 /* MyEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F88051E2A4A84F7001A8C44 /* MyEvent.swift */; };
-		5F8805232A4B26EF001A8C44 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5F8805222A4B26EE001A8C44 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,7 +55,6 @@
 		5A9C4E6E2A48A572001F7388 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		5F8805182A4A3E45001A8C44 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		5F88051E2A4A84F7001A8C44 /* MyEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyEvent.swift; sourceTree = "<group>"; };
-		5F8805222A4B26EE001A8C44 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../Desktop/GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,7 +95,6 @@
 				5A9C4E642A48A094001F7388 /* Controller */,
 				5A9C4E632A48A08D001F7388 /* Model */,
 				5A9C4E552A48A084001F7388 /* G2_findeventsApp.swift */,
-				5F8805222A4B26EE001A8C44 /* GoogleService-Info.plist */,
 				5A9C4E592A48A085001F7388 /* Assets.xcassets */,
 				5A9C4E5B2A48A085001F7388 /* Preview Content */,
 			);
@@ -218,7 +215,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				5A9C4E5D2A48A085001F7388 /* Preview Assets.xcassets in Resources */,
-				5F8805232A4B26EF001A8C44 /* GoogleService-Info.plist in Resources */,
 				5A9C4E5A2A48A085001F7388 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
