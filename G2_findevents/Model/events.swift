@@ -10,7 +10,6 @@ import Foundation
 struct eventsReponseObj: Codable {
     var events:[Event]
 }
-
 struct Stats: Codable,Hashable{
     var average_price: Int?
     var median_price: Int?
