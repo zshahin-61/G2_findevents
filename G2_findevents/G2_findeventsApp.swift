@@ -14,14 +14,18 @@ import FirebaseFirestore
 @main
 struct G2_findeventsApp: App {
     let authHelper = FireAuthController()
+    
 
     init(){
         //configure Firebase in the project
         FirebaseApp.configure()
     }
+    
+    //private var dbHelper = FirestoreController.getInstance()
+    
     var body: some Scene {
         WindowGroup {
-           //EventDetailsView()
+            //EventDetailsView().environmentObject(authHelper).environmentObject(dbHelper)
              ContentView().environmentObject(authHelper)
         }
     }

@@ -19,9 +19,11 @@ struct ContentView: View {
         NavigationView{
             switch root {
             case .Login:
+                //EventDetailsView().environmentObject(authHelper).environmentObject(self.dbHelper)
                 SignInView(rootScreen: $root).environmentObject(authHelper).environmentObject(self.dbHelper)
             case .Home:
-                HomeView(rootScreen: $root).environmentObject(authHelper).environmentObject(self.dbHelper)
+                EventDetailsView().environmentObject(authHelper).environmentObject(self.dbHelper)
+                //HomeView(rootScreen: $root).environmentObject(authHelper).environmentObject(self.dbHelper)
             case .SignUp:
                 SignUpView(rootScreen: $root).environmentObject(self.authHelper).environmentObject(self.dbHelper)
             

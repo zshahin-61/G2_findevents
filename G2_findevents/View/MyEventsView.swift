@@ -13,8 +13,6 @@ struct MyEventsView: View {
 
     var body: some View {
         VStack {
-         
-              
             Button("Remove All Events", action: removeAllEvents)
         }
         .onAppear {

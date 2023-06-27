@@ -13,7 +13,6 @@ struct UserProfile: Codable, Hashable {
     var name: String
     var contactNumber: String
     var address: String
-    var events:[String] = [String]()
 
     init?(dictionary: [String: Any]) {
         guard let myId = dictionary["id"] as? String else {
@@ -36,19 +35,13 @@ struct UserProfile: Codable, Hashable {
             return nil
         }
 
-        guard let myEvents = dictionary["events"] as? [String] else {
-            print(#function, "Unable to get events from JSON")
-            return nil
-        }
-
-        self.init(id: myId, name: myName, contactNumber: myContactNumber, address: myAddress, events: myEvents)
+        self.init(id: myId, name: myName, contactNumber: myContactNumber, address: myAddress)
     }
 
-    init(id: String, name: String, contactNumber: String, address: String, events: [String]) {
+    init(id: String, name: String, contactNumber: String, address: String) {
         self.id = id
         self.name = name
         self.contactNumber = contactNumber
         self.address = address
-        self.events = events
     }
 }

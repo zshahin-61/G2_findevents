@@ -11,7 +11,7 @@ import FirebaseFirestoreSwift
 
 class FirestoreController: ObservableObject {
 
-    @Published var events: [Event] = []
+    @Published var eventsList: [Event] = []
     @Published var userProfile: UserProfile?
     
     private let db: Firestore
@@ -118,83 +118,151 @@ class FirestoreController: ObservableObject {
     
     // MARK: User Profile
     
-    func createUserProfile(newUserProfile: UserProfile) {
-        print(#function, "Creating user profile")
-        do {
-            let docRef = db.collection(COLLECTION_USER_PROFILES).document(newUserProfile.id ?? "")
-            try docRef.setData(from: newUserProfile) { error in
-                if let error = error {
-                    print(#function, "Unable to add user profile to DB: \(error)")
-                } else {
-                    print(#function, "User profile successfully added to DB")
-                }
-            }
-        } catch {
-            print(#function, "Unable to add user profile to DB: \(error)")
-        }
-    }
-    
-    func updateUserProfile(userUpdate: UserProfile) {
-        print(#function, "Updating user profile: \(userUpdate.name)")
-        guard let userProfileId = userUpdate.id else {
-            print(#function, "Invalid user profile ID")
-            return
-        }
+    // MARK: User profile functions
+    func createUserProfile(newUser: UserProfile){
+        print(#function, "Inserting profile Info")
         
-        do {
-            let userProfileRef = db.collection(COLLECTION_USER_PROFILES).document(userProfileId)
-            try userProfileRef.setData(from: userUpdate, merge: true) { error in
-                if let error = error {
-                    print(#function, "Unable to update user profile: \(error)")
-                } else {
-                    print(#function, "User profile updated successfully")
+        do{
+            let docRef = db.collection(COLLECTION_USER_PROFILES).document(newUser.id!)
+            try docRef.setData([FIELD_NAME: newUser.name,
+                              FIELD_CONTACT_NUMBER : newUser.contactNumber,
+                              FIELD_ADDRESS : newUser.address]){ error in
                 }
-            }
-        } catch {
-            print(#function, "Unable to update user profile: \(error)")
-        }
-    }
-    
-    func deleteUserProfile() {
-        print(#function, "Deleting user profile")
-        self.loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL") ?? ""
-        
-        if self.loggedInUserEmail.isEmpty {
-            print(#function, "Logged in user's email address not available. Can't delete user profile.")
-        } else {
-            let userProfileRef = db.collection(COLLECTION_USER_PROFILES).document(self.loggedInUserEmail)
             
-            userProfileRef.delete { error in
-                if let error = error {
-                    print(#function, "Unable to delete user profile: \(error)")
-                } else {
-                    print(#function, "User profile deleted successfully")
-                }
-            }
-        }
+            print(#function, "user \(newUser.name) successfully added to database")
+        }catch let err as NSError{
+            print(#function, "Unable to add user to database : \(err)")
+        }//do..catch
+        
     }
     
     func getUserProfile(withCompletion completion: @escaping (Bool) -> Void) {
         self.loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL") ?? ""
+        print("\(self.loggedInUserEmail)")
         
         let document = db.collection(COLLECTION_USER_PROFILES).document(self.loggedInUserEmail)
-        
-        document.addSnapshotListener { (documentSnapshot, error) in
-            if let document = documentSnapshot, document.exists {
-                do {
-                    if let userProfile = try document.data(as: UserProfile?.self) {
-                        self.userProfile = userProfile
+
+            document.addSnapshotListener { (documentSnapshot, error) in
+                if let document = documentSnapshot, document.exists {
+                    do {
+                        if let userProfile = try document.data(as: UserProfile?.self) {
+                            self.userProfile = userProfile
+                            DispatchQueue.main.async {
+                                completion(true)
+                            }
+                        }
+                    } catch {
+                        print("Error decoding user profile data: \(error.localizedDescription)")
                         DispatchQueue.main.async {
-                            completion(true)
+                            //self.isLoginSuccessful = false
+                            completion(false)
                         }
                     }
-                } catch {
-                    
+                } else {
+                    print("Document does not exist")
                     DispatchQueue.main.async {
+                        //self.isLoginSuccessful = false
                         completion(false)
                     }
                 }
-            } else {
+            }
+        }
+    
+    func updateUserProfile(userToUpdate : UserProfile){
+        print(#function, "Updating user profile \(userToUpdate.name), ID : \(userToUpdate.id)")
+        
+        
+        //get the email address of currently logged in user
+        self.loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL") ?? ""
+        
+        if (self.loggedInUserEmail.isEmpty){
+            print(#function, "Logged in user's email address not available. Can't update employees")
+        }
+        else{
+            do{
+                try self.db
+                    .collection(COLLECTION_USER_PROFILES)
+                    .document(userToUpdate.id!)
+                    .updateData([FIELD_NAME : userToUpdate.name,
+                       FIELD_CONTACT_NUMBER : userToUpdate.contactNumber,
+                                      FIELD_ADDRESS : userToUpdate.address ]){ error in
+                        
+                        if let err = error {
+                            print(#function, "Unable to update user profile in database : \(err)")
+                        }else{
+                            print(#function, "User profile \(userToUpdate.name) successfully updated in database")
+                        }
+                    }
+            }catch let err as NSError{
+                print(#function, "Unable to update user profile in database : \(err)")
+            }//catch
+        }//else
+    }
+    
+    func deleteUser23(withCompletion completion: @escaping (Bool) -> Void) {
+        self.loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL") ?? ""
+        
+        if (self.loggedInUserEmail.isEmpty){
+            print(#function, "Logged in user's email address not available. Can't Delete User ")
+            DispatchQueue.main.async {
+                completion(false)
+            }
+        }
+        else{
+            if(self.eventsList.count > 0){
+                print("this user has events in the system. before delete the account, list should be removed. ")
+                DispatchQueue.main.async {
+                    completion(false)
+                }
+            }
+            let userDocRef = db.collection(COLLECTION_USER_PROFILES).document(loggedInUserEmail)
+            userDocRef.delete { error in
+                if let error = error {
+                    print("Error deleting user data from Firestore: \(error)")
+                    DispatchQueue.main.async {
+                        completion(false)
+                    }
+                } else {
+                    print("User data deleted from Firestore successfully.")
+                    DispatchQueue.main.async {
+                        completion(true)
+                    }
+                }
+            }
+        }
+    }
+    
+    func deleteUser(withCompletion completion: @escaping (Bool) -> Void) {
+        
+        //get the email address of currently logged in user
+        self.loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL") ?? ""
+        
+        if (self.loggedInUserEmail.isEmpty){
+            print(#function, "Logged in user's email address not available. Can't delete USER")
+            DispatchQueue.main.async {
+                completion(false)
+            }
+        }
+        else{
+            do{
+                try self.db
+                    .collection(COLLECTION_USER_PROFILES)
+                    .document(self.loggedInUserEmail)
+                    .delete{ error in
+                        if let err = error {
+                            print(#function, "Unable to delete user from database : \(err)")
+                            DispatchQueue.main.async {
+                                completion(false)
+                            }
+                        }else{
+                            print(#function, "user \(self.loggedInUserEmail) successfully deleted from database")
+                            DispatchQueue.main.async {
+                                completion(true)
+                            }
+                        }
+                    }
+            }catch let err as NSError{
+                print(#function, "Unable to delete user from database : \(err)")
                 DispatchQueue.main.async {
                     completion(false)
                 }
@@ -202,4 +270,52 @@ class FirestoreController: ObservableObject {
         }
     }
     
+    
+    // MARK: Users events
+    func insertEvent(newEvent : Event){
+        print(#function, "Inserting event: \(newEvent.title)")
+        
+        //get the email address of currently logged in user
+        self.loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL") ?? ""
+        
+        if (self.loggedInUserEmail.isEmpty){
+            print(#function, "Logged in user's email address not available. Can't add Event")
+        }
+        else{
+            do{
+                try self.db
+                    .collection(COLLECTION_USER_PROFILES)
+                    .document(self.loggedInUserEmail)
+                    .collection(COLLECTION_EVENTS)
+                    .addDocument(from: newEvent)
+                
+                print(#function, "event \(newEvent.title) successfully added to database")
+            }catch let err as NSError{
+                print(#function, "Unable to add event to database : \(err)")
+            }//do..catch
+        }//else
+    }
+  
+//      func updateEvent(eventUpdate: all) {
+//          print(#function, "Updating event: \(eventUpdate.title)")
+//          guard let eventId = eventUpdate.id else {
+//              print(#function, "Invalid event ID")
+//              return
+//          }
+//
+//          do {
+//              let eventRef = db.collection(COLLECTION_EVENTS).document(eventId)
+//              try eventRef.setData(from: eventUpdate, merge: true) { error in
+//                  if let error = error {
+//                      print(#function, "Unable to update event: \(error)")
+//                  } else {
+//                      print(#function, "Event updated successfully")
+//                  }
+//              }
+//          } catch {
+//              print(#function, "Unable to update event: \(error)")
+//          }
+//      }
+//
+        
 }
