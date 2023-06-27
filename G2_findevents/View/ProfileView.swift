@@ -49,9 +49,15 @@ struct ProfileView: View {
                 
                 if let data = imageData,
                    let uiImage = UIImage(data: data) {
-                    Image(uiImage: uiImage)
-                        .resizable()
+                    if(selectedImage == nil)
+                    {
+                        Image(uiImage: uiImage)
+                            .resizable()
                         .aspectRatio(contentMode: .fit)
+                    }
+                    else{
+                        //
+                    }
                 } else {
                     Text("No image available")
                 }
@@ -99,8 +105,8 @@ struct ProfileView: View {
                 dbHelper.userProfile!.contactNumber = contactNumberFromUI
                 
                 self.dbHelper.updateUserProfile(userToUpdate: dbHelper.userProfile!)
-                
-                //dismiss()
+            
+                rootScreen = .Home
             }){
                 Text("Update Profile")
             }.buttonStyle(.borderedProminent)
