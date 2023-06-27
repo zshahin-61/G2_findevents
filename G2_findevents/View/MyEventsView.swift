@@ -29,17 +29,27 @@ struct MyEventsView: View {
                 
                 ForEach(dbHelper.myEventsList, id:\.id){
                     myEvt in
-                    //HStack{
-                        AsyncImage(url: URL(string: myEvt.image)).frame(width: 100, height: 50)
-                        VStack{
+                    VStack{
+                        //VStack{
                             Text(myEvt.title)
                             Text(myEvt.date)
                             Text(myEvt.location)
-                        }//VSTACK
-                        
-                   // }//HSTACK
-                    
+//                        }
+                         Spacer()
+//                        VStack{
+                            //AsyncImage(url: URL(string: myEvt.image)).frame(width: 100, height: 50)
+                        //}
+                    }
                 } //FOREACH
+                .onDelete(perform: { indexSet in
+                    for index in indexSet{
+                        //get the  object to delete
+                        let evt = self.dbHelper.myEventsList[index]
+                        //delete the document from database
+                        self.dbHelper.deleteMyEvent(eventToDelete: evt)
+                    }
+                    
+                })//onDelete
             }//LIST
             Spacer()
         }//VSTACK
