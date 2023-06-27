@@ -53,8 +53,19 @@ struct SignUpView: View {
                     .textFieldStyle(.roundedBorder)
             }
             .autocorrectionDisabled(true)
+            .navigationTitle("Sign Up Form")
+           
             
             HStack{
+                Button(action:{
+                    self.rootScreen = .Login
+                }){
+                    Image(systemName: "chevron.left")
+
+                    Text("Back").buttonStyle(.borderedProminent)
+                }
+                Spacer()
+
                 Button(action: {
                     self.authHelper.signUp(email: self.email.lowercased(), password: self.password, withCompletion: { isSuccessful in
                         if (isSuccessful){
@@ -74,12 +85,7 @@ struct SignUpView: View {
                     Text("Create Account")
                 }.buttonStyle(.borderedProminent)
                     .disabled(self.password != self.confirmPassword || self.email.isEmpty || self.password.isEmpty || self.confirmPassword.isEmpty)
-                Spacer()
-                Button(action:{
-                    self.rootScreen = .Login
-                }){
-                    Text("Back to Login").buttonStyle(.borderedProminent)
-                }
+              
             }
         }
     }
