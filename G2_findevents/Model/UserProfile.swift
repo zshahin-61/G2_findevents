@@ -13,6 +13,7 @@ struct UserProfile: Codable, Hashable {
     var name: String
     var contactNumber: String
     var address: String
+    var image: Data?
 
     init?(dictionary: [String: Any]) {
         guard let myId = dictionary["id"] as? String else {
@@ -34,14 +35,20 @@ struct UserProfile: Codable, Hashable {
             print(#function, "Unable to get address from JSON")
             return nil
         }
+        
+        guard let myImage = dictionary["image"] as? Data else {
+            print(#function, "Unable to get address from JSON")
+            return nil
+        }
 
-        self.init(id: myId, name: myName, contactNumber: myContactNumber, address: myAddress)
+        self.init(id: myId, name: myName, contactNumber: myContactNumber, address: myAddress, image: myImage)
     }
 
-    init(id: String, name: String, contactNumber: String, address: String) {
+    init(id: String, name: String, contactNumber: String, address: String, image: Data?) {
         self.id = id
         self.name = name
         self.contactNumber = contactNumber
         self.address = address
+        self.image = image
     }
 }

@@ -24,6 +24,9 @@ struct SignUpView: View {
     
     @Binding var rootScreen : RootView
     
+    @State private var showImagePicker = false
+    @State private var selectedImage: UIImage?
+    
     var body: some View {
         
         VStack{
@@ -55,10 +58,25 @@ struct SignUpView: View {
             .autocorrectionDisabled(true)
             .navigationTitle("Sign Up Form")
            
+            VStack {
+                        Button("Select Image") {
+                            showImagePicker = true
+                        }
+                        if let image = selectedImage {
+                            Image(uiImage: image)
+                                .resizable()
+                                .scaledToFit()
+                        }
+                        //Button("Save Image") {
+                            
+                            //saveImageToFirestore()
+                        //}
+                    }
+                    .sheet(isPresented: $showImagePicker) {
+                        ImagePicker(selectedImage: $selectedImage)
+                    }
             
             HStack{
-          
-                
                 Button(action:{
                     self.rootScreen = .Login
                 }){
@@ -70,9 +88,20 @@ struct SignUpView: View {
                 
                   Button(action: {
                       self.authHelper.signUp(email: self.email.lowercased(), password: self.password, withCompletion: { isSuccessful in
+                          
                           if (isSuccessful){
+                              // MARK: USER IMAGE
+                              var imageData :Data? = nil
                               
-                              let user : UserProfile = UserProfile(id: self.email.lowercased(), name: self.nameFromUI, contactNumber: self.phoneFromUI, address: self.addressFromUI)
+                              if(selectedImage != nil )
+                              {
+                                  let image = selectedImage!
+                                  let imageName = "\(UUID().uuidString).jpg"
+                                  
+                                  imageData = image.jpegData(compressionQuality: 0.1)
+                              }
+                              
+                              let user : UserProfile = UserProfile(id: self.email.lowercased(), name: self.nameFromUI, contactNumber: self.phoneFromUI, address: self.addressFromUI, image: imageData)
                               
                               self.dbHelper.createUserProfile(newUser: user)
                               
@@ -93,9 +122,31 @@ struct SignUpView: View {
         }
     }
     
-    func validateCarPlateNumber(_ input: String) -> Bool {
-        let pattern = "^[a-zA-Z0-9]{2,8}$"
-        let regex = NSPredicate(format: "SELF MATCHES %@", pattern)
-        return regex.evaluate(with: input)
-    }
+    func saveImageToFirestore() {
+            guard let image = selectedImage else {
+                return
+            }
+//
+//            let storage = Storage.storage()
+            //let storageRef = storage.reference()
+            //let imageName = "\(UUID().uuidString).jpg"
+            //let imagesRef = storageRef.child("profile_images/\(imageName)")
+//
+          //  if let imageData = image.jpegData(compressionQuality: 0.8) {
+//                imagesRef.putData(imageData, metadata: nil) { _, error in
+//                    if let error = error {
+//                        print("Error uploading image: \(error.localizedDescription)")
+//                    } else {
+//                        imagesRef.downloadURL { url, error in
+//                            if let downloadURL = url {
+//                                // Save the downloadURL to Firestore or use it as needed
+//                                print("Image uploaded successfully. URL: \(downloadURL)")
+//                            } else {
+//                                print("Error getting download URL: \(error?.localizedDescription ?? "")")
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+        }
 }
