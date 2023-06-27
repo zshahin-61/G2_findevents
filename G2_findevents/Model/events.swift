@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct eventsReponseObj: Codable,Hashable {
+struct eventsReponseObj: Codable {
     var events:[Event]
 }
 
