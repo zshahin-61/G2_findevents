@@ -34,6 +34,7 @@
 		5F88051F2A4A84F7001A8C44 /* MyEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F88051E2A4A84F7001A8C44 /* MyEvent.swift */; };
 		5F8805302A4B5AA6001A8C44 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5F88052F2A4B5AA6001A8C44 /* GoogleService-Info.plist */; };
 		5F8805322A4B6783001A8C44 /* ImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8805312A4B6783001A8C44 /* ImagePickerView.swift */; };
+		5F8805352A4BA524001A8C44 /* URLImage in Frameworks */ = {isa = PBXBuildFile; productRef = 5F8805342A4BA524001A8C44 /* URLImage */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -71,6 +72,7 @@
 				5A95590F2A4927E800A47D02 /* FirebaseDatabase in Frameworks */,
 				5A95590D2A4927E800A47D02 /* FirebaseAuth in Frameworks */,
 				5A9559112A4927E800A47D02 /* FirebaseFirestore in Frameworks */,
+				5F8805352A4BA524001A8C44 /* URLImage in Frameworks */,
 				5A9559132A4927E800A47D02 /* FirebaseFirestoreSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -177,6 +179,7 @@
 				5A95590E2A4927E800A47D02 /* FirebaseDatabase */,
 				5A9559102A4927E800A47D02 /* FirebaseFirestore */,
 				5A9559122A4927E800A47D02 /* FirebaseFirestoreSwift */,
+				5F8805342A4BA524001A8C44 /* URLImage */,
 			);
 			productName = G2_findevents;
 			productReference = 5A9C4E522A48A084001F7388 /* G2_findevents.app */;
@@ -208,6 +211,7 @@
 			mainGroup = 5A9C4E492A48A084001F7388;
 			packageReferences = (
 				5A95590B2A4927E800A47D02 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				5F8805332A4BA524001A8C44 /* XCRemoteSwiftPackageReference "url-image" */,
 			);
 			productRefGroup = 5A9C4E532A48A084001F7388 /* Products */;
 			projectDirPath = "";
@@ -466,6 +470,14 @@
 				minimumVersion = 10.0.0;
 			};
 		};
+		5F8805332A4BA524001A8C44 /* XCRemoteSwiftPackageReference "url-image" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/dmytro-anokhin/url-image";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -488,6 +500,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5A95590B2A4927E800A47D02 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseFirestoreSwift;
+		};
+		5F8805342A4BA524001A8C44 /* URLImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5F8805332A4BA524001A8C44 /* XCRemoteSwiftPackageReference "url-image" */;
+			productName = URLImage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
