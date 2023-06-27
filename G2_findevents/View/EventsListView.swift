@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct EventsListView: View {
+    @EnvironmentObject var authHelper : FireAuthController
+
     @State var evntList:[Event] = []
     @State private var selectedCityIndex = 0
     let cities = ["New York", "Pennsylvania"]
