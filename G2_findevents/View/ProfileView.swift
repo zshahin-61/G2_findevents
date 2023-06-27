@@ -14,12 +14,12 @@ struct ProfileView: View {
     @EnvironmentObject var authHelper : FireAuthController
     @EnvironmentObject var dbHelper : FirestoreController
     
-    @Environment(\.dismiss) var dismiss
+    //@Environment(\.dismiss) var dismiss
     
     @State private var emailFromUI : String = ""
     @State private var addressFromUI : String = ""
-    @State private var phoneFromUI : String = ""
-    @State private var displayNameFromUI : String = ""
+    @State private var contactNumberFromUI : String = ""
+    @State private var nameFromUI : String = ""
     
     @State private var errorMsg : String? = nil
     //@State private var selectedLink : Int? = nil
@@ -37,7 +37,7 @@ struct ProfileView: View {
             Form{
                 Text("Dear user: \(self.emailFromUI)")
                 
-                TextField("Name", text: self.$displayNameFromUI)
+                TextField("Name", text: self.$nameFromUI)
                     .textInputAutocapitalization(.never)
                     .textFieldStyle(.roundedBorder)
                 
@@ -45,69 +45,87 @@ struct ProfileView: View {
                     .textInputAutocapitalization(.never)
                     .textFieldStyle(.roundedBorder)
                 
-                TextField("Phone Number", text: self.$phoneFromUI)
+                TextField("Phone Number", text: self.$contactNumberFromUI)
                     .textInputAutocapitalization(.never)
                     .textFieldStyle(.roundedBorder)
                 
-                
-//                if let url = imageURL {
-//                                URLImage(url: url) { image in
-//                                    image
-//                                        .resizable()
-//                                        .aspectRatio(contentMode: .fit)
-//                                        .frame(width: 200, height: 200)
-//                                }
-//                            } else {
-//                                Text("No image available")
-//                            }
-
-                    
-                    if let err = errorMsg{
-                        Text(err).foregroundColor(Color.red).bold()
+                VStack{
+                    Button("Select Image") {
+                        showImagePicker = true
                     }
-                    
-                    
-            
+                    if let image = selectedImage {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFit()
+                    }
+                }
+                .sheet(isPresented: $showImagePicker) {
+                    ImagePicker(selectedImage: $selectedImage)
+                }
+                
+                // TODO: Show image from db
+                
+                //                if let image = selectedImage {
+                //                    Image(uiImage: image)
+                //                        .resizable()
+                //                        .scaledToFit()
+                //                }
+                
+                //                if let url = imageURL {
+                //                                URLImage(url: url) { image in
+                //                                    image
+                //                                        .resizable()
+                //                                        .aspectRatio(contentMode: .fit)
+                //                                        .frame(width: 200, height: 200)
+                //                                }
+                //                            } else {
+                //                                Text("No image available")
+                //                            }
+                if let err = errorMsg{
+                    Text(err).foregroundColor(Color.red).bold()
+                }
             }
             .autocorrectionDisabled(true)
             
+            
+            
             //HStack{
-                Button(action: {
-                    //validate the data such as no mandatory inputs, password rules, etc.
-                    
-                    //create user account on FirebaseAuth
-                    dbHelper.userProfile!.address = addressFromUI
-                    //////IMage
-                    var imageData :Data? = nil
-                    
-                    if(selectedImage != nil )
-                    {
-                        let image = selectedImage!
-                        let imageName = "\(UUID().uuidString).jpg"
-                        
-                        imageData = image.jpegData(compressionQuality: 0.1)
-                    }
-                    
-                    ////////
-                    dbHelper.userProfile!.image = imageData
-                    dbHelper.userProfile!.name = displayNameFromUI
-                    dbHelper.userProfile!.contactNumber = phoneFromUI
-                    
-                    self.dbHelper.updateUserProfile(userToUpdate: dbHelper.userProfile!)
-                    
-                    dismiss()
-                }){
-                    Text("Update Profile")
-                }.buttonStyle(.borderedProminent)
+            Button(action: {
+                //validate the data such as no mandatory inputs, password rules, etc.
                 
-//                NavigationLink(destination: SignInView(rootScreen: $rootScreen).environmentObject(authHelper).environmentObject(dbHelper),tag: 1, selection: self.$selectedLink ){}
-                Spacer()
-                Button(action:{
-                    // TODO: 
-                    }){
-                        Image(systemName: "multiply.circle").foregroundColor(Color.white)
-                    Text("Delete User Account")
-                    }.padding(5).font(.title2).foregroundColor(Color.white)//
+                //create user account on FirebaseAuth
+                dbHelper.userProfile!.address = addressFromUI
+                //////IMage
+                var imageData :Data? = nil
+                
+                if(selectedImage != nil )
+                {
+                    let image = selectedImage!
+                    let imageName = "\(UUID().uuidString).jpg"
+                    
+                    imageData = image.jpegData(compressionQuality: 0.1)
+                }
+                
+                ////////
+                dbHelper.userProfile!.image = imageData
+                dbHelper.userProfile!.name = nameFromUI
+                dbHelper.userProfile!.contactNumber = contactNumberFromUI
+                
+                self.dbHelper.updateUserProfile(userToUpdate: dbHelper.userProfile!)
+                
+                //dismiss()
+            }){
+                Text("Update Profile")
+            }.buttonStyle(.borderedProminent)
+            
+            //                NavigationLink(destination: SignInView(rootScreen: $rootScreen).environmentObject(authHelper).environmentObject(dbHelper),tag: 1, selection: self.$selectedLink ){}
+            Spacer()
+            Button(action:{
+                // TODO: Delete Account
+            }){
+                Image(systemName: "multiply.circle").foregroundColor(Color.white)
+                Text("Delete User Account")
+            }.padding(5).font(.title2).foregroundColor(Color.white)//
                 .buttonBorderShape(.roundedRectangle(radius: 15)).buttonStyle(.bordered).background(Color.red)
                 .alert(isPresented: $showAlert) {
                     Alert(
@@ -124,18 +142,12 @@ struct ProfileView: View {
                 if (isSuccessful){
                     self.emailFromUI = dbHelper.userProfile!.id!
                     self.addressFromUI = dbHelper.userProfile!.address
-                    self.displayNameFromUI = dbHelper.userProfile!.name
+                    self.nameFromUI = dbHelper.userProfile!.name
                     
-                    self.phoneFromUI = dbHelper.userProfile!.contactNumber
+                    self.contactNumberFromUI = dbHelper.userProfile!.contactNumber
                     self.errorMsg = nil
                 }
             })
         }
-    }
-    
-    func validateCarPlateNumber(_ input: String) -> Bool {
-        let pattern = "^[a-zA-Z0-9]{2,8}$"
-        let regex = NSPredicate(format: "SELF MATCHES %@", pattern)
-        return regex.evaluate(with: input)
     }
 }

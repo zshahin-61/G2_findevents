@@ -119,32 +119,4 @@ struct SignUpView: View {
            
         }
     }
-    
-    func saveImageToFirestore() {
-            guard let image = selectedImage else {
-                return
-            }
-//
-//            let storage = Storage.storage()
-            //let storageRef = storage.reference()
-            //let imageName = "\(UUID().uuidString).jpg"
-            //let imagesRef = storageRef.child("profile_images/\(imageName)")
-//
-          //  if let imageData = image.jpegData(compressionQuality: 0.8) {
-//                imagesRef.putData(imageData, metadata: nil) { _, error in
-//                    if let error = error {
-//                        print("Error uploading image: \(error.localizedDescription)")
-//                    } else {
-//                        imagesRef.downloadURL { url, error in
-//                            if let downloadURL = url {
-//                                // Save the downloadURL to Firestore or use it as needed
-//                                print("Image uploaded successfully. URL: \(downloadURL)")
-//                            } else {
-//                                print("Error getting download URL: \(error?.localizedDescription ?? "")")
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-        }
 }
