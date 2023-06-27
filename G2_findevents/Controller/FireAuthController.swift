@@ -64,6 +64,7 @@ class FireAuthController : ObservableObject{
         }
         
     }
+    
     func signIn(email: String, password : String, withCompletion completion: @escaping (Bool) -> Void){
         
         Auth.auth().signIn(withEmail: email, password: password){authResult, error in
@@ -111,6 +112,7 @@ class FireAuthController : ObservableObject{
             print(#function, "Unable to sign out : \(err)")
         }
     }
+    
     func deleteAccountFromAuth() {
         if let currentUser = Auth.auth().currentUser {
             currentUser.delete { error in
