@@ -1,6 +1,6 @@
 //
 //  SignUpView.swift
-//  Parking_Golnaz
+//  G2_findevents
 //
 //  Created by Golnaz Chehrazi on 2023-06-23.
 //
@@ -11,6 +11,7 @@ import SwiftUI
 struct SignUpView: View {
     @EnvironmentObject var authHelper : FireAuthController
     @EnvironmentObject var dbHelper : FirestoreController
+    
     @State private var email : String = ""
     @State private var password : String = ""
     @State private var confirmPassword : String = ""

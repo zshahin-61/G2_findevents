@@ -116,8 +116,6 @@ class FirestoreController: ObservableObject {
         }
     }
     
-    // MARK: User Profile
-    
     // MARK: User profile functions
     func createUserProfile(newUser: UserProfile){
         print(#function, "Inserting profile Info")
@@ -176,7 +174,7 @@ class FirestoreController: ObservableObject {
         self.loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL") ?? ""
         
         if (self.loggedInUserEmail.isEmpty){
-            print(#function, "Logged in user's email address not available. Can't update employees")
+            print(#function, "Logged in user's email address not available. Can't update User Profile")
         }
         else{
             do{
@@ -197,39 +195,6 @@ class FirestoreController: ObservableObject {
                 print(#function, "Unable to update user profile in database : \(err)")
             }//catch
         }//else
-    }
-    
-    func deleteUser23(withCompletion completion: @escaping (Bool) -> Void) {
-        self.loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL") ?? ""
-        
-        if (self.loggedInUserEmail.isEmpty){
-            print(#function, "Logged in user's email address not available. Can't Delete User ")
-            DispatchQueue.main.async {
-                completion(false)
-            }
-        }
-        else{
-            if(self.eventsList.count > 0){
-                print("this user has events in the system. before delete the account, list should be removed. ")
-                DispatchQueue.main.async {
-                    completion(false)
-                }
-            }
-            let userDocRef = db.collection(COLLECTION_USER_PROFILES).document(loggedInUserEmail)
-            userDocRef.delete { error in
-                if let error = error {
-                    print("Error deleting user data from Firestore: \(error)")
-                    DispatchQueue.main.async {
-                        completion(false)
-                    }
-                } else {
-                    print("User data deleted from Firestore successfully.")
-                    DispatchQueue.main.async {
-                        completion(true)
-                    }
-                }
-            }
-        }
     }
     
     func deleteUser(withCompletion completion: @escaping (Bool) -> Void) {
@@ -283,6 +248,12 @@ class FirestoreController: ObservableObject {
         }
         else{
             do{
+//                let docRef = db.collection(COLLECTION_USER_PROFILES)
+//                    .document(self.loggedInUserEmail).collection(COLLECTION_EVENTS).document(String(new).id!)
+//                try docRef.setData([FIELD_NAME: newEvent.event.title
+//                                  FIELD_CONTACT_NUMBER : .contactNumber,
+//                                  FIELD_ADDRESS : newUser.address]){ error in
+//                    }
                 try self.db
                     .collection(COLLECTION_USER_PROFILES)
                     .document(self.loggedInUserEmail)

@@ -43,7 +43,8 @@ struct EventDetailsView: View {
                 Button(action:{
                     // TODO: add to firestore
                     //var newEvent = Event()
-                    dbHelper.insertEvent(newEvent: self.event)
+                    //var newEvent = MyEvent(id: String(event.id), event: event)
+                    dbHelper.insertEvent(newEvent: event)
                     
                 }){
                     Text("I will Attend")
