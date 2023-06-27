@@ -63,31 +63,12 @@ struct ProfileView: View {
                     ImagePicker(selectedImage: $selectedImage)
                 }
                 
-                // TODO: Show image from db
                 
-                //                if let image = selectedImage {
-                //                    Image(uiImage: image)
-                //                        .resizable()
-                //                        .scaledToFit()
-                //                }
-                
-                //                if let url = imageURL {
-                //                                URLImage(url: url) { image in
-                //                                    image
-                //                                        .resizable()
-                //                                        .aspectRatio(contentMode: .fit)
-                //                                        .frame(width: 200, height: 200)
-                //                                }
-                //                            } else {
-                //                                Text("No image available")
-                //                            }
                 if let err = errorMsg{
                     Text(err).foregroundColor(Color.red).bold()
                 }
             }
             .autocorrectionDisabled(true)
-            
-            
             
             //HStack{
             Button(action: {
@@ -118,7 +99,6 @@ struct ProfileView: View {
                 Text("Update Profile")
             }.buttonStyle(.borderedProminent)
             
-            //                NavigationLink(destination: SignInView(rootScreen: $rootScreen).environmentObject(authHelper).environmentObject(dbHelper),tag: 1, selection: self.$selectedLink ){}
             Spacer()
             Button(action:{
                 // TODO: Delete Account
@@ -127,15 +107,6 @@ struct ProfileView: View {
                 Text("Delete User Account")
             }.padding(5).font(.title2).foregroundColor(Color.white)//
                 .buttonBorderShape(.roundedRectangle(radius: 15)).buttonStyle(.bordered).background(Color.red)
-                .alert(isPresented: $showAlert) {
-                    Alert(
-                        title: Text("Error :"),
-                        message: Text("before deleting your account you have to remove all cars in parking lots"),
-                        dismissButton: .default(Text("OK")){
-                            //dismiss()
-                        }
-                    )
-                }
             
         }.padding().onAppear(){
             dbHelper.getUserProfile(withCompletion: { isSuccessful in
@@ -146,6 +117,24 @@ struct ProfileView: View {
                     
                     self.contactNumberFromUI = dbHelper.userProfile!.contactNumber
                     self.errorMsg = nil
+                    
+                    // TODO: Show image from db
+                    
+                    //                if let image = selectedImage {
+                    //                    Image(uiImage: image)
+                    //                        .resizable()
+                    //                        .scaledToFit()
+                    //                }
+                    //                if let url = imageURL {
+                    //                                URLImage(url: url) { image in
+                    //                                    image
+                    //                                        .resizable()
+                    //                                        .aspectRatio(contentMode: .fit)
+                    //                                        .frame(width: 200, height: 200)
+                    //                                }
+                    //                            } else {
+                    //                                Text("No image available")
+                    //                            }
                 }
             })
         }
