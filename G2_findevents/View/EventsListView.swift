@@ -8,22 +8,40 @@ import SwiftUI
 import MapKit
 
 struct EventsListView: View {
-    @Environment(\.dismiss) var dismiss
+    //@Environment(\.dismiss) var dismiss
+    
     @EnvironmentObject var dbHelper: FirestoreController
     @EnvironmentObject var authHelper: FireAuthController
     @State var evntList: [Event] = []
     @State private var selectedCity = ""
+    
     @State private var mapRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0), span: MKCoordinateSpan(latitudeDelta: 0.1, longitudeDelta: 0.1))
     
     var body: some View {
         VStack {
             Text("All Events Near You").font(.title)
             VStack {
-                TextField("Enter City", text: $selectedCity, onCommit: {
-                    loadDataFromAPI()
-                })
+                TextField("Enter City", text: $selectedCity)
+                          //, onCommit: {
+                    //loadDataFromAPI()
+                //})
+                
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding()
+                
+                Button(action:{
+                    if(!self.selectedCity.isEmpty)
+                    {
+                        loadDataFromAPIbyCity()
+                    }
+                    else
+                    {
+                        loadDataFromAPI()
+                    }
+                    
+                }){
+                    Text("Search")
+                }
                 
                 VStack {
                     Text("Event Map")
@@ -62,10 +80,51 @@ struct EventsListView: View {
     }
     
     func loadDataFromAPI() {
+        //evntList.removeAll()
         print("Getting data from API")
         
         // 1. Specify the API URL
         let apiUrlString = "https://api.seatgeek.com/2/events?client_id=MzQ1MjY2NjN8MTY4Nzc0MzYxNi45MzE5NzMy"
+        
+        guard let apiUrl = URL(string: apiUrlString) else {
+            print("ERROR: Cannot convert API address to a URL object")
+            return
+        }
+        
+        // 2. Create a network request object
+        let request = URLRequest(url: apiUrl)
+        
+        // 3. Connect to the API and handle the results
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            if let error = error {
+                print("ERROR: Network error: \(error)")
+                return
+            }
+            
+            if let jsonData = data {
+                print("Data retrieved")
+                if let decodedResponse = try? JSONDecoder().decode(eventsReponseObj.self, from: jsonData) {
+                    DispatchQueue.main.async {
+                        print(decodedResponse)
+                        let events = decodedResponse.events
+                        self.evntList = events
+                    }
+                } else {
+                    print("ERROR: Error converting data to JSON")
+                }
+            } else {
+                print("ERROR: Did not receive data from the API")
+            }
+        }
+        task.resume()
+    }
+    
+    func loadDataFromAPIbyCity() {
+        //evntList.removeAll()
+        print("Getting data from API")
+        
+        // 1. Specify the API URL
+        let apiUrlString = "https://api.seatgeek.com/2/events?venue.city=\(self.selectedCity)&client_id=MzQ1MjY2NjN8MTY4Nzc0MzYxNi45MzE5NzMy"
         
         guard let apiUrl = URL(string: apiUrlString) else {
             print("ERROR: Cannot convert API address to a URL object")
