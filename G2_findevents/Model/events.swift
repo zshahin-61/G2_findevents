@@ -52,9 +52,3 @@ struct Event: Codable,Hashable,Identifiable {
     var datetime_local: String
     var stats: Stats
 }
-
-
-
-
- 
-
