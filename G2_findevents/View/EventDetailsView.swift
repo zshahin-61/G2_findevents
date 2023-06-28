@@ -32,12 +32,10 @@ struct EventDetailsView: View {
                         }
                     }
                     Text("Local Date:\(event.datetime_local)")
+            
+                Text("Price: $\(event.stats.average_price!)")
                 
-                if let price = event.stats.average_price{
-                    Text("Price: $\(price)")
-                }
-                    
-                Section(header:Text("Venue")){
+                    Section(header:Text("Venue")){
                         Text("Name: \(event.venue.name)")
                         Text("Location: \(event.venue.display_location)")
                         Text("City: \(event.venue.city)")
