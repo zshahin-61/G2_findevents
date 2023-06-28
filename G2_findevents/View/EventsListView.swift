@@ -21,30 +21,31 @@ struct EventsListView: View {
         VStack {
             Text("All Events Near You").font(.title)
             VStack {
-                TextField("Enter City", text: $selectedCity)
-                          //, onCommit: {
+                HStack{
+                    TextField("Enter City", text: $selectedCity)
+                    //, onCommit: {
                     //loadDataFromAPI()
-                //})
-                
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
-                
-                Button(action:{
-                    evntList.removeAll()
-                    if(!self.selectedCity.isEmpty)
-                    {
-                        loadDataFromAPIbyCity()
-                    }
-                    else
-                    {
-                        loadDataFromAPI()
-                    }
-                    calculateMapRegion()
+                    //})
                     
-                }){
-                    Text("Search")
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding()
+                    
+                    Button(action:{
+                        evntList.removeAll()
+                        if(!self.selectedCity.isEmpty)
+                        {
+                            loadDataFromAPIbyCity()
+                        }
+                        else
+                        {
+                            loadDataFromAPI()
+                        }
+                        calculateMapRegion()
+                        
+                    }){
+                        Text("Search")
+                    }
                 }
-                
                 VStack {
                     Text("Event Map")
                         .font(.headline)
