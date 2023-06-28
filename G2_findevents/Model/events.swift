@@ -25,13 +25,6 @@ struct Performer: Codable,Hashable{
     var image: String?
 }
 
-//struct Images: Codable,Hashable {
-//    var large: String?
-//    var huge: String?
-//    var small: String?
-//    var medium: String?
-//}
-
 struct Location: Codable,Hashable {
     var lat: Double
     var lon: Double
