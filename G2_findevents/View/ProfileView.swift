@@ -27,7 +27,6 @@ struct ProfileView: View {
     
     @State private var showImagePicker = false
     @State private var selectedImage: UIImage?
-    //@State private var imageURL: URL? = nil
     @State private var imageData: Data?
     
     var body: some View {
@@ -47,13 +46,28 @@ struct ProfileView: View {
                     .textInputAutocapitalization(.never)
                     .textFieldStyle(.roundedBorder)
                 
+                VStack{
+                    Button("Select Image") {
+                        showImagePicker = true
+                    }
+                    if let image = selectedImage {
+                        Image(uiImage: image)
+                            .resizable()//.frame(width: 150)
+                            .scaledToFit()
+                        
+                    }
+                }
+                .sheet(isPresented: $showImagePicker) {
+                    ImagePickerView(selectedImage: $selectedImage)
+                }
+                
                 if let data = imageData,
                    let uiImage = UIImage(data: data) {
                     if(selectedImage == nil)
                     {
                         Image(uiImage: uiImage)
                             .resizable()
-                        .aspectRatio(contentMode: .fit)
+                            .aspectRatio(contentMode: .fit)
                     }
                     else{
                         //
@@ -67,20 +81,6 @@ struct ProfileView: View {
                 }
             }
             .autocorrectionDisabled(true)
-            
-            VStack{
-                Button("Select Image") {
-                    showImagePicker = true
-                }
-                if let image = selectedImage {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFit()
-                }
-            }
-            .sheet(isPresented: $showImagePicker) {
-                ImagePickerView(selectedImage: $selectedImage)
-            }
             
             //HStack{
             Button(action: {
@@ -106,7 +106,7 @@ struct ProfileView: View {
                 dbHelper.userProfile!.contactNumber = contactNumberFromUI
                 
                 self.dbHelper.updateUserProfile(userToUpdate: dbHelper.userProfile!)
-            
+                
                 rootScreen = .Home
             }){
                 Text("Update Profile")
