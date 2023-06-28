@@ -32,6 +32,7 @@ class FirestoreController: ObservableObject {
     private let FIELD_NAME = "name"
     private let FIELD_CONTACT_NUMBER = "contactNumber"
     private let FIELD_ADDRESS = "address"
+    private let FIELD_USER_IMAGE = "image"
     
     private var loggedInUserEmail: String = ""
     
@@ -54,7 +55,7 @@ class FirestoreController: ObservableObject {
             let docRef = db.collection(COLLECTION_USER_PROFILES).document(newUser.id!)
             try docRef.setData([FIELD_NAME: newUser.name,
                      FIELD_CONTACT_NUMBER : newUser.contactNumber,
-                            FIELD_ADDRESS : newUser.address]){ error in
+                            FIELD_ADDRESS : newUser.address, FIELD_USER_IMAGE: newUser.image]){ error in
             }
             
             print(#function, "user \(newUser.name) successfully added to database")
@@ -113,7 +114,7 @@ class FirestoreController: ObservableObject {
                     .document(userToUpdate.id!)
                     .updateData([FIELD_NAME : userToUpdate.name,
                        FIELD_CONTACT_NUMBER : userToUpdate.contactNumber,
-                              FIELD_ADDRESS : userToUpdate.address ]){ error in
+                              FIELD_ADDRESS : userToUpdate.address, FIELD_USER_IMAGE: userToUpdate.image ]){ error in
                         
                         if let err = error {
                             print(#function, "Unable to update user profile in database : \(err)")

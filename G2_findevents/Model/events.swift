@@ -7,9 +7,10 @@
 
 import Foundation
 
-struct eventsReponseObj: Codable {
+struct eventsReponseObj: Codable,Hashable {
     var events:[Event]
 }
+
 struct Stats: Codable,Hashable{
     var average_price: Int?
     var median_price: Int?
@@ -24,12 +25,12 @@ struct Performer: Codable,Hashable{
     var image: String
 }
 
-struct Images: Codable,Hashable {
-    var large: String?
-    var huge: String?
-    var small: String?
-    var medium: String?
-}
+//struct Images: Codable,Hashable {
+//    var large: String?
+//    var huge: String?
+//    var small: String?
+//    var medium: String?
+//}
 
 struct Location: Codable,Hashable {
     var lat: Double
@@ -52,6 +53,8 @@ struct Event: Codable,Hashable,Identifiable {
     var id: Int
     var type: String
     var title: String
+    //var short_title: String
+    //var url: String
     var performers: [Performer]
     var datetime_utc: String
     var venue: Venue

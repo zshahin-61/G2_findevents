@@ -18,11 +18,12 @@ struct SignUpView: View {
     @State private var addressFromUI : String = ""
     @State private var phoneFromUI : String = ""
     @State private var nameFromUI : String = ""
-    @State private var carPlateNumber : String = ""
-    @State private var cpnList : [String] = [String]()
     @State private var errorMsg : String? = nil
     
     @Binding var rootScreen : RootView
+    
+    @State private var showImagePicker = false
+    @State private var selectedImage: UIImage?
     
     var body: some View {
         
@@ -51,51 +52,62 @@ struct SignUpView: View {
                 TextField("Phone Number", text: self.$phoneFromUI)
                     .textInputAutocapitalization(.never)
                     .textFieldStyle(.roundedBorder)
+                
+                VStack {
+                    Button("Select Image") {
+                        showImagePicker = true
+                    }
+                    if let image = selectedImage {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFit()
+                    }
+                }
+                .sheet(isPresented: $showImagePicker) {
+                    ImagePickerView(selectedImage: $selectedImage)
+                }
             }
             .autocorrectionDisabled(true)
-            .navigationTitle("Sign Up Form")
-           
             
-            HStack{
-          
-                
-                Button(action:{
-                    self.rootScreen = .Login
-                }){
-                    Image(systemName: "chevron.left")
-
-                    Text("Back").buttonStyle(.borderedProminent)
-                }
-                Spacer()
-                
-                  Button(action: {
-                      self.authHelper.signUp(email: self.email.lowercased(), password: self.password, withCompletion: { isSuccessful in
-                          if (isSuccessful){
-                              
-                              let user : UserProfile = UserProfile(id: self.email.lowercased(), name: self.nameFromUI, contactNumber: self.phoneFromUI, address: self.addressFromUI)
-                              
-                              self.dbHelper.createUserProfile(newUser: user)
-                              
-                              //show to home screen
-                              self.rootScreen = .Home
-                          }else{
-                              //show the alert with invalid username/password prompt
-                              print(#function, "unable to create user")
-                          }
-                      })
-                  }){
-                      Text("Create Account")
-                  }.buttonStyle(.borderedProminent)
-                      .disabled(self.password != self.confirmPassword || self.email.isEmpty || self.password.isEmpty || self.confirmPassword.isEmpty)
-                                
-            }
-           
+            Button(action: {
+                self.authHelper.signUp(email: self.email.lowercased(), password: self.password, withCompletion: { isSuccessful in
+                    
+                    if (isSuccessful){
+                        // MARK: USER IMAGE
+                        var imageData :Data? = nil
+                        
+                        if(selectedImage != nil )
+                        {
+                            let image = selectedImage!
+                            let imageName = "\(UUID().uuidString).jpg"
+                            
+                            imageData = image.jpegData(compressionQuality: 0.1)
+                        }
+                        
+                        let user : UserProfile = UserProfile(id: self.email.lowercased(), name: self.nameFromUI, contactNumber: self.phoneFromUI, address: self.addressFromUI, image: imageData)
+                        
+                        self.dbHelper.createUserProfile(newUser: user)
+                        
+                        //show to home screen
+                        self.rootScreen = .Home
+                    }else{
+                        //show the alert with invalid username/password prompt
+                        print(#function, "unable to create user")
+                    }
+                })
+            }){
+                Text("Create Account")
+            }.buttonStyle(.borderedProminent)
+                .disabled(self.password != self.confirmPassword || self.email.isEmpty || self.password.isEmpty || self.confirmPassword.isEmpty)
+            
+                .navigationBarTitle("Sign Up Form", displayMode: .inline)
+                .navigationBarItems(
+                    trailing: Button(action: {
+                        rootScreen = .Login
+                    }) {
+                        Image(systemName: "chevron.left")
+                        Text("Back")
+                    })
         }
-    }
-    
-    func validateCarPlateNumber(_ input: String) -> Bool {
-        let pattern = "^[a-zA-Z0-9]{2,8}$"
-        let regex = NSPredicate(format: "SELF MATCHES %@", pattern)
-        return regex.evaluate(with: input)
     }
 }

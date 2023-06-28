@@ -25,7 +25,8 @@ struct ContentView: View {
                     
             case .SignUp:
                 SignUpView(rootScreen: $root).environmentObject(self.authHelper).environmentObject(self.dbHelper)
-            
+            case .Profile:
+                ProfileView(rootScreen: $root).environmentObject(self.authHelper).environmentObject(self.dbHelper)
             }
         }.padding()
     }
