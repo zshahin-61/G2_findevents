@@ -25,12 +25,12 @@ struct Performer: Codable,Hashable{
     var image: String
 }
 
-struct Images: Codable,Hashable {
-    var large: String?
-    var huge: String?
-    var small: String?
-    var medium: String?
-}
+//struct Images: Codable,Hashable {
+//    var large: String?
+//    var huge: String?
+//    var small: String?
+//    var medium: String?
+//}
 
 struct Location: Codable,Hashable {
     var lat: Double
@@ -53,8 +53,8 @@ struct Event: Codable,Hashable,Identifiable {
     var id: Int
     var type: String
     var title: String
-    var short_title: String
-    var url: String
+    //var short_title: String
+    //var url: String
     var performers: [Performer]
     var datetime_utc: String
     var venue: Venue
