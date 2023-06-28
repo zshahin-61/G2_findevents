@@ -30,6 +30,7 @@ struct EventsListView: View {
                 .padding()
                 
                 Button(action:{
+                    evntList.removeAll()
                     if(!self.selectedCity.isEmpty)
                     {
                         loadDataFromAPIbyCity()
@@ -38,6 +39,7 @@ struct EventsListView: View {
                     {
                         loadDataFromAPI()
                     }
+                    calculateMapRegion()
                     
                 }){
                     Text("Search")
