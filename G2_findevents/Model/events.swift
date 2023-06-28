@@ -20,9 +20,9 @@ struct Stats: Codable,Hashable{
 
 struct Performer: Codable,Hashable{
     var id: Int
-    var type: String
-    var name: String
-    var image: String
+    var type: String?
+    var name: String?
+    var image: String?
 }
 
 //struct Images: Codable,Hashable {
@@ -39,22 +39,20 @@ struct Location: Codable,Hashable {
 
 struct Venue: Codable,Hashable {
     var id: Int
-    var state: String
-    var name: String
+    var state: String?
+    var name: String?
     var location: Location
-    var address: String
-    var country: String
-    var city: String
-    var display_location: String
-    var url: String
+    var address: String?
+    var country: String?
+    var city: String?
+    var display_location: String?
+    var url: String?
 }
 
 struct Event: Codable,Hashable,Identifiable {
     var id: Int
     var type: String
     var title: String
-    //var short_title: String
-    //var url: String
     var performers: [Performer]
     var datetime_utc: String
     var venue: Venue
