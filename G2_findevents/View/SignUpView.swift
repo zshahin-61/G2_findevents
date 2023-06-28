@@ -52,67 +52,62 @@ struct SignUpView: View {
                 TextField("Phone Number", text: self.$phoneFromUI)
                     .textInputAutocapitalization(.never)
                     .textFieldStyle(.roundedBorder)
+                
+                VStack {
+                    Button("Select Image") {
+                        showImagePicker = true
+                    }
+                    if let image = selectedImage {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFit()
+                    }
+                }
+                .sheet(isPresented: $showImagePicker) {
+                    ImagePickerView(selectedImage: $selectedImage)
+                }
             }
             .autocorrectionDisabled(true)
-            .navigationTitle("Sign Up Form")
-           
-            VStack {
-                        Button("Select Image") {
-                            showImagePicker = true
-                        }
-                        if let image = selectedImage {
-                            Image(uiImage: image)
-                                .resizable()
-                                .scaledToFit()
-                        }
-                    }
-                    .sheet(isPresented: $showImagePicker) {
-                        ImagePickerView(selectedImage: $selectedImage)
-                    }
+            
+            Button(action: {
+                self.authHelper.signUp(email: self.email.lowercased(), password: self.password, withCompletion: { isSuccessful in
                     
-            HStack{
-                Button(action:{
-                    self.rootScreen = .Login
-                }){
-                    Image(systemName: "chevron.left")
-
-                    Text("Back").buttonStyle(.borderedProminent)
-                }
-                Spacer()
-                
-                  Button(action: {
-                      self.authHelper.signUp(email: self.email.lowercased(), password: self.password, withCompletion: { isSuccessful in
-                          
-                          if (isSuccessful){
-                              // MARK: USER IMAGE
-                              var imageData :Data? = nil
-                              
-                              if(selectedImage != nil )
-                              {
-                                  let image = selectedImage!
-                                  let imageName = "\(UUID().uuidString).jpg"
-                                  
-                                  imageData = image.jpegData(compressionQuality: 0.1)
-                              }
-                              
-                              let user : UserProfile = UserProfile(id: self.email.lowercased(), name: self.nameFromUI, contactNumber: self.phoneFromUI, address: self.addressFromUI, image: imageData)
-                              
-                              self.dbHelper.createUserProfile(newUser: user)
-                              
-                              //show to home screen
-                              self.rootScreen = .Home
-                          }else{
-                              //show the alert with invalid username/password prompt
-                              print(#function, "unable to create user")
-                          }
-                      })
-                  }){
-                      Text("Create Account")
-                  }.buttonStyle(.borderedProminent)
-                      .disabled(self.password != self.confirmPassword || self.email.isEmpty || self.password.isEmpty || self.confirmPassword.isEmpty)
-                                
-            }
-           
+                    if (isSuccessful){
+                        // MARK: USER IMAGE
+                        var imageData :Data? = nil
+                        
+                        if(selectedImage != nil )
+                        {
+                            let image = selectedImage!
+                            let imageName = "\(UUID().uuidString).jpg"
+                            
+                            imageData = image.jpegData(compressionQuality: 0.1)
+                        }
+                        
+                        let user : UserProfile = UserProfile(id: self.email.lowercased(), name: self.nameFromUI, contactNumber: self.phoneFromUI, address: self.addressFromUI, image: imageData)
+                        
+                        self.dbHelper.createUserProfile(newUser: user)
+                        
+                        //show to home screen
+                        self.rootScreen = .Home
+                    }else{
+                        //show the alert with invalid username/password prompt
+                        print(#function, "unable to create user")
+                    }
+                })
+            }){
+                Text("Create Account")
+            }.buttonStyle(.borderedProminent)
+                .disabled(self.password != self.confirmPassword || self.email.isEmpty || self.password.isEmpty || self.confirmPassword.isEmpty)
+            
+                .navigationBarTitle("Sign Up Form", displayMode: .inline)
+                .navigationBarItems(
+                    trailing: Button(action: {
+                        rootScreen = .Login
+                    }) {
+                        Image(systemName: "chevron.left")
+                        Text("Back")
+                    })
         }
     }
 }
