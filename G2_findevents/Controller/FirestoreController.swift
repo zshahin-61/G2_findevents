@@ -173,50 +173,6 @@ class FirestoreController: ObservableObject {
         }
     }
     
-    func getFriends(){
-        //get the email address of currently logged in user
-        self.loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL") ?? ""
-        if (self.loggedInUserEmail.isEmpty){
-            print(#function, "Logged in user's email address not available. Can't show Friends")
-        }
-        else{
-            getUserProfile(withCompletion: { isSuccessful in
-                if (isSuccessful){
-                    let friends = self.userProfile!.friends
-                    for fre in friends{
-                        
-                        let document = self.db.collection(self.COLLECTION_USER_PROFILES).document(fre)
-                        
-                        document.addSnapshotListener { (documentSnapshot, error) in
-                            if let document = documentSnapshot, document.exists {
-                                do {
-                                    if let userProfile = try document.data(as: UserProfile?.self) {
-                                        self.myFriendsList.append(userProfile)
-                                        //                                DispatchQueue.main.async {
-                                        //                                    completion(true)
-                                        //                                }
-                                    }
-                                } catch {
-                                    print("Error decoding user profile data: \(error.localizedDescription)")
-                                    //                            DispatchQueue.main.async {
-                                    //                                //self.isLoginSuccessful = false
-                                    //                                completion(false)
-                                    //                            }
-                                }
-                            } else {
-                                print("Document does not exist")
-                                //                        DispatchQueue.main.async {
-                                //                            //self.isLoginSuccessful = false
-                                //                            completion(false)
-                                //                        }
-                            }
-                        }
-                        
-                    }
-                }})}
-    }
-    
-    
     
     // MARK: Users events
     func getMyEventsList(){
@@ -367,6 +323,7 @@ class FirestoreController: ObservableObject {
         }
     }
     
+    //MARK: User Friend
     func getNearbyEvents(UserProile : UserProfile) {
         //        let today = Date()
         //
@@ -394,6 +351,7 @@ class FirestoreController: ObservableObject {
     }
     
     func searchUserProfiles(withName searchText: String, completion: @escaping ([UserProfile]) -> Void) {
+        
         let lowercaseSearchText = searchText.lowercased()
         let searchQuery = lowercaseSearchText + "z"
         
@@ -456,5 +414,154 @@ class FirestoreController: ObservableObject {
         }
     }
     
+    func deleteAllMyFriends() {
+        print(#function, "Deleting All My Friends")
+        
+        self.loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL") ?? ""
+        
+        if self.loggedInUserEmail.isEmpty {
+            print(#function, "Logged in user's email address not available. Can't delete friends")
+        } else {
+            let userProfileRef = self.db.collection(COLLECTION_USER_PROFILES).document(self.loggedInUserEmail)
+            
+            userProfileRef.updateData([
+                "friends": FieldValue.delete()
+            ]) { error in
+                if let err = error {
+                    print(#function, "Unable to remove friends from the user profile: \(err)")
+                } else {
+                    print(#function, "All friends successfully removed from the user profile")
+                }
+            }
+        }
+    }
+
+
+    func deleteMyFriend(friendID: String) {
+        print(#function, "Deleting Friend with ID: \(friendID)")
+        
+        self.loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL") ?? ""
+        
+        if self.loggedInUserEmail.isEmpty {
+            print(#function, "Logged in user's email address not available. Can't delete friend")
+        } else {
+            let userProfileRef = self.db.collection(COLLECTION_USER_PROFILES).document(self.loggedInUserEmail)
+            
+            userProfileRef.updateData([
+                "friends": FieldValue.arrayRemove([friendID])
+            ]) { error in
+                if let err = error {
+                    print(#function, "Unable to remove friend from the user profile: \(err)")
+                } else {
+                    print(#function, "Friend with ID \(friendID) successfully removed from the user profile")
+                }
+            }
+        }
+    }
+
+    func getFriends(){
+        //get the email address of currently logged in user
+        self.loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL") ?? ""
+        if (self.loggedInUserEmail.isEmpty){
+            print(#function, "Logged in user's email address not available. Can't show Friends")
+        }
+        else{
+            getUserProfile(withCompletion: { isSuccessful in
+                if (isSuccessful){
+                    let friends = self.userProfile!.friends
+                    for fre in friends{
+                        
+                        let document = self.db.collection(self.COLLECTION_USER_PROFILES).document(fre)
+                        
+                        document.addSnapshotListener { (documentSnapshot, error) in
+                            if let document = documentSnapshot, document.exists {
+                                do {
+                                    if let userProfile = try document.data(as: UserProfile?.self) {
+                                        self.myFriendsList.append(userProfile)
+                                        //                                DispatchQueue.main.async {
+                                        //                                    completion(true)
+                                        //                                }
+                                    }
+                                } catch {
+                                    print("Error decoding user profile data: \(error.localizedDescription)")
+                                    //                            DispatchQueue.main.async {
+                                    //                                //self.isLoginSuccessful = false
+                                    //                                completion(false)
+                                    //                            }
+                                }
+                            } else {
+                                print("Document does not exist")
+                                //                        DispatchQueue.main.async {
+                                //                            //self.isLoginSuccessful = false
+                                //                            completion(false)
+                                //                        }
+                            }
+                        }
+                        
+                    }
+                }})}
+    }
+    
+    func addFriend(newFriend: UserProfile) {
+        
+        print(#function, "Trying to get all Friends List.")
+        
+        
+        self.loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL") ?? ""
+    
+        
+        if (self.loggedInUserEmail.isEmpty){
+            print(#function, "Logged in user's email address not available. Can't show my Events")
+        }
+        else{
+            
+            
+            let friendID = newFriend.id ?? ""
+            
+            // Update the current user's profile in Firestore
+            let userProfilesCollection = db.collection(COLLECTION_USER_PROFILES)
+            let currentUserProfileRef = userProfilesCollection.document(loggedInUserEmail)
+            
+            currentUserProfileRef.updateData([
+                "friends": FieldValue.arrayUnion([friendID])
+            ]) { error in
+                if let error = error {
+                    print("Error adding friend: \(error)")
+                } else {
+                    print("Friend added successfully")
+                }
+            }
+        }
+    }//
+
+    func removeFriend(friendDelet: UserProfile){
+        print(#function, "Trying to remove a  Friend \(friendDelet.name).")
+        
+        
+        self.loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL") ?? ""
+        
+        
+        if (self.loggedInUserEmail.isEmpty){
+            print(#function, "Logged in user's email address not available. Can't show my Events")
+        }
+        else{
+            
+            let friendID = friendDelet.id ?? ""
+            
+            // Update the current user's profile in Firestore
+            let userProfilesCollection = db.collection(COLLECTION_USER_PROFILES)
+            let currentUserProfileRef = userProfilesCollection.document(loggedInUserEmail)
+            
+            currentUserProfileRef.updateData([
+                "friends": FieldValue.arrayRemove([friendID])
+            ]) { error in
+                if let error = error {
+                    print("Error removing friend: \(error)")
+                } else {
+                    print("Friend removed successfully")
+                }
+            }
+        }
+    }
     
 }

@@ -31,13 +31,13 @@ struct MyEventsView: View {
                     myEvt in
                     VStack{
                         //VStack{
-                            Text(myEvt.title)
-                            Text(myEvt.date)
-                            Text(myEvt.location)
-//                        }
-                         Spacer()
-//                        VStack{
-                            //AsyncImage(url: URL(string: myEvt.image)).frame(width: 100, height: 50)
+                        Text(myEvt.title)
+                        Text(myEvt.date)
+                        Text(myEvt.location)
+                        //                        }
+                        Spacer()
+                        //                        VStack{
+                        //AsyncImage(url: URL(string: myEvt.image)).frame(width: 100, height: 50)
                         //}
                     }
                 } //FOREACH
@@ -59,26 +59,6 @@ struct MyEventsView: View {
         }
     }
     
-//    func removeEvent(at offsets: IndexSet) {
-//        events.remove(atOffsets: offsets)
-//        if let removedIndex = offsets.first {
-//            let removedEvent = events[removedIndex]
-//
-//            updateAttendeesList(for: removedEvent, isAttending: false)
-//        }
-//    }
-    
-//    func removeAllEvents() {
-//
-//        events.removeAll()
-//        for event in events {
-//            updateAttendeesList(for: event, isAttending: false)
-//        }
-//    }
-    
-    //func updateAttendeesList(for event: Event, isAttending: Bool) {
-//         event.attendees = isAttending ? event.attendees.filter { $0 != User } : event.attendees
-    //}
 }
 
 
