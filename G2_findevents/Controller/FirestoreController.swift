@@ -11,7 +11,6 @@ import FirebaseFirestoreSwift
 
 class FirestoreController: ObservableObject {
     
-    
     @Published var myEventsList: [MyEvent] = [MyEvent]()
     @Published var userProfile: UserProfile?
     @Published var myFriendsList: [UserProfile] = [UserProfile]()
@@ -271,7 +270,7 @@ class FirestoreController: ObservableObject {
             do{
                 let docRef = db.collection(COLLECTION_USER_PROFILES)
                     .document(self.loggedInUserEmail).collection(COLLECTION_EVENTS).document(newEvent.id!)
-                try docRef.setData([FIELD_ID : newEvent.id, FIELD_TYPE : newEvent.type, FIELD_TITLE: newEvent.title, FIELD_LOCATION: newEvent.location,
+                try docRef.setData([FIELD_TYPE : newEvent.type, FIELD_TITLE: newEvent.title, FIELD_LOCATION: newEvent.location,
                                  FIELD_IMAGE : newEvent.image, FIELD_DATE: newEvent.date]){ error in
                     if let err = error {
                         print(#function, "Unable to Insert Event in database : \(err)")

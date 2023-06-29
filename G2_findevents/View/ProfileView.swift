@@ -84,11 +84,10 @@ struct ProfileView: View {
             
             //HStack{
             Button(action: {
-                //validate the data such as no mandatory inputs, password rules, etc.
-                ///////
-                ///
+                //Validate the data such as no mandatory inputs, password rules, etc.
+                //
                 dbHelper.userProfile!.address = addressFromUI
-                //////Image
+                //Image
                 var imageData :Data? = nil
                 
                 if(selectedImage != nil )
@@ -130,23 +129,25 @@ struct ProfileView: View {
                     })
         }.padding()
             .onAppear(){
-                dbHelper.getUserProfile(withCompletion: { isSuccessful in
-                    if (isSuccessful){
-                        self.emailFromUI = dbHelper.userProfile!.id!
-                        self.addressFromUI = dbHelper.userProfile!.address
-                        self.nameFromUI = dbHelper.userProfile!.name
-                        
-                        self.contactNumberFromUI = dbHelper.userProfile!.contactNumber
-                        self.errorMsg = nil
-                        
-                        // TODO: Show image from db
-                        if let imageData = dbHelper.userProfile!.image as? Data {
-                            self.imageData = imageData
-                        } else {
-                            print("Invalid image data format")
-                        }
+                //dbHelper.getUserProfile(withCompletion: { isSuccessful in
+                //if (isSuccessful){
+                if let currentUser = dbHelper.userProfile{
+                    self.emailFromUI = currentUser.id!
+                    self.addressFromUI = currentUser.address
+                    self.nameFromUI = currentUser.name
+                    
+                    self.contactNumberFromUI = currentUser.contactNumber
+                    self.errorMsg = nil
+                    
+                    // TODO: Show image from db
+                    if let imageData = currentUser.image as? Data {
+                        self.imageData = imageData
+                    } else {
+                        print("Invalid image data format")
                     }
-                })
+                    //}
+                    //})
+                }
             }
     }
 }

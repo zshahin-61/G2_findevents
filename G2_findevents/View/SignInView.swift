@@ -19,6 +19,7 @@ struct SignInView: View {
     
     private let gridItems : [GridItem] = [GridItem(.flexible()), GridItem(.flexible())]
     
+    //private var currentUser : UserProfile?
     
     var body: some View {
         
@@ -40,6 +41,10 @@ struct SignInView: View {
                   
                     self.authHelper.signIn(email: self.email, password: self.password, withCompletion: { isSuccessful in
                         if (isSuccessful){
+                            self.dbHelper.getUserProfile(withCompletion: {isSuccessful in
+                                dbHelper.getFriends()
+                                dbHelper.getMyEventsList()
+                            })
                             self.rootScreen = .Home
                         }else{
                             //show the alert with invalid username/password prompt

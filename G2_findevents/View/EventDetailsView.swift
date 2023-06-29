@@ -54,24 +54,38 @@ struct EventDetailsView: View {
                 }//List
                 Spacer()
                 Button(action:{
+                    
                     // TODO: add to firestore
                     //var newEvent = Event()
+                    var counter = 0
                     var newEvent = MyEvent(id: String(event.id), type: event.type, title: event.title, date: event.datetime_local, image: event.performers[0].image ?? "" , location: event.venue.display_location ?? "")
+                    
                     if(!dbHelper.myEventsList.contains(where: {$0.id == newEvent.id })){
                         dbHelper.insertMyEvent(newEvent: newEvent)
                         toggleBtnText = "Cancel Attending"
                         //dbHelper.myEventsList.append(newEvent)
+                        counter = 1
+                       // dbHelper.userProfile!.numberOfEventsAttending += 1
                     }
                     else{
                         //dbHelper.myEventsList.removeAll(where: {$0.id == newEvent.id})
                         toggleBtnText = "I will attend"
                         dbHelper.deleteMyEvent(eventToDelete: newEvent)
+                     //   dbHelper.userProfile!.numberOfEventsAttending -= 1
+                        counter = -1
                     }
+//                    dbHelper.getUserProfile(withCompletion: {isSuccessful in
+                        if let currentUser = dbHelper.userProfile{
+                            dbHelper.userProfile!.numberOfEventsAttending += counter
+                            dbHelper.updateUserProfile(userToUpdate: dbHelper.userProfile!)
+                        }
+                            // })
                 }){
                     Text(self.toggleBtnText)
                 }.buttonStyle(.borderedProminent)
         }.onAppear(){
-            dbHelper.getMyEventsList()
+            //dbHelper.myEventsList.removeAll()
+            //dbHelper.getMyEventsList()
             if(dbHelper.myEventsList.contains(where: {$0.id == String(event.id)}))
             {
                 toggleBtnText = "Cancel Attending"
@@ -83,18 +97,5 @@ struct EventDetailsView: View {
                 
         }
     }
-    // MARK: function for ToggleFavorite
-    private func toggleFavorite() {
-        
-        //isFav = user.favorites.contains(where: {$0 == activity.id})
-        //activity.isFavorite.toggle()
-        //if !isFav{
-            //user.addFavorite(activity.id)
-        //} else {
-            //user.removeFavorite(activity.id)
-        //}
-        //isFav.toggle()
-    }
-    
     
 }

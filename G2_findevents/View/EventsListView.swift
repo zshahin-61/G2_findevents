@@ -79,7 +79,7 @@ struct EventsListView: View {
     }
     
     func loadDataFromAPI() {
-        //evntList.removeAll()
+        self.evntList.removeAll()
         print("Getting data from API")
         
         // 1. Specify the API URL
@@ -119,6 +119,7 @@ struct EventsListView: View {
     }
     
     func loadDataFromAPIbyCity() {
+        self.evntList.removeAll()
         //evntList.removeAll()
         print("Getting data from API")
         

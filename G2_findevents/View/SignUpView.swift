@@ -87,7 +87,13 @@ struct SignUpView: View {
                         let user : UserProfile = UserProfile(id: self.email.lowercased(), name: self.nameFromUI, contactNumber: self.phoneFromUI, address: self.addressFromUI, image: imageData,friends: [], numberOfEventsAttending: 0)
                         
                         self.dbHelper.createUserProfile(newUser: user)
-                        
+                        //Load User Data
+                        self.dbHelper.getUserProfile(withCompletion: {isSuccessful in
+                            if(isSuccessful){
+                                dbHelper.getFriends()
+                                dbHelper.getMyEventsList()
+                            }
+                        })
                         //show to home screen
                         self.rootScreen = .Home
                     }else{
