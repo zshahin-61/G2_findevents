@@ -17,6 +17,10 @@ struct MyEventsView: View {
             Button(action:{
                 //dbHelper.myEventsList.removeAll()
                 dbHelper.deleteAllMyEvents()
+                if let currUser = dbHelper.userProfile{
+                    dbHelper.userProfile!.numberOfEventsAttending = 0
+                    dbHelper.updateUserProfile(userToUpdate: dbHelper.userProfile!)
+                }
             }){
                 Text("Remove All")
             }.buttonStyle(.borderedProminent)
@@ -47,6 +51,10 @@ struct MyEventsView: View {
                         let evt = self.dbHelper.myEventsList[index]
                         //delete the document from database
                         self.dbHelper.deleteMyEvent(eventToDelete: evt)
+                        if let currUser = dbHelper.userProfile{
+                            dbHelper.userProfile!.numberOfEventsAttending -= 1
+                            dbHelper.updateUserProfile(userToUpdate: dbHelper.userProfile!)
+                        }
                     }
                     
                 })//onDelete
