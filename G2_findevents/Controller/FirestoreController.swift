@@ -11,6 +11,7 @@ import FirebaseFirestoreSwift
 
 class FirestoreController: ObservableObject {
     
+    
     @Published var myEventsList: [MyEvent] = [MyEvent]()
     @Published var userProfile: UserProfile?
     @Published var myFriendsList: [UserProfile] = [UserProfile]()
@@ -401,7 +402,10 @@ class FirestoreController: ObservableObject {
             print(#function, "Logged in user's email address not available. Can't search.")
             return
         }
-        
+        print("**************")
+        print(loggedInUserEmail)
+        print("**************")
+
         db.collection(COLLECTION_USER_PROFILES)
             .whereField(FIELD_NAME, isGreaterThanOrEqualTo: lowercaseSearchText)
             .whereField(FIELD_NAME, isLessThan: searchQuery)
@@ -414,7 +418,9 @@ class FirestoreController: ObservableObject {
                     for document in querySnapshot!.documents {
                         do {
                             if let userProfile = try document.data(as: UserProfile?.self) {
-                                results.append(userProfile)
+                                if userProfile.id != loggedInUserEmail{
+                                    results.append(userProfile)
+                                }
                             }
                         } catch {
                             print("Error decoding user profile data: \(error.localizedDescription)")
