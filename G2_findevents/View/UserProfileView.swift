@@ -17,7 +17,7 @@ struct UserProfileView: View {
     
     var body: some View {
         VStack {
-            HStack{
+            HStack {
                 if let imageData = userProfile.image, let image = UIImage(data: imageData) {
                     Image(uiImage: image)
                         .resizable()
@@ -25,17 +25,15 @@ struct UserProfileView: View {
                         .frame(width: 150, height: 150)
                 }
                 
-                VStack{
+                VStack(alignment: .leading) {
                     Text(userProfile.name)
                         .font(.title)
-                    Text("Events Attending: \(userProfile.numberOfEventsAttending)")
-                }
-                
-                
-                
-                
+                    Text("Events Attending: \(userProfile.numberOfEventsAttending)")                }
             }
+            .padding()
+            
             Spacer()
+            
             Toggle(isOn: $isFriend, label: {
                 Text(isFriend ? "Remove Friend" : "Add Friend")
             })
@@ -46,26 +44,23 @@ struct UserProfileView: View {
             .cornerRadius(10)
             .onTapGesture {
                 if isFriend {
-                    //  removeFriend()
+                    // Remove friend
                 } else {
-                 //   addFriend()
+                    // Add friend 
                 }
             }
-            
-            
-        }
-        VStack{
-            Text("\(userProfile.name) Next Event")
-                .font(.title)
-            Spacer()
-            
-            Text("Name of  Event")
-            Spacer()
-            List{
-                Text("Are Also Attending")
-            }
+            VStack {
+                Text("\(userProfile.name)'s Next Event")
+                    .font(.title)
                 
+                
+              Spacer()
+                Text("Friends Attending")
+                    .font(.title)
+                
+    
+            }
+            .padding()
         }
-        
     }
 }
