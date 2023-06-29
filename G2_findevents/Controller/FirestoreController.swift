@@ -13,6 +13,7 @@ class FirestoreController: ObservableObject {
     
     @Published var myEventsList: [MyEvent] = [MyEvent]()
     @Published var userProfile: UserProfile?
+    @Published var myFriendsList: [UserProfile] = [UserProfile]()
     
     private let db: Firestore
     private static var shared: FirestoreController?
@@ -33,6 +34,8 @@ class FirestoreController: ObservableObject {
     private let FIELD_CONTACT_NUMBER = "contactNumber"
     private let FIELD_ADDRESS = "address"
     private let FIELD_USER_IMAGE = "image"
+    private let FIELD_USER_FRIENDS = "friends"
+    private let FIELD_USER_NUMBERATTENDING = "numberOfEventsAttending"
     
     private var loggedInUserEmail: String = ""
     
@@ -46,7 +49,7 @@ class FirestoreController: ObservableObject {
         }
         return self.shared!
     }
-        
+    
     // MARK: User profile functions
     func createUserProfile(newUser: UserProfile){
         print(#function, "Inserting profile Info")
@@ -55,7 +58,7 @@ class FirestoreController: ObservableObject {
             let docRef = db.collection(COLLECTION_USER_PROFILES).document(newUser.id!)
             try docRef.setData([FIELD_NAME: newUser.name,
                      FIELD_CONTACT_NUMBER : newUser.contactNumber,
-                            FIELD_ADDRESS : newUser.address, FIELD_USER_IMAGE: newUser.image]){ error in
+                            FIELD_ADDRESS : newUser.address, FIELD_USER_IMAGE: newUser.image, FIELD_USER_FRIENDS : newUser.friends, FIELD_USER_NUMBERATTENDING : newUser.numberOfEventsAttending]){ error in
             }
             
             print(#function, "user \(newUser.name) successfully added to database")
@@ -114,7 +117,10 @@ class FirestoreController: ObservableObject {
                     .document(userToUpdate.id!)
                     .updateData([FIELD_NAME : userToUpdate.name,
                        FIELD_CONTACT_NUMBER : userToUpdate.contactNumber,
-                              FIELD_ADDRESS : userToUpdate.address, FIELD_USER_IMAGE: userToUpdate.image ]){ error in
+                              FIELD_ADDRESS : userToUpdate.address,
+                            FIELD_USER_IMAGE: userToUpdate.image,
+                          FIELD_USER_FRIENDS: userToUpdate.friends,
+                  FIELD_USER_NUMBERATTENDING: userToUpdate.numberOfEventsAttending]){ error in
                         
                         if let err = error {
                             print(#function, "Unable to update user profile in database : \(err)")
@@ -165,6 +171,50 @@ class FirestoreController: ObservableObject {
             }
         }
     }
+    
+    func getFriends(){
+        //get the email address of currently logged in user
+        self.loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL") ?? ""
+        if (self.loggedInUserEmail.isEmpty){
+            print(#function, "Logged in user's email address not available. Can't show Friends")
+        }
+        else{
+            getUserProfile(withCompletion: { isSuccessful in
+                if (isSuccessful){
+                    let friends = self.userProfile!.friends
+                    for fre in friends{
+                        
+                        let document = self.db.collection(self.COLLECTION_USER_PROFILES).document(fre)
+                        
+                        document.addSnapshotListener { (documentSnapshot, error) in
+                            if let document = documentSnapshot, document.exists {
+                                do {
+                                    if let userProfile = try document.data(as: UserProfile?.self) {
+                                        self.myFriendsList.append(userProfile)
+                                        //                                DispatchQueue.main.async {
+                                        //                                    completion(true)
+                                        //                                }
+                                    }
+                                } catch {
+                                    print("Error decoding user profile data: \(error.localizedDescription)")
+                                    //                            DispatchQueue.main.async {
+                                    //                                //self.isLoginSuccessful = false
+                                    //                                completion(false)
+                                    //                            }
+                                }
+                            } else {
+                                print("Document does not exist")
+                                //                        DispatchQueue.main.async {
+                                //                            //self.isLoginSuccessful = false
+                                //                            completion(false)
+                                //                        }
+                            }
+                        }
+                        
+                    }
+                }})}
+    }
+    
     
     
     // MARK: Users events
@@ -315,5 +365,93 @@ class FirestoreController: ObservableObject {
             deleteMyEvent(eventToDelete: myEvt)
         }
     }
+    
+    func getNearbyEvents(UserProile : UserProfile) {
+        //        let today = Date()
+        //
+        //        print(#function, "Trying to get near event for this User.")
+        //        self.loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL") ?? ""
+        //        if (self.loggedInUserEmail.isEmpty){
+        //            print(#function, "Logged in user's email address not available. Can't show my Events")
+        //        }
+        //        else{
+        //            do{
+        //                self.db
+        //                    .collection(COLLECTION_USER_PROFILES)
+        //                    .document(self.loggedInUserEmail)
+        //                    .collection(COLLECTION_EVENTS)
+        //                    .whereField(FIELD_DATE, isGreaterThanOrEqualTo: today)
+        //                    .order(by: FIELD_DATE)
+        //
+        
+        
+        
+        
+        
+        //         }
+        //       }
+    }
+    
+    func searchUserProfiles(withName searchText: String, completion: @escaping ([UserProfile]) -> Void) {
+        let lowercaseSearchText = searchText.lowercased()
+        let searchQuery = lowercaseSearchText + "z"
+        
+        // Get the email address of the currently logged in user
+        guard let loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL"), !loggedInUserEmail.isEmpty else {
+            print(#function, "Logged in user's email address not available. Can't search.")
+            return
+        }
+        
+        db.collection(COLLECTION_USER_PROFILES)
+            .whereField(FIELD_NAME, isGreaterThanOrEqualTo: lowercaseSearchText)
+            .whereField(FIELD_NAME, isLessThan: searchQuery)
+            .getDocuments { querySnapshot, error in
+                if let error = error {
+                    print("Error searching user profiles: \(error)")
+                    completion([])
+                } else {
+                    var results: [UserProfile] = []
+                    for document in querySnapshot!.documents {
+                        do {
+                            if let userProfile = try document.data(as: UserProfile?.self) {
+                                results.append(userProfile)
+                            }
+                        } catch {
+                            print("Error decoding user profile data: \(error.localizedDescription)")
+                        }
+                    }
+                    completion(results)
+                }
+            }
+    }
+
+    
+    func getUsersAttendingEvent(eventID: String, completion: @escaping ([UserProfile]) -> Void) {
+        let query = db.collection(COLLECTION_USER_PROFILES)
+            .whereField(FIELD_USER_NUMBERATTENDING, isGreaterThan: 0)
+            .whereField("events.\(eventID)", isGreaterThan: 0)
+        
+        query.getDocuments { snapshot, error in
+            if let error = error {
+                print("Error retrieving users attending event: \(error.localizedDescription)")
+                completion([])
+                return
+            }
+            
+            guard let documents = snapshot?.documents else {
+                print("No users attending event found")
+                completion([])
+                return
+            }
+            
+            let profiles = documents.compactMap { document -> UserProfile? in
+                let data = document.data()
+                return UserProfile(dictionary: data)
+            }
+            
+            completion(profiles)
+        }
+    }
+    
     
 }

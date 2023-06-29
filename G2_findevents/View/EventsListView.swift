@@ -23,11 +23,7 @@ struct EventsListView: View {
             VStack {
                 HStack{
                     TextField("Enter City", text: $selectedCity)
-                    //, onCommit: {
-                    //loadDataFromAPI()
-                    //})
-                    
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .padding()
                     
                     Button(action:{

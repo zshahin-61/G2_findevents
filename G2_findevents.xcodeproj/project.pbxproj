@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5A72C2C32A4B58A4002607D2 /* G2-findevents-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5A72C2C12A4B58A4002607D2 /* G2-findevents-Info.plist */; };
+		5A72C2CA2A4D1248002607D2 /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A72C2C92A4D1248002607D2 /* UserProfileView.swift */; };
 		5A95590A2A49254800A47D02 /* events.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9559092A49254800A47D02 /* events.swift */; };
 		5A95590D2A4927E800A47D02 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 5A95590C2A4927E800A47D02 /* FirebaseAuth */; };
 		5A95590F2A4927E800A47D02 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 5A95590E2A4927E800A47D02 /* FirebaseDatabase */; };
@@ -39,6 +40,7 @@
 
 /* Begin PBXFileReference section */
 		5A72C2C12A4B58A4002607D2 /* G2-findevents-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "G2-findevents-Info.plist"; path = "../G2-findevents-Info.plist"; sourceTree = "<group>"; };
+		5A72C2C92A4D1248002607D2 /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		5A9559092A49254800A47D02 /* events.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = events.swift; sourceTree = "<group>"; };
 		5A9559142A4929B900A47D02 /* EventsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsListView.swift; sourceTree = "<group>"; };
 		5A9559162A4929CD00A47D02 /* MyEventsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyEventsView.swift; sourceTree = "<group>"; };
@@ -154,6 +156,7 @@
 				5A9559242A49E50500A47D02 /* RootView.swift */,
 				5A9559262A49EA4200A47D02 /* ProfileView.swift */,
 				5F8805312A4B6783001A8C44 /* ImagePickerView.swift */,
+				5A72C2C92A4D1248002607D2 /* UserProfileView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -244,6 +247,7 @@
 				5A9C4E6B2A48A3D3001F7388 /* FirestoreController.swift in Sources */,
 				5A9559232A49E4C200A47D02 /* HomeView.swift in Sources */,
 				5A9559152A4929B900A47D02 /* EventsListView.swift in Sources */,
+				5A72C2CA2A4D1248002607D2 /* UserProfileView.swift in Sources */,
 				5A9C4E582A48A084001F7388 /* ContentView.swift in Sources */,
 				5A95591B2A4929EC00A47D02 /* MyFriendsView.swift in Sources */,
 				5A9559192A4929DD00A47D02 /* SearchUsersView.swift in Sources */,
