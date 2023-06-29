@@ -22,14 +22,13 @@ struct UserProfileView: View {
                     Image(uiImage: image)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: 100, height: 100)
-                        .padding()
+                        .frame(width: 150, height: 150)
                 }
+                
                 VStack{
                     Text(userProfile.name)
                         .font(.title)
                     Text("Events Attending: \(userProfile.numberOfEventsAttending)")
-                        .padding()
                 }
                 
                 
