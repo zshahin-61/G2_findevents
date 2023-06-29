@@ -402,9 +402,6 @@ class FirestoreController: ObservableObject {
             print(#function, "Logged in user's email address not available. Can't search.")
             return
         }
-        print("**************")
-        print(loggedInUserEmail)
-        print("**************")
 
         db.collection(COLLECTION_USER_PROFILES)
             .whereField(FIELD_NAME, isGreaterThanOrEqualTo: lowercaseSearchText)
