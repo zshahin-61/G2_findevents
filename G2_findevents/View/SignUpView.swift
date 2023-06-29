@@ -84,7 +84,7 @@ struct SignUpView: View {
                             imageData = image.jpegData(compressionQuality: 0.1)
                         }
                         
-                        let user : UserProfile = UserProfile(id: self.email.lowercased(), name: self.nameFromUI, contactNumber: self.phoneFromUI, address: self.addressFromUI, image: imageData)
+                        let user : UserProfile = UserProfile(id: self.email.lowercased(), name: self.nameFromUI, contactNumber: self.phoneFromUI, address: self.addressFromUI, image: imageData,friends: [], numberOfEventsAttending: 0)
                         
                         self.dbHelper.createUserProfile(newUser: user)
                         
