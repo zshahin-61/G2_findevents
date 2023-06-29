@@ -176,7 +176,7 @@ class FirestoreController: ObservableObject {
     // MARK: Users events
     func getMyEventsList(){
         print(#function, "Trying to get all logged in user event List.")
-        
+        self.myEventsList = [MyEvent]()
         
         //get the email address of currently logged in user
         self.loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL") ?? ""
@@ -459,6 +459,7 @@ class FirestoreController: ObservableObject {
     }
 
     func getFriends(){
+        self.myFriendsList = [UserProfile]()
         //get the email address of currently logged in user
         self.loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL") ?? ""
         if (self.loggedInUserEmail.isEmpty){
