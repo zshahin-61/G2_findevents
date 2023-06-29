@@ -54,7 +54,6 @@ struct EventDetailsView: View {
             }//List
             Spacer()
             Button(action:{
-                
                 // TODO: add to firestore
                 //var newEvent = Event()
                 var counter = 0

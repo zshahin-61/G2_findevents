@@ -62,8 +62,8 @@ struct MyEventsView: View {
             Spacer()
         }//VSTACK
         .onAppear {
-            dbHelper.myEventsList.removeAll()
-            dbHelper.getMyEventsList()
+            //dbHelper.myEventsList.removeAll()
+            //dbHelper.getMyEventsList()
         }
     }
     
