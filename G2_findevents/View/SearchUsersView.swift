@@ -16,12 +16,32 @@ struct SearchUsersView: View {
     
     var body: some View {
         VStack {
-            TextField("Search", text: $searchQuery, onCommit: performSearch)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
+            HStack {
+                TextField("Search", text: $searchQuery)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding()
+                    .autocapitalization(.none)
+                    .autocorrectionDisabled()
+                
+                Button(action: {
+                    performSearch()
+                }) {
+                    Image(systemName: "magnifyingglass")
+
+                }
+                Button(action: {
+                    searchQuery = ""
+                    performSearch()
+                }) {
+                    Image(systemName: "xmark.circle.fill")
+                         .font(.system(size: 24))
+                        
+                    
+                }
+            }
             
             List(searchResults, id: \.id) { userProfile in
-                NavigationLink(destination: UserProfileView(userProfile: userProfile)) {
+                NavigationLink(destination: UserProfileView(userProfile: userProfile).environmentObject(authHelper).environmentObject(self.dbHelper)) {
                     Text(userProfile.name)
                 }
             }
