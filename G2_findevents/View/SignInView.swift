@@ -13,7 +13,7 @@ struct SignInView: View {
     @EnvironmentObject var dbHelper: FirestoreController
 
     @State private var email : String = "g.chehrazi@gmail.com"
-    @State private var password : String = "admin123"
+    @State private var password : String = "Admin123"
 
     @Binding var rootScreen : RootView
     
