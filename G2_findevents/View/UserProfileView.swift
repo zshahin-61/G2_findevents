@@ -37,15 +37,20 @@ struct UserProfileView: View {
             Spacer()
             
             Button(action: {
-                addFriend()
+                if isFriend {
+                    removeFriend()
+                } else {
+                    addFriend()
+                }
             }) {
-                Text("Add Friend")
+                Text(isFriend ? "Remove Friend" : "Add Friend")
                     .font(.headline)
                     .padding()
                     .foregroundColor(.white)
-                    .background(Color.blue)
+                    .background(isFriend ? Color.red : Color.blue)
                     .cornerRadius(10)
             }
+
             VStack {
                 Text("\(userProfile.name)'s Next Event")
                     .font(.title)
