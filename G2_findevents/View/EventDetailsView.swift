@@ -26,9 +26,13 @@ struct EventDetailsView: View {
             Text("\(event.title)")
                     Section(header: Text("Performers")){
                         ForEach(event.performers, id:\.self){ per in
-                            Text(per.name)
+                            if let name = per.name{
+                                Text(name)
+                            }
                             //Text("type: \(per.type)")
-                            AsyncImage(url:URL(string:per.image))
+                            if let image = per.image{
+                                AsyncImage(url:URL(string:image))
+                            }
                         }
                     }
                     Text("Local Date:\(event.datetime_local)")
@@ -36,18 +40,23 @@ struct EventDetailsView: View {
                 if let price = event.stats.average_price{
                     Text("Price: $\(price)")
                 }
-                    Section(header:Text("Venue")){
-                        Text("Name: \(event.venue.name)")
-                        Text("Location: \(event.venue.display_location)")
-                        Text("City: \(event.venue.city)")
+                Section(header:Text("Venue")){
+                    if let  name = event.venue.name{
+                        Text("Name: \(name)")
                     }
-                
+                    if let location = event.venue.display_location{
+                        Text("Location: \(location)")
+                    }
+                    if let city = event.venue.city{
+                        Text("City: \(city)")
+                    }
+                }
                 }//List
                 Spacer()
                 Button(action:{
                     // TODO: add to firestore
                     //var newEvent = Event()
-                    var newEvent = MyEvent(id: String(event.id), type: event.type, title: event.title, date: event.datetime_local, image: event.performers[0].image, location: event.venue.display_location)
+                    var newEvent = MyEvent(id: String(event.id), type: event.type, title: event.title, date: event.datetime_local, image: event.performers[0].image ?? "" , location: event.venue.display_location ?? "")
                     if(!dbHelper.myEventsList.contains(where: {$0.id == newEvent.id })){
                         dbHelper.insertMyEvent(newEvent: newEvent)
                         toggleBtnText = "Cancel Attending"
