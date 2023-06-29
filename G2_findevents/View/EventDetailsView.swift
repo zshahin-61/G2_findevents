@@ -19,24 +19,24 @@ struct EventDetailsView: View {
     var body: some View {
         VStack{
             Text(event.type)
-                MapView(latitude: event.venue.location.lat, longitude: self.event.venue.location.lon)
-                //.edgesIgnoringSafeArea(.all)
-                    .frame(width: 300, height: 150).border(.gray)
+            MapView(latitude: event.venue.location.lat, longitude: self.event.venue.location.lon)
+            //.edgesIgnoringSafeArea(.all)
+                .frame(width: 300, height: 150).border(.gray)
             List{
-            Text("\(event.title)")
-                    Section(header: Text("Performers")){
-                        ForEach(event.performers, id:\.self){ per in
-                            if let name = per.name{
-                                Text(name)
-                            }
-                            //Text("type: \(per.type)")
-                            if let image = per.image{
-                                AsyncImage(url:URL(string:image))
-                            }
+                Text("\(event.title)")
+                Section(header: Text("Performers")){
+                    ForEach(event.performers, id:\.self){ per in
+                        if let name = per.name{
+                            Text(name)
+                        }
+                        //Text("type: \(per.type)")
+                        if let image = per.image{
+                            AsyncImage(url:URL(string:image))
                         }
                     }
-                    Text("Local Date:\(event.datetime_local)")
-            
+                }
+                Text("Local Date:\(event.datetime_local)")
+                
                 if let price = event.stats.average_price{
                     Text("Price: $\(price)")
                 }
@@ -51,41 +51,34 @@ struct EventDetailsView: View {
                         Text("City: \(city)")
                     }
                 }
-                }//List
-                Spacer()
-                Button(action:{
-                    
-                    // TODO: add to firestore
-                    //var newEvent = Event()
-                    var counter = 0
-                    var newEvent = MyEvent(id: String(event.id), type: event.type, title: event.title, date: event.datetime_local, image: event.performers[0].image ?? "" , location: event.venue.display_location ?? "")
-                    
-                    if(!dbHelper.myEventsList.contains(where: {$0.id == newEvent.id })){
-                        dbHelper.insertMyEvent(newEvent: newEvent)
-                        toggleBtnText = "Cancel Attending"
-                        //dbHelper.myEventsList.append(newEvent)
-                        counter = 1
-                       // dbHelper.userProfile!.numberOfEventsAttending += 1
-                    }
-                    else{
-                        //dbHelper.myEventsList.removeAll(where: {$0.id == newEvent.id})
-                        toggleBtnText = "I will attend"
-                        dbHelper.deleteMyEvent(eventToDelete: newEvent)
-                     //   dbHelper.userProfile!.numberOfEventsAttending -= 1
-                        counter = -1
-                    }
-//                    dbHelper.getUserProfile(withCompletion: {isSuccessful in
-                        if let currentUser = dbHelper.userProfile{
-                            dbHelper.userProfile!.numberOfEventsAttending += counter
-                            dbHelper.updateUserProfile(userToUpdate: dbHelper.userProfile!)
-                        }
-                            // })
-                }){
-                    Text(self.toggleBtnText)
-                }.buttonStyle(.borderedProminent)
+            }//List
+            Spacer()
+            Button(action:{
+                
+                // TODO: add to firestore
+                //var newEvent = Event()
+                var counter = 0
+                var newEvent = MyEvent(id: String(event.id), type: event.type, title: event.title, date: event.datetime_local, image: event.performers[0].image ?? "" , location: event.venue.display_location ?? "")
+                
+                if(!dbHelper.myEventsList.contains(where: {$0.id == newEvent.id })){
+                    dbHelper.insertMyEvent(newEvent: newEvent)
+                    toggleBtnText = "Cancel Attending"
+                    counter = 1
+                }
+                else{
+                    toggleBtnText = "I will attend"
+                    dbHelper.deleteMyEvent(eventToDelete: newEvent)
+                    counter = -1
+                }
+                if let currentUser = dbHelper.userProfile{
+                    dbHelper.userProfile!.numberOfEventsAttending += counter
+                    dbHelper.updateUserProfile(userToUpdate: dbHelper.userProfile!)
+                }
+                
+            }){
+                Text(self.toggleBtnText)
+            }.buttonStyle(.borderedProminent)
         }.onAppear(){
-            //dbHelper.myEventsList.removeAll()
-            //dbHelper.getMyEventsList()
             if(dbHelper.myEventsList.contains(where: {$0.id == String(event.id)}))
             {
                 toggleBtnText = "Cancel Attending"
@@ -94,8 +87,6 @@ struct EventDetailsView: View {
             {
                 toggleBtnText = "I will Attend"
             }
-                
         }
     }
-    
 }
