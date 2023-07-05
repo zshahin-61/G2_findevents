@@ -57,7 +57,14 @@ struct EventDetailsView: View {
                 // TODO: add to firestore
                 //var newEvent = Event()
                 var counter = 0
-                var newEvent = MyEvent(id: String(event.id), type: event.type, title: event.title, date: event.datetime_local, image: event.performers[0].image ?? "" , location: event.venue.display_location ?? "")
+                
+                let dateFormatter = ISO8601DateFormatter()
+                var date : Date = Date()
+                if let convertedDate = dateFormatter.date(from: event.datetime_local) {
+                    date = convertedDate
+                }
+                
+                var newEvent = MyEvent(id: String(event.id), type: event.type, title: event.title, date: date, image: event.performers[0].image ?? "" , location: event.venue.display_location ?? "")
                 
                 if(!dbHelper.myEventsList.contains(where: {$0.id == newEvent.id })){
                     dbHelper.insertMyEvent(newEvent: newEvent)

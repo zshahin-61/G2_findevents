@@ -36,7 +36,7 @@ struct EventsListView: View {
                         {
                             loadDataFromAPI()
                         }
-                        calculateMapRegion()
+                        //calculateMapRegion()
                         
                     }){
                         Text("Search")
@@ -53,7 +53,7 @@ struct EventsListView: View {
                                         Image(systemName: "mappin.circle.fill")
                                             .foregroundColor(.red)
                                             .font(.title)
-                                        Text(event.title)
+                                        Text(event.type)
                                             .font(.caption)
                                             .foregroundColor(.black)
                                             .multilineTextAlignment(.center)
@@ -71,19 +71,28 @@ struct EventsListView: View {
                 }
                 .padding()
             }
-            .padding()
-            .onAppear {
-                loadDataFromAPI()
-            }
+        }
+        .padding()
+        .onAppear {
+            loadDataFromAPI()
         }
     }
     
+    func getCurrentDate() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = TimeZone(identifier: "UTC")
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        return dateFormatter.string(from: Date())
+    }
+    
     func loadDataFromAPI() {
-        self.evntList.removeAll()
+        self.evntList = [Event]()
         print("Getting data from API")
         
         // 1. Specify the API URL
-        let apiUrlString = "https://api.seatgeek.com/2/events?client_id=MzQ1MjY2NjN8MTY4Nzc0MzYxNi45MzE5NzMy"
+        let apiUrlString = "https://api.seatgeek.com/2/events?datetime_utc.gt=\(getCurrentDate())&client_id=MzQ1MjY2NjN8MTY4Nzc0MzYxNi45MzE5NzMy"
+        
+        print("%%%%%$$$$######\(apiUrlString)")
         
         guard let apiUrl = URL(string: apiUrlString) else {
             print("ERROR: Cannot convert API address to a URL object")
@@ -104,7 +113,7 @@ struct EventsListView: View {
                 print("Data retrieved")
                 if let decodedResponse = try? JSONDecoder().decode(eventsReponseObj.self, from: jsonData) {
                     DispatchQueue.main.async {
-                        print(decodedResponse)
+                        //print(decodedResponse)
                         let events = decodedResponse.events
                         self.evntList = events
                     }
@@ -119,12 +128,12 @@ struct EventsListView: View {
     }
     
     func loadDataFromAPIbyCity() {
-        self.evntList.removeAll()
+        self.evntList = [Event]()
         //evntList.removeAll()
         print("Getting data from API")
         
         // 1. Specify the API URL
-        let apiUrlString = "https://api.seatgeek.com/2/events?venue.city=\(self.selectedCity)&client_id=MzQ1MjY2NjN8MTY4Nzc0MzYxNi45MzE5NzMy"
+        let apiUrlString = "https://api.seatgeek.com/2/events?venue.city=\(self.selectedCity)&datetime_utc.gt=\(getCurrentDate())&client_id=MzQ1MjY2NjN8MTY4Nzc0MzYxNi45MzE5NzMy"
         
         guard let apiUrl = URL(string: apiUrlString) else {
             print("ERROR: Cannot convert API address to a URL object")

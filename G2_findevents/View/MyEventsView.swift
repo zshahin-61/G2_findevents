@@ -36,7 +36,7 @@ struct MyEventsView: View {
                     VStack{
                         //VStack{
                         Text(myEvt.title)
-                        Text(myEvt.date)
+                        Text("\(myEvt.date)")
                         Text(myEvt.location)
                         //                        }
                         Spacer()

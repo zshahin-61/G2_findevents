@@ -181,8 +181,8 @@ class FirestoreController: ObservableObject {
         //get the email address of currently logged in user
         self.loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL") ?? ""
         
-        //        get the instance of Auth Helper to access all the user details
-        //        self.loggedInUserEmail = self.authHelper.user.email
+        //get the instance of Auth Helper to access all the user details
+        //self.loggedInUserEmail = self.authHelper.user.email
         
         if (self.loggedInUserEmail.isEmpty){
             print(#function, "Logged in user's email address not available. Can't show my Events")
@@ -252,7 +252,7 @@ class FirestoreController: ObservableObject {
                     })//addSnapshotListener
                 
             }catch let err as NSError{
-                print(#function, "Unable to get all paking lots from database : \(err)")
+                print(#function, "Unable to get all logged in user events from database : \(err)")
             }//do..catch
         }//else
     }
@@ -323,31 +323,70 @@ class FirestoreController: ObservableObject {
     }
     
     //MARK: User Friend
-    func getNearbyEvents(UserProile : UserProfile) {
-        //        let today = Date()
-        //
-        //        print(#function, "Trying to get near event for this User.")
-        //        self.loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL") ?? ""
-        //        if (self.loggedInUserEmail.isEmpty){
-        //            print(#function, "Logged in user's email address not available. Can't show my Events")
-        //        }
-        //        else{
-        //            do{
-        //                self.db
-        //                    .collection(COLLECTION_USER_PROFILES)
-        //                    .document(self.loggedInUserEmail)
-        //                    .collection(COLLECTION_EVENTS)
-        //                    .whereField(FIELD_DATE, isGreaterThanOrEqualTo: today)
-        //                    .order(by: FIELD_DATE)
-        //
+//    func getNearbyEvents(userProfile: UserProfile, completion: @escaping ([MyEvent]?, Error?) -> Void){
+//        let today = Date()
+//
+//        print(#function, "Trying to get near event for this User.")
+//        self.loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL") ?? ""
+//        if (self.loggedInUserEmail.isEmpty){
+//            print(#function, "Logged in user's email address not available. Can't show my Events")
+//        }
+//        else{
+//            do{
+//                self.db
+//                    .collection(COLLECTION_USER_PROFILES)
+//                    .document(self.loggedInUserEmail)
+//                    .collection(COLLECTION_EVENTS)
+//                    .whereField(FIELD_DATE, isGreaterThanOrEqualTo: today)
+//                    .order(by: FIELD_DATE)
+//
+//
+//            }
+//        }
+//    }
+//
+    func getNearbyEvents(userProfile: UserProfile, completion: @escaping ([MyEvent]?, Error?) -> Void) {
+        let today = Date()
         
+        print(#function, "Trying to get nearby events for this User.")
         
+        guard let loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL"), !loggedInUserEmail.isEmpty else {
+            print(#function, "Logged-in user's email address not available. Can't show my Events")
+            completion(nil, nil) // Pass nil events and nil error indicating the issue
+            return
+        }
         
+        let db = Firestore.firestore()
         
-        
-        //         }
-        //       }
+        db.collection(COLLECTION_USER_PROFILES)
+            .document(loggedInUserEmail)
+            .collection(COLLECTION_EVENTS)
+            .whereField(FIELD_DATE, isGreaterThanOrEqualTo: today)
+            .order(by: FIELD_DATE)
+            .getDocuments { (querySnapshot, error) in
+                if let error = error {
+                    print("Error getting nearby events: \(error.localizedDescription)")
+                    completion(nil, error) // Pass nil events and the error
+                    return
+                }
+                
+                // Process the retrieved events
+                var events: [MyEvent] = []
+                for document in querySnapshot?.documents ?? [] {
+                    let eventData = document.data()
+                    
+                    // Parse the eventData and create Event objects
+                    // Assuming you have an Event struct or class, create Event objects here
+                    // Example:
+                    if let event = MyEvent(dictionary: eventData){
+                        events.append(event)
+                    }
+                }
+                
+                completion(events, nil) // Pass the retrieved events and nil error
+            }
     }
+
     
     func searchUserProfiles(withName searchText: String, completion: @escaping ([UserProfile]) -> Void) {
         

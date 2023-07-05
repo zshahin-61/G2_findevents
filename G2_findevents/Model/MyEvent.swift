@@ -12,7 +12,7 @@ struct MyEvent: Codable, Hashable{
     @DocumentID var id : String? = UUID().uuidString
     var type: String
     var title: String
-    var date: String
+    var date: Date
     var image: String
     var location: String
    
@@ -32,7 +32,7 @@ struct MyEvent: Codable, Hashable{
             return nil
         }
         
-        guard let mDate = dictionary["date"] as? String else {
+        guard let mDate = dictionary["date"] as? Date else {
             print(#function, "Unable to get date from JSON")
             return nil
         }
@@ -50,7 +50,7 @@ struct MyEvent: Codable, Hashable{
         self.init(id: mId, type: mType, title: mTitle, date: mDate, image: mImage, location: mlocation)
     }
     
-    init(id: String, type: String, title: String, date: String, image:String,  location:String) {
+    init(id: String, type: String, title: String, date: Date, image:String,  location:String) {
         self.id = id
         self.type = type
         self.title = title
