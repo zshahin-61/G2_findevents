@@ -67,9 +67,12 @@ struct EventDetailsView: View {
                 
                 let dateString = event.datetime_local // Assuming event.datetime_local is a String in ISO 8601 format
 
-                let formatter = ISO8601DateFormatter()
-                guard let dateDate = formatter.date(from: dateString) else {
-                    print("!!!!!!!!!date")
+                let dateFormatter = ISO8601DateFormatter()
+                //dateFormatter.dateFormat = "YYYY-MM-DDTHH:mm:ss"
+                
+                //let formatter = ISO8601DateFormatter()
+                guard let dateDate = dateFormatter.date(from: dateString) else {
+                    print("!!!!!!!!!date\(dateString)")
                     return
                 }
             
