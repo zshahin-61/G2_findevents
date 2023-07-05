@@ -345,15 +345,14 @@ class FirestoreController: ObservableObject {
 //        }
 //    }
 //
-    func getNearbyEvents(userProfile: UserProfile, completion: @escaping (MyEvent?, Error?) -> Void) {
+    
+    func getNearbyEvents(selectedUser: UserProfile, completion: @escaping (MyEvent?, Error?) -> Void) {
         let today = Date()
         
         print(#function, "Trying to get nearby events for this User.")
         
-        let db = Firestore.firestore()
-        
-        db.collection(COLLECTION_USER_PROFILES)
-            .document(userProfile.id!)
+        self.db.collection(COLLECTION_USER_PROFILES)
+            .document(selectedUser.id!)
             .collection(COLLECTION_EVENTS)
             .whereField(FIELD_DATE, isGreaterThanOrEqualTo: today)
             .order(by: FIELD_DATE)
@@ -381,6 +380,36 @@ class FirestoreController: ObservableObject {
             }
     }
 
+    func getFriendsAttendingInEvent(nextEvent: MyEvent ,completion: @escaping ([UserProfile]?, Error?) -> Void){
+        
+        // Get the email address of the currently logged in user
+        guard let loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL"), !loggedInUserEmail.isEmpty else {
+            print(#function, "Logged in user's email address not available. Can't search.")
+            return
+        }
+        var friendsAttendList = [UserProfile]()
+        getFriends()
+        for friend in self.myFriendsList{
+            self.db.collection(COLLECTION_USER_PROFILES)
+                .document(friend.id!)
+                .collection(COLLECTION_EVENTS).document(nextEvent.id!)
+                .getDocument{ (querySnapshot, error) in
+                    if let error = error {
+                        print("Error check attending: \(error.localizedDescription)")
+                        completion(nil, error) // Pass nil events and the error
+                        return
+                    }
+                    
+                    if let document = querySnapshot {
+                        if(document.exists){
+                            friendsAttendList.append(friend)
+                        }
+                    }
+                }
+        }
+        
+        completion(friendsAttendList, nil) // Pass the retrieved events and nil error
+    }
     
     func searchUserProfiles(withName searchText: String, completion: @escaping ([UserProfile]) -> Void) {
         

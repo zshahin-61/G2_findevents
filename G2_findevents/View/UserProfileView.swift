@@ -16,6 +16,7 @@ struct UserProfileView: View {
     @State private var showAlert: Bool = false
     @State private var alertMessage: String = ""
     @State private var nextEvent: MyEvent?
+    @State private var attendingList : [UserProfile]?
     
     var body: some View {
         VStack {
@@ -65,23 +66,42 @@ struct UserProfileView: View {
                             Text("\(nextEVT.date)")
                         }
                     }
+                    List{
+                        if let attList = self.attendingList {
+                            ForEach(attList, id:\.id){
+                                att in
+                                Text(att.name)
+                                
+                            }
+                        }
+                    }
                 }
+                
+                
+                
                 Spacer()
                 Text("Friends Attending")
                     .font(.title)
             }
             .padding()
         }.onAppear(){
-            dbHelper.getNearbyEvents(userProfile: userProfile) { (events, error) in
+            dbHelper.getNearbyEvents(selectedUser: userProfile) { (events, error) in
                 if let error = error {
                     // Handle the error
                     print("Error retrieving nearby events: \(error.localizedDescription)")
                 } else if let evt = events {
                     // Use the retrieved events
-                    nextEvent = evt
+                    self.nextEvent = evt
                     print("Event: \(events)")
-                    
-                }
+                    dbHelper.getFriendsAttendingInEvent(nextEvent: evt){ (attList, err) in
+                        if let err = err {
+                            // Handle the error
+                            print("Error retrieving attendingList: \(err.localizedDescription)")
+                        } else if let evt = events {
+                            self.attendingList = attList
+                        } //else if let
+                    } //getFriendsAttendingInEvent
+                } // else if let
             }
         }
         .alert(isPresented: $showAlert, content: {
