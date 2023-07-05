@@ -16,10 +16,10 @@ struct MyEventsView: View {
         VStack {
             Button(action:{
                 //dbHelper.myEventsList.removeAll()
-                dbHelper.deleteAllMyEvents()
-                if let currUser = dbHelper.userProfile{
-                    dbHelper.userProfile!.numberOfEventsAttending = 0
-                    dbHelper.updateUserProfile(userToUpdate: dbHelper.userProfile!)
+                self.dbHelper.deleteAllMyEvents()
+                if let currUser = self.dbHelper.userProfile{
+                    self.dbHelper.userProfile!.numberOfEventsAttending = 0
+                    self.dbHelper.updateUserProfile(userToUpdate: self.dbHelper.userProfile!)
                 }
             }){
                 Text("Remove All")

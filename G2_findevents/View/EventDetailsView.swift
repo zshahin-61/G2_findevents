@@ -58,13 +58,23 @@ struct EventDetailsView: View {
                 //var newEvent = Event()
                 var counter = 0
                 
-                let dateFormatter = ISO8601DateFormatter()
-                var date : Date = Date()
-                if let convertedDate = dateFormatter.date(from: event.datetime_local) {
-                    date = convertedDate
-                }
+//                let dateFormatter = ISO8601DateFormatter()
+//                var date : Date = Date()
+//                if let convertedDate = dateFormatter.Date(from: event.datetime_local) {
+//                    print("!!!!!!!!!convertedDate")
+//                    date = convertedDate
+//                }
                 
-                var newEvent = MyEvent(id: String(event.id), type: event.type, title: event.title, date: date, image: event.performers[0].image ?? "" , location: event.venue.display_location ?? "")
+                let dateString = event.datetime_local // Assuming event.datetime_local is a String in ISO 8601 format
+
+                let formatter = ISO8601DateFormatter()
+                guard let dateDate = formatter.date(from: dateString) else {
+                    print("!!!!!!!!!date")
+                    return
+                }
+            
+                
+                var newEvent = MyEvent(id: String(event.id), type: event.type, title: event.title, date: dateDate, image: event.performers[0].image ?? "" , location: event.venue.display_location ?? "")
                 
                 if(!dbHelper.myEventsList.contains(where: {$0.id == newEvent.id })){
                     dbHelper.insertMyEvent(newEvent: newEvent)
