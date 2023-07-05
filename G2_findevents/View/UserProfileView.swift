@@ -15,6 +15,7 @@ struct UserProfileView: View {
     @State private var isFriend: Bool = false
     @State private var showAlert: Bool = false
     @State private var alertMessage: String = ""
+    @State private var nextEvent: MyEvent?
     
     var body: some View {
         VStack {
@@ -54,13 +55,34 @@ struct UserProfileView: View {
             VStack {
                 Text("\(userProfile.name)'s Next Event")
                     .font(.title)
-                
-                
+                if let nextEVT = nextEvent{
+                    HStack{
+                        if !nextEVT.image.isEmpty{
+                            AsyncImage(url:URL(string: nextEVT.image))
+                        }
+                        VStack {
+                            Text(nextEVT.title)
+                            Text("\(nextEVT.date)")
+                        }
+                    }
+                }
                 Spacer()
                 Text("Friends Attending")
                     .font(.title)
             }
             .padding()
+        }.onAppear(){
+            dbHelper.getNearbyEvents(userProfile: userProfile) { (events, error) in
+                if let error = error {
+                    // Handle the error
+                    print("Error retrieving nearby events: \(error.localizedDescription)")
+                } else if let evt = events {
+                    // Use the retrieved events
+                    nextEvent = evt
+                    print("Event: \(events)")
+                    
+                }
+            }
         }
         .alert(isPresented: $showAlert, content: {
             Alert(title: Text("Friend Status"), message: Text(alertMessage), dismissButton: .default(Text("OK")))

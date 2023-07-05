@@ -323,7 +323,7 @@ class FirestoreController: ObservableObject {
     }
     
     //MARK: User Friend
-//    func getNearbyEvents(userProfile: UserProfile, completion: @escaping ([MyEvent]?, Error?) -> Void){
+//    func getNearbyEvents(userProfile: UserProfile){
 //        let today = Date()
 //
 //        print(#function, "Trying to get near event for this User.")
@@ -345,21 +345,15 @@ class FirestoreController: ObservableObject {
 //        }
 //    }
 //
-    func getNearbyEvents(userProfile: UserProfile, completion: @escaping ([MyEvent]?, Error?) -> Void) {
+    func getNearbyEvents(userProfile: UserProfile, completion: @escaping (MyEvent?, Error?) -> Void) {
         let today = Date()
         
         print(#function, "Trying to get nearby events for this User.")
         
-        guard let loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL"), !loggedInUserEmail.isEmpty else {
-            print(#function, "Logged-in user's email address not available. Can't show my Events")
-            completion(nil, nil) // Pass nil events and nil error indicating the issue
-            return
-        }
-        
         let db = Firestore.firestore()
         
         db.collection(COLLECTION_USER_PROFILES)
-            .document(loggedInUserEmail)
+            .document(userProfile.id!)
             .collection(COLLECTION_EVENTS)
             .whereField(FIELD_DATE, isGreaterThanOrEqualTo: today)
             .order(by: FIELD_DATE)
@@ -383,7 +377,7 @@ class FirestoreController: ObservableObject {
                     }
                 }
                 
-                completion(events, nil) // Pass the retrieved events and nil error
+                completion(events.first, nil) // Pass the retrieved events and nil error
             }
     }
 
