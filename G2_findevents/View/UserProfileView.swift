@@ -53,37 +53,56 @@ struct UserProfileView: View {
                     .cornerRadius(10)
             }
 
-            VStack {
+            VStack{
                 Text("\(selectedUser.name)'s Next Event")
                     .font(.title)
                 if let nextEVT = self.nextEvent {
                     HStack{
                         if !nextEVT.image.isEmpty{
-                            AsyncImage(url:URL(string: nextEVT.image))
+                            //AsyncImage(url:URL(string: nextEVT.image))
+                            GeometryReader { geometry in
+                                AsyncImage(url: URL(string: nextEVT.image)) { phase in
+                                    switch phase {
+                                    case .success(let image):
+                                        image
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(width: 120, height: 120) // Set the desired width and height
+                                    case .failure(_):
+                                        // Handle the failure case or display a placeholder image
+                                        // ...
+                                        EmptyView()
+                                    case .empty:
+                                        // Handle the empty case or display a placeholder image
+                                        // ...
+                                        EmptyView()
+                                    @unknown default:
+                                        EmptyView()
+                                    }
+                                }
+                            }
                         }
                         VStack {
                             Text(nextEVT.title)
                             Text("\(nextEVT.date)")
                         }
                     }
-//                    List{
-//                        if let attList = self.attendingList {
-//                            ForEach(attList, id:\.id){
-//                                att in
-//                                Text(att.name)
-//                                
-//                            }
-//                        }
-//                    }
+                    List{
+                        Text("Friends Attending")
+                            .font(.title)
+                        if let attList = self.attendingList {
+                            ForEach(attList, id:\.id){
+                                att in
+                                Text(att.name)
+
+                            }
+                        }
+                    }
                 }//if let
                 else{
                     Text("No Next Event")
                 }
-                
-                
                 Spacer()
-                Text("Friends Attending")
-                    .font(.title)
             }
             .padding()
         }.onAppear(){
@@ -95,12 +114,13 @@ struct UserProfileView: View {
                     // Use the retrieved events
                     self.nextEvent = evt
                     print("Event: \(events)")
-                    dbHelper.getFriendsAttendingInEvent(nextEvent: evt){ (attList, err) in
+                    dbHelper.getFriendsAttendingInEvent(nextEventId: evt.id!){ (attList, err) in
                         if let err = err {
                             // Handle the error
                             print("Error retrieving attendingList: \(err.localizedDescription)")
-                        } else if let evt = events {
-                            self.attendingList = attList
+                        } else if let att = attList {
+                            self.attendingList = att
+                            print("%%%%%%%%%\(att)")
                         } //else if let
                     } //getFriendsAttendingInEvent
                 } // else if let

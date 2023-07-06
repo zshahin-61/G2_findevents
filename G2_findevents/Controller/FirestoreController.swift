@@ -356,22 +356,26 @@ class FirestoreController: ObservableObject {
             completion(nil, nil) // Pass nil events and the error
             return
         }
-        
-        self.db.collection(COLLECTION_USER_PROFILES)
-            .document(userId)
-            .collection(COLLECTION_EVENTS)
-            .whereField(FIELD_DATE, isGreaterThanOrEqualTo: today)
-            .order(by: FIELD_DATE)
-            .getDocuments { (querySnapshot, error) in
-                if let error = error {
-                    print("Error getting nearby events: \(error.localizedDescription)")
-                    completion(nil, error) // Pass nil events and the error
-                    return
-                }
-                
-                // Process the retrieved events
-                var events: [MyEvent] = []
-                for document in querySnapshot?.documents ?? [] {
+        do{
+            try self.db.collection(COLLECTION_USER_PROFILES)
+                .document(userId)
+                .collection(COLLECTION_EVENTS)
+                //.whereField(FIELD_DATE, isGreaterThanOrEqualTo: today)
+                .order(by: FIELD_DATE)
+                .getDocuments { (querySnapshot, error) in
+                    if let error = error {
+                        print("Error getting nearby events: \(error.localizedDescription)")
+                        completion(nil, error) // Pass nil events and the error
+                        return
+                    }
+                    
+                    // Process the retrieved events
+                    var events: [MyEvent] = []
+                    guard let document = querySnapshot?.documents.first else {
+                        completion(nil, error) // Pass nil events and the error
+                        return
+                    }
+                    //for document in querySnapshot?.documents ?? [] {
                     let eventId = document.documentID
                     print("@@@@@@@@@\(eventId)")
                     let eventData = document.data()
@@ -393,44 +397,102 @@ class FirestoreController: ObservableObject {
                     if var event = MyEvent(dictionary: eventData, documentId: eventId, dateFromDB: date){
                         //event.id = eventId
                         //event.date = date
-                        events.append(event)
+                        //events.append(event)
+                        completion(event, nil)
                     }
+                    else{
+                        completion(nil, nil)
+                    }
+                    //}
+                    
+                    //completion(events.first, nil) // Pass the retrieved events and nil error
                 }
-                
-                completion(events.first, nil) // Pass the retrieved events and nil error
-            }
-    }
-
-    func getFriendsAttendingInEvent(nextEvent: MyEvent ,completion: @escaping ([UserProfile]?, Error?) -> Void){
-        
-        // Get the email address of the currently logged in user
-        guard let loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL"), !loggedInUserEmail.isEmpty else {
-            print(#function, "Logged in user's email address not available. Can't search.")
+            
+        }catch{ 
+            completion(nil, error)
             return
         }
+    }
+
+//    func getFriendsAttendingInEvent(nextEventId: String ,completion: @escaping ([UserProfile]?, Error?) -> Void){
+//
+//        // Get the email address of the currently logged in user
+//        guard let loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL"), !loggedInUserEmail.isEmpty else {
+//            print(#function, "Logged in user's email address not available. Can't search.")
+//            return
+//        }
+//        var friendsAttendList = [UserProfile]()
+//        //getFriends()
+//        //print("@@@@@@@@@@@@myFriendsList: \(self.myFriendsList)")
+//        for friend in self.myFriendsList{
+//            self.db.collection(COLLECTION_USER_PROFILES)
+//                .document(friend.id!)
+//                .collection(COLLECTION_EVENTS).document(nextEventId)
+//                .getDocument{ (querySnapshot, error) in
+//                    if let error = error {
+//                        print("Error check attending: \(error.localizedDescription)")
+//                        completion(nil, error) // Pass nil events and the error
+//                        return
+//                    }
+//
+//                    if querySnapshot != nil {
+//                        //print("$$$$$$$$$$inja")
+//                        //if(document.exists){
+//
+//                        friendsAttendList.append(friend)
+//                        print("$$$$$$$$$$inja\(friendsAttendList)")
+//                        //}
+//                    }
+//                }
+//            //print("$$$$$########$$$$$inja\(friendsAttendList)")
+//        }
+//        //print("$$$$$$$$$$inja\(friendsAttendList)")
+//        //print("$$$$$########$$$$$inja\(friendsAttendList)")
+//        print("GollllllllllllZahhhhhhhhhh")
+//        completion(friendsAttendList, nil) // Pass the friends and nil error
+//    }
+//
+    
+    func getFriendsAttendingInEvent(nextEventId: String, completion: @escaping ([UserProfile]?, Error?) -> Void) {
+        guard let loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL"), !loggedInUserEmail.isEmpty else {
+            print(#function, "Logged in user's email address not available. Can't search.")
+            completion(nil, nil) // Pass nil friends and nil error
+            return
+        }
+        
         var friendsAttendList = [UserProfile]()
-        getFriends()
-        for friend in self.myFriendsList{
+        let group = DispatchGroup() // Create a DispatchGroup
+        
+        for friend in self.myFriendsList {
+            group.enter() // Enter the DispatchGroup
+            
             self.db.collection(COLLECTION_USER_PROFILES)
                 .document(friend.id!)
-                .collection(COLLECTION_EVENTS).document(nextEvent.id!)
-                .getDocument{ (querySnapshot, error) in
+                .collection(COLLECTION_EVENTS)
+                .document(nextEventId)
+                .getDocument { (querySnapshot, error) in
+                    defer {
+                        group.leave() // Leave the DispatchGroup in the completion block
+                    }
+                    
                     if let error = error {
-                        print("Error check attending: \(error.localizedDescription)")
-                        completion(nil, error) // Pass nil events and the error
+                        print("Error checking attendance: \(error.localizedDescription)")
+                        // Handle the error if needed
                         return
                     }
                     
-                    if let document = querySnapshot {
-                        if(document.exists){
-                            friendsAttendList.append(friend)
-                        }
+                    if querySnapshot?.exists == true {
+                        friendsAttendList.append(friend)
                     }
                 }
         }
         
-        completion(friendsAttendList, nil) // Pass the retrieved events and nil error
+        group.notify(queue: .main) {
+            // This block will be executed when all queries have finished
+            completion(friendsAttendList, nil) // Pass the friends and nil error
+        }
     }
+
     
     func searchUserProfiles(withName searchText: String, completion: @escaping ([UserProfile]) -> Void) {
         
