@@ -41,7 +41,7 @@ struct SearchUsersView: View {
             }
             
             List(searchResults, id: \.id) { userProfile in
-                NavigationLink(destination: UserProfileView(userProfile: userProfile).environmentObject(authHelper).environmentObject(self.dbHelper)) {
+                NavigationLink(destination: UserProfileView(selectedUser: userProfile).environmentObject(authHelper).environmentObject(self.dbHelper)) {
                     Text(userProfile.name)
                 }
             }

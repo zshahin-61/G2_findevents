@@ -10,7 +10,7 @@ struct UserProfileView: View {
     @EnvironmentObject var dbHelper: FirestoreController
     @EnvironmentObject var authHelper: FireAuthController
     
-    let userProfile: UserProfile
+    let selectedUser: UserProfile
     
     @State private var isFriend: Bool = false
     @State private var showAlert: Bool = false
@@ -21,7 +21,7 @@ struct UserProfileView: View {
     var body: some View {
         VStack {
             HStack {
-                if let imageData = userProfile.image, let image = UIImage(data: imageData) {
+                if let imageData = selectedUser.image, let image = UIImage(data: imageData) {
                     Image(uiImage: image)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
@@ -29,9 +29,9 @@ struct UserProfileView: View {
                 }
                 
                 VStack(alignment: .leading) {
-                    Text(userProfile.name)
+                    Text(selectedUser.name)
                         .font(.title)
-                    Text("Events Attending: \(userProfile.numberOfEventsAttending)")
+                    Text("Events Attending: \(selectedUser.numberOfEventsAttending)")
                 }
             }
             .padding()
@@ -54,9 +54,9 @@ struct UserProfileView: View {
             }
 
             VStack {
-                Text("\(userProfile.name)'s Next Event")
+                Text("\(selectedUser.name)'s Next Event")
                     .font(.title)
-                if let nextEVT = nextEvent{
+                if let nextEVT = self.nextEvent {
                     HStack{
                         if !nextEVT.image.isEmpty{
                             AsyncImage(url:URL(string: nextEVT.image))
@@ -66,17 +66,19 @@ struct UserProfileView: View {
                             Text("\(nextEVT.date)")
                         }
                     }
-                    List{
-                        if let attList = self.attendingList {
-                            ForEach(attList, id:\.id){
-                                att in
-                                Text(att.name)
-                                
-                            }
-                        }
-                    }
+//                    List{
+//                        if let attList = self.attendingList {
+//                            ForEach(attList, id:\.id){
+//                                att in
+//                                Text(att.name)
+//                                
+//                            }
+//                        }
+//                    }
+                }//if let
+                else{
+                    Text("No Next Event")
                 }
-                
                 
                 
                 Spacer()
@@ -85,7 +87,7 @@ struct UserProfileView: View {
             }
             .padding()
         }.onAppear(){
-            dbHelper.getNearbyEvents(selectedUser: userProfile) { (events, error) in
+            dbHelper.getNearbyEvents(selectedUser: self.selectedUser) { (events, error) in
                 if let error = error {
                     // Handle the error
                     print("Error retrieving nearby events: \(error.localizedDescription)")
@@ -110,11 +112,11 @@ struct UserProfileView: View {
     }
     
     func addFriend() {
-        dbHelper.addFriend(newFriend: userProfile)
+        dbHelper.addFriend(newFriend: selectedUser)
     }
     
     func removeFriend() {
-        dbHelper.removeFriend(friendDelet: userProfile)
+        dbHelper.removeFriend(friendDelet: selectedUser)
         
     }
 }

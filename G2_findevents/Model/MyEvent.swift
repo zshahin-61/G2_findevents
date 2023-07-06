@@ -16,11 +16,13 @@ struct MyEvent: Codable, Hashable{
     var image: String
     var location: String
    
-    init?(dictionary: [String: Any]) {
-        guard let mId = dictionary["id"] as? String else {
-            print(#function, "Unable to get user ID from JSON")
-            return nil
-        }
+    init?(dictionary: [String: Any], documentId: String, dateFromDB : Date) {
+//        guard let mId = dictionary["id"] as? String else {
+//            print(#function, "Unable to get Event ID from JSON")
+//            return nil
+//        }
+        
+        let mId = dictionary["id"] as? String ?? documentId
         
         guard let mType = dictionary["type"] as? String else {
             print(#function, "Unable to get type from JSON")
@@ -32,10 +34,11 @@ struct MyEvent: Codable, Hashable{
             return nil
         }
         
-        guard let mDate = dictionary["date"] as? Date else {
-            print(#function, "Unable to get date from JSON")
-            return nil
-        }
+//        guard let mDate = dictionary["date"] as? Date else {
+//            print(#function, "Unable to get date from JSON")
+//            return nil
+//        }
+        let mDate = dictionary["date"] as? Date ?? dateFromDB
         
         guard let mImage = dictionary["image"] as? String else {
             print(#function, "Unable to get image from JSON")

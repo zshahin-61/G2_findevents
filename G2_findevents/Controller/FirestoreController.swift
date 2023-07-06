@@ -351,8 +351,14 @@ class FirestoreController: ObservableObject {
         
         print(#function, "Trying to get nearby events for this User.")
         
+        guard let userId = selectedUser.id else{
+            print("!!!!!!!!Error")
+            completion(nil, nil) // Pass nil events and the error
+            return
+        }
+        
         self.db.collection(COLLECTION_USER_PROFILES)
-            .document(selectedUser.id!)
+            .document(userId)
             .collection(COLLECTION_EVENTS)
             .whereField(FIELD_DATE, isGreaterThanOrEqualTo: today)
             .order(by: FIELD_DATE)
@@ -366,12 +372,27 @@ class FirestoreController: ObservableObject {
                 // Process the retrieved events
                 var events: [MyEvent] = []
                 for document in querySnapshot?.documents ?? [] {
+                    let eventId = document.documentID
+                    print("@@@@@@@@@\(eventId)")
                     let eventData = document.data()
+                    
+                    // Inside the for loop that retrieves the document data
+                    guard let timestamp = eventData[self.FIELD_DATE] as? Timestamp else{
+                        //let date = timestamp.dateValue()
+                        // Use the 'date' variable as a Date object in your code
+                        completion(nil, nil) // Pass nil events and the error
+                        return
+                    }
+                    
+                    let date = timestamp.dateValue()
                     
                     // Parse the eventData and create Event objects
                     // Assuming you have an Event struct or class, create Event objects here
                     // Example:
-                    if let event = MyEvent(dictionary: eventData){
+                    print("!!!!!!!!\(eventData)")
+                    if var event = MyEvent(dictionary: eventData, documentId: eventId, dateFromDB: date){
+                        //event.id = eventId
+                        //event.date = date
                         events.append(event)
                     }
                 }
@@ -496,7 +517,6 @@ class FirestoreController: ObservableObject {
             }
         }
     }
-
 
     func deleteMyFriend(friendID: String) {
         print(#function, "Deleting Friend with ID: \(friendID)")
