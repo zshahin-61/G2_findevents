@@ -54,28 +54,13 @@ struct EventDetailsView: View {
             }//List
             Spacer()
             Button(action:{
-                // TODO: add to firestore
-                //var newEvent = Event()
                 var counter = 0
                 
-                //                let dateFormatter = ISO8601DateFormatter()
-                //                var date : Date = Date()
-                //                if let convertedDate = dateFormatter.Date(from: event.datetime_local) {
-                //                    print("!!!!!!!!!convertedDate")
-                //                    date = convertedDate
-                //                }
-                
-                let dateString = event.datetime_local // Assuming event.datetime_local is a String in ISO 8601 format
-                
-                //let dateFormatter = ISO8601DateFormatter()
-                //dateFormatter.dateFormat = "YYYY-MM-DDTHH:mm:ss"
-                
-                //let formatter = ISO8601DateFormatter()
+                let dateString = event.datetime_local
                 guard let dateDate = formattedDate(dateString: dateString) else {
-                    print("!!!!!!!!!date\(dateString)")
+                    print("Error: Invalid date format!")
                     return
                 }
-                
                 
                 var newEvent = MyEvent(id: String(event.id), type: event.type, title: event.title, date: dateDate, image: event.performers[0].image ?? "" , location: event.venue.display_location ?? "")
                 
@@ -89,11 +74,11 @@ struct EventDetailsView: View {
                     dbHelper.deleteMyEvent(eventToDelete: newEvent)
                     counter = -1
                 }
+                
                 if let currentUser = dbHelper.userProfile{
                     dbHelper.userProfile!.numberOfEventsAttending += counter
                     dbHelper.updateUserProfile(userToUpdate: dbHelper.userProfile!)
                 }
-                
             }){
                 Text(self.toggleBtnText)
             }.buttonStyle(.borderedProminent)
