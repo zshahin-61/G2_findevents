@@ -465,27 +465,26 @@ class FirestoreController: ObservableObject {
         
         for friend in self.myFriendsList {
             group.enter() // Enter the DispatchGroup
-            
-            self.db.collection(COLLECTION_USER_PROFILES)
-                .document(friend.id!)
-                .collection(COLLECTION_EVENTS)
-                .document(nextEventId)
-                .getDocument { (querySnapshot, error) in
-                    defer {
-                        group.leave() // Leave the DispatchGroup in the completion block
-                    }
-                    
-                    if let error = error {
-                        print("Error checking attendance: \(error.localizedDescription)")
-                        // Handle the error if needed
-                        return
-                    }
-                    
-                    if querySnapshot?.exists == true {
-                        friendsAttendList.append(friend)
-                    }
-                }
-        }
+                self.db.collection(COLLECTION_USER_PROFILES)
+                    .document(friend.id!)
+                    .collection(COLLECTION_EVENTS)
+                    .document(nextEventId)
+                    .getDocument { (querySnapshot, error) in
+                        defer {
+                            group.leave() // Leave the DispatchGroup in the completion block
+                        }
+                        
+                        if let error = error {
+                            print("Error checking attendance: \(error.localizedDescription)")
+                            // Handle the error if needed
+                            return
+                        }
+                        
+                        if querySnapshot?.exists == true {
+                            friendsAttendList.append(friend)
+                        }
+                    } // end
+        } // end for
         
         group.notify(queue: .main) {
             // This block will be executed when all queries have finished

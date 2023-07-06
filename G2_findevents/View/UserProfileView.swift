@@ -113,14 +113,15 @@ struct UserProfileView: View {
                 } else if let evt = events {
                     // Use the retrieved events
                     self.nextEvent = evt
-                    print("Event: \(events)")
+                    //print("Event: \(events)")
                     dbHelper.getFriendsAttendingInEvent(nextEventId: evt.id!){ (attList, err) in
-                        if let err = err {
+                        if let errr = err {
                             // Handle the error
-                            print("Error retrieving attendingList: \(err.localizedDescription)")
-                        } else if let att = attList {
+                            print("Error retrieving attendingList: \(errr.localizedDescription)")
+                        } else if var att = attList {
+                            att.removeAll(where: {$0.id == self.selectedUser.id})
                             self.attendingList = att
-                            print("%%%%%%%%%\(att)")
+                            //print("%%%%%%%%%\(att)")
                         } //else if let
                     } //getFriendsAttendingInEvent
                 } // else if let
