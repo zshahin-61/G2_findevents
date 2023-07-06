@@ -58,24 +58,24 @@ struct EventDetailsView: View {
                 //var newEvent = Event()
                 var counter = 0
                 
-//                let dateFormatter = ISO8601DateFormatter()
-//                var date : Date = Date()
-//                if let convertedDate = dateFormatter.Date(from: event.datetime_local) {
-//                    print("!!!!!!!!!convertedDate")
-//                    date = convertedDate
-//                }
+                //                let dateFormatter = ISO8601DateFormatter()
+                //                var date : Date = Date()
+                //                if let convertedDate = dateFormatter.Date(from: event.datetime_local) {
+                //                    print("!!!!!!!!!convertedDate")
+                //                    date = convertedDate
+                //                }
                 
                 let dateString = event.datetime_local // Assuming event.datetime_local is a String in ISO 8601 format
-
-                let dateFormatter = ISO8601DateFormatter()
+                
+                //let dateFormatter = ISO8601DateFormatter()
                 //dateFormatter.dateFormat = "YYYY-MM-DDTHH:mm:ss"
                 
                 //let formatter = ISO8601DateFormatter()
-                guard let dateDate = dateFormatter.date(from: dateString) else {
+                guard let dateDate = formattedDate(dateString: dateString) else {
                     print("!!!!!!!!!date\(dateString)")
                     return
                 }
-            
+                
                 
                 var newEvent = MyEvent(id: String(event.id), type: event.type, title: event.title, date: dateDate, image: event.performers[0].image ?? "" , location: event.venue.display_location ?? "")
                 
@@ -106,6 +106,19 @@ struct EventDetailsView: View {
             {
                 toggleBtnText = "I will Attend"
             }
+        }
+    }
+    
+    func formattedDate(dateString: String)-> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        
+        if let date = dateFormatter.date(from: dateString) {
+            dateFormatter.dateStyle = .long
+            dateFormatter.timeStyle = .medium
+            return date
+        } else {
+            return nil
         }
     }
 }
