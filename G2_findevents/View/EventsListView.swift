@@ -90,7 +90,7 @@ struct EventsListView: View {
         print("Getting data from API")
         
         // 1. Specify the API URL
-        let apiUrlString = "https://api.seatgeek.com/2/events?datetime_utc.gt=\(getCurrentDate())&client_id=MzQ1MjY2NjN8MTY4Nzc0MzYxNi45MzE5NzMy"
+        let apiUrlString = "https://api.seatgeek.com/2/events?geoip=true&datetime_utc.gt=\(getCurrentDate())&client_id=MzQ1MjY2NjN8MTY4Nzc0MzYxNi45MzE5NzMy"
         
         print("%%%%%$$$$######\(apiUrlString)")
         
