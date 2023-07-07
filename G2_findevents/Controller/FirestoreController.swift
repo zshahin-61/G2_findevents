@@ -360,7 +360,7 @@ class FirestoreController: ObservableObject {
             try self.db.collection(COLLECTION_USER_PROFILES)
                 .document(userId)
                 .collection(COLLECTION_EVENTS)
-                //.whereField(FIELD_DATE, isGreaterThanOrEqualTo: today)
+                .whereField(FIELD_DATE, isGreaterThanOrEqualTo: today)
                 .order(by: FIELD_DATE)
                 .getDocuments { (querySnapshot, error) in
                     if let error = error {

@@ -15,7 +15,7 @@ struct HomeView: View {
     @State private var selectedLink: Int? = nil
 
     var body: some View {
-        NavigationView {
+        //NavigationView {
             TabView {
                 EventsListView()
                     .tabItem {
@@ -62,6 +62,6 @@ struct HomeView: View {
             )
             .padding(.top, -50) // Adjust the padding to remove the gap
         }
-    }
+    //}
 }
 
