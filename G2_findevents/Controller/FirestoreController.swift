@@ -530,33 +530,33 @@ class FirestoreController: ObservableObject {
     }
 
     
-//    func getUsersAttendingEvent(eventID: String, completion: @escaping ([UserProfile]) -> Void) {
-//        let query = db.collection(COLLECTION_USER_PROFILES)
-//            .whereField(FIELD_USER_NUMBERATTENDING, isGreaterThan: 0)
-//            .whereField("events.\(eventID)", isGreaterThan: 0)
-//
-//        query.getDocuments { snapshot, error in
-//            if let error = error {
-//                print("Error retrieving users attending event: \(error.localizedDescription)")
-//                completion([])
-//                return
-//            }
-//
-//            guard let documents = snapshot?.documents else {
-//                print("No users attending event found")
-//                completion([])
-//                return
-//            }
-//
-//            let profiles = documents.compactMap { document -> UserProfile? in
-//                let data = document.data()
-//                return UserProfile(dictionary: data)
-//            }
-//
-//            completion(profiles)
-//        }
-//    }
-//
+    func getUsersAttendingEvent(eventID: String, completion: @escaping ([UserProfile]) -> Void) {
+        let query = db.collection(COLLECTION_USER_PROFILES)
+            .whereField(FIELD_USER_NUMBERATTENDING, isGreaterThan: 0)
+            .whereField("events.\(eventID)", isGreaterThan: 0)
+
+        query.getDocuments { snapshot, error in
+            if let error = error {
+                print("Error retrieving users attending event: \(error.localizedDescription)")
+                completion([])
+                return
+            }
+
+            guard let documents = snapshot?.documents else {
+                print("No users attending event found")
+                completion([])
+                return
+            }
+
+            let profiles = documents.compactMap { document -> UserProfile? in
+                let data = document.data()
+                return UserProfile(dictionary: data)
+            }
+
+            completion(profiles)
+        }
+    }
+
     func deleteAllMyFriends() {
         print(#function, "Deleting All My Friends")
         
