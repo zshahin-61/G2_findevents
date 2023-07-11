@@ -323,28 +323,6 @@ class FirestoreController: ObservableObject {
     }
     
     //MARK: User Friend
-//    func getNearbyEvents(userProfile: UserProfile){
-//        let today = Date()
-//
-//        print(#function, "Trying to get near event for this User.")
-//        self.loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL") ?? ""
-//        if (self.loggedInUserEmail.isEmpty){
-//            print(#function, "Logged in user's email address not available. Can't show my Events")
-//        }
-//        else{
-//            do{
-//                self.db
-//                    .collection(COLLECTION_USER_PROFILES)
-//                    .document(self.loggedInUserEmail)
-//                    .collection(COLLECTION_EVENTS)
-//                    .whereField(FIELD_DATE, isGreaterThanOrEqualTo: today)
-//                    .order(by: FIELD_DATE)
-//
-//
-//            }
-//        }
-//    }
-//
     
     func getNearbyEvents(selectedUser: UserProfile, completion: @escaping (MyEvent?, Error?) -> Void) {
         let today = Date()
@@ -353,7 +331,7 @@ class FirestoreController: ObservableObject {
         
         guard let userId = selectedUser.id else{
             print("!!!!!!!!Error")
-            completion(nil, nil) // Pass nil events and the error
+            completion(nil, nil)
             return
         }
         do{
@@ -496,7 +474,7 @@ class FirestoreController: ObservableObject {
     func searchUserProfiles(withName searchText: String, completion: @escaping ([UserProfile]) -> Void) {
         
         let lowercaseSearchText = searchText.lowercased()
-        let searchQuery = lowercaseSearchText + "z"
+     //   let searchQuery = lowercaseSearchText + "z"
         
         // Get the email address of the currently logged in user
         guard let loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL"), !loggedInUserEmail.isEmpty else {
