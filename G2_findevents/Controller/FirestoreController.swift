@@ -474,7 +474,7 @@ class FirestoreController: ObservableObject {
     func searchUserProfiles(withName searchText: String, completion: @escaping ([UserProfile]) -> Void) {
         
         let lowercaseSearchText = searchText.lowercased()
-     //   let searchQuery = lowercaseSearchText + "z"
+        let searchQuery = lowercaseSearchText
         
         // Get the email address of the currently logged in user
         guard let loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL"), !loggedInUserEmail.isEmpty else {
