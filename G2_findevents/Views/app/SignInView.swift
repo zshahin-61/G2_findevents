@@ -46,7 +46,7 @@ struct SignInView: View {
                             self.rootScreen = .Home
                         }else{
                             //show the alert with invalid username/password prompt
-                            showAlert = true
+                            self.showAlert = true
                             print(#function, "invalid username/password")
                         }
                     })
@@ -63,7 +63,13 @@ struct SignInView: View {
                 //.background(Color.blue)
                 .disabled(self.emailFromUI.isEmpty || self.passwordFromUI.isEmpty || !isEmailValid() )
                 .buttonStyle(CustomButtonStyle(isEnabled: !self.emailFromUI.isEmpty && !self.passwordFromUI.isEmpty && isEmailValid()))
-                
+                .alert(isPresented: $showAlert) {
+                    Alert(
+                        title: Text("Alert Title"),
+                        message: Text("invalid username/password"),
+                        dismissButton: .default(Text("OK"))
+                    )
+                }
                 
                 Button(action: {
                     self.rootScreen = .SignUp
@@ -78,13 +84,7 @@ struct SignInView: View {
                         .background(Color.blue)
                 }
             }
-            .alert(isPresented: $showAlert) {
-                Alert(
-                    title: Text("Alert Title"),
-                    message: Text("invalid username/password"),
-                    dismissButton: .default(Text("OK"))
-                )
-            }
+           
         }
     }
     
