@@ -139,14 +139,14 @@ struct UserProfileView: View {
     }
     func addFriend() {
         dbHelper.addFriend(newFriend: selectedUser)
+        isFriend = true
     }
     
     func removeFriend() {
         dbHelper.removeFriend(friendDelet: selectedUser)
-        
+        isFriend = false
     }
     func checkfriendship(){
         isFriend = dbHelper.isUserFriend(selectedUser)
-        
     }
 }
