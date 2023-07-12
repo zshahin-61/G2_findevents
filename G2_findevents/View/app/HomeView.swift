@@ -48,13 +48,13 @@ struct HomeView: View {
                     authHelper.signOut()
                     rootScreen = .Login
                 }) {
-                    Image(systemName: "person.crop.circle.badge.xmark")
+                    Image(systemName: "person.crop.circle.badge.xmark").font(.system(size: 23))
                 },
                 trailing:
                     Button(action:{
                         rootScreen = .Profile
                     }){
-                        Image(systemName: "person.crop.circle")
+                        Image(systemName: "person.crop.circle").font(.system(size: 23))
                     }
 //                    NavigationLink(destination: ProfileView(rootScreen: self.$rootScreen).environmentObject(dbHelper).environmentObject(authHelper)) {
 //                    Image(systemName: "person.crop.circle")

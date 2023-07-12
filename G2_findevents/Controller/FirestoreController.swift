@@ -430,7 +430,7 @@ class FirestoreController: ObservableObject {
 //        completion(friendsAttendList, nil) // Pass the friends and nil error
 //    }
 //
-    
+   
     func getFriendsAttendingInEvent(nextEventId: String, completion: @escaping ([UserProfile]?, Error?) -> Void) {
         guard let loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL"), !loggedInUserEmail.isEmpty else {
             print(#function, "Logged in user's email address not available. Can't search.")
@@ -469,45 +469,43 @@ class FirestoreController: ObservableObject {
             completion(friendsAttendList, nil) // Pass the friends and nil error
         }
     }
-
-    
     func searchUserProfiles(withName searchText: String, completion: @escaping ([UserProfile]) -> Void) {
-        
-        let lowercaseSearchText = searchText.lowercased()
-        let searchQuery = lowercaseSearchText
-        
-        // Get the email address of the currently logged in user
-        guard let loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL"), !loggedInUserEmail.isEmpty else {
-            print(#function, "Logged in user's email address not available. Can't search.")
-            return
+            
+            let lowercaseSearchText = searchText.lowercased()
+            let searchQuery = lowercaseSearchText + "z"
+            
+            // Get the email address of the currently logged in user
+            guard let loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL"), !loggedInUserEmail.isEmpty else {
+                print(#function, "Logged in user's email address not available. Can't search.")
+                return
+            }
+
+            db.collection(COLLECTION_USER_PROFILES)
+                .whereField(FIELD_NAME, isGreaterThanOrEqualTo: lowercaseSearchText)
+                .whereField(FIELD_NAME, isLessThan: searchQuery)
+                .getDocuments { querySnapshot, error in
+                    if let error = error {
+                        print("Error searching user profiles: \(error)")
+                        completion([])
+                    } else {
+                        var results: [UserProfile] = []
+                        for document in querySnapshot!.documents {
+                            do {
+                                if let userProfile = try document.data(as: UserProfile?.self) {
+                                    if userProfile.id != loggedInUserEmail{
+                                        results.append(userProfile)
+                                    }
+                                }
+                            } catch {
+                                print("Error decoding user profile data: \(error.localizedDescription)")
+                            }
+                        }
+                        completion(results)
+                    }
+                }
         }
 
-        db.collection(COLLECTION_USER_PROFILES)
-            .whereField(FIELD_NAME, isGreaterThanOrEqualTo: lowercaseSearchText)
-            .whereField(FIELD_NAME, isLessThan: searchQuery)
-            .getDocuments { querySnapshot, error in
-                if let error = error {
-                    print("Error searching user profiles: \(error)")
-                    completion([])
-                } else {
-                    var results: [UserProfile] = []
-                    for document in querySnapshot!.documents {
-                        do {
-                            if let userProfile = try document.data(as: UserProfile?.self) {
-                                if userProfile.id != loggedInUserEmail{
-                                    results.append(userProfile)
-                                }
-                            }
-                        } catch {
-                            print("Error decoding user profile data: \(error.localizedDescription)")
-                        }
-                    }
-                    completion(results)
-                }
-            }
-    }
 
-    
     func getUsersAttendingEvent(eventID: String, completion: @escaping ([UserProfile]) -> Void) {
         let query = db.collection(COLLECTION_USER_PROFILES)
             .whereField(FIELD_USER_NUMBERATTENDING, isGreaterThan: 0)
@@ -578,7 +576,17 @@ class FirestoreController: ObservableObject {
             }
         }
     }
+    func isUserFriend(_ selectedUser: UserProfile) -> Bool {
+        guard let loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL"), !loggedInUserEmail.isEmpty else {
+            print(#function, "Logged in user's email address not available. Can't check friend status.")
+            return false
+        }
 
+        return myFriendsList.contains { friend in
+            friend.id == selectedUser.id
+        }
+    }
+    
     func getFriends(){
         self.myFriendsList = [UserProfile]()
         //get the email address of currently logged in user

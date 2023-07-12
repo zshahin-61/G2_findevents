@@ -11,127 +11,133 @@ struct UserProfileView: View {
     @EnvironmentObject var authHelper: FireAuthController
     
     let selectedUser: UserProfile
-    
     @State private var isFriend: Bool = false
     @State private var showAlert: Bool = false
     @State private var alertMessage: String = ""
     @State private var nextEvent: MyEvent?
-    @State private var attendingList : [UserProfile]?
+    @State private var attendingList : [UserProfile]? = []
     
     var body: some View {
         VStack {
-            HStack {
-                if let imageData = selectedUser.image, let image = UIImage(data: imageData) {
-                    Image(uiImage: image)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 150, height: 150)
-                }
-                
-                VStack(alignment: .leading) {
-                    Text(selectedUser.name)
-                        .font(.title)
-                    Text("Events Attending: \(selectedUser.numberOfEventsAttending)")
-                }
-            }
-            .padding()
-            
-            Spacer()
-            
-            Button(action: {
-                if isFriend {
-                    removeFriend()
-                } else {
-                    addFriend()
-                }
-            }) {
-                Text(isFriend ? "Remove Friend" : "Add Friend")
-                    .font(.headline)
-                    .padding()
-                    .foregroundColor(.white)
-                    .background(isFriend ? Color.red : Color.blue)
-                    .cornerRadius(10)
-            }
-
-            VStack{
-                Text("\(selectedUser.name)'s Next Event")
-                    .font(.title)
-                if let nextEVT = self.nextEvent {
-                    HStack{
-                        if !nextEVT.image.isEmpty{
-                            //AsyncImage(url:URL(string: nextEVT.image))
-                            GeometryReader { geometry in
-                                AsyncImage(url: URL(string: nextEVT.image)) { phase in
-                                    switch phase {
-                                    case .success(let image):
-                                        image
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                            .frame(width: 120, height: 120) // Set the desired width and height
-                                    case .failure(_):
-                                        // Handle the failure case or display a placeholder image
-                                        // ...
-                                        EmptyView()
-                                    case .empty:
-                                        // Handle the empty case or display a placeholder image
-                                        // ...
-                                        EmptyView()
-                                    @unknown default:
-                                        EmptyView()
-                                    }
-                                }
-                            }
+            Form{
+                Section{
+                    HStack {
+                        if let imageData = selectedUser.image, let image = UIImage(data: imageData) {
+                            Image(uiImage: image)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 150, height: 150)
                         }
-                        VStack {
-                            Text(nextEVT.title)
-                            Text("\(nextEVT.date)")
+                        
+                        VStack(alignment: .leading) {
+                            Text(selectedUser.name)
+                                .font(.title)
+                            Text("Events Attending: \(selectedUser.numberOfEventsAttending)")
                         }
                     }
-                    List{
-                        Text("Friends Attending")
-                            .font(.title)
+                }  .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: {
+                            if isFriend {
+                                removeFriend()
+                            } else {
+                                addFriend()
+                            }
+                        }) {
+                            Image(systemName: isFriend ? "person.badge.minus" : "person.badge.plus").font(.system(size: 27))
+                        }
+                    }
+                }
+                .onChange(of: isFriend){
+                    newvalue in
+                   
+                   
+                }
+                
+                
+           
+                Section(header: Text("\(selectedUser.name)'s Next Event")
+                    .font(.headline)){
+                   
+                        if let nextEVT = self.nextEvent {
+                            HStack{
+                                if !nextEVT.image.isEmpty{
+                                    //AsyncImage(url:URL(string: nextEVT.image))
+                                    GeometryReader { geometry in
+                                        AsyncImage(url: URL(string: nextEVT.image)) { phase in
+                                            switch phase {
+                                            case .success(let image):
+                                                image
+                                                    .resizable()
+                                                    .aspectRatio(contentMode: .fit)
+                                                    .frame(width: 120, height: 120)
+                                            case .failure(_):
+                                                
+                                                EmptyView()
+                                            case .empty:
+                                                
+                                                EmptyView()
+                                            @unknown default:
+                                                EmptyView()
+                                            }
+                                        }
+                                    }
+                                }
+                                VStack {
+                                    Text(nextEVT.title).font(.headline)
+                                    Spacer()
+                                    Text("\(nextEVT.date)").font(.subheadline)
+                                }
+                            }
+                        
+                     
+                    }//if let
+                    else{
+                        Text("No Next Event")
+                    }
+                }
+                Section(header: Text("Friends Attending")
+                    .font(.headline)){
                         if let attList = self.attendingList {
                             ForEach(attList, id:\.id){
                                 att in
                                 Text(att.name)
-
+                                
                             }
                         }
                     }
-                }//if let
-                else{
-                    Text("No Next Event")
+                
+                .padding()
+            }.onAppear(){
+                dbHelper.getNearbyEvents(selectedUser: self.selectedUser) { (events, error) in
+                    if let error = error {
+                        // Handle the error
+                        print("Error retrieving nearby events: \(error.localizedDescription)")
+                    } else if let evt = events {
+                        // Use the retrieved events
+                        self.nextEvent = evt
+                        //print("Event: \(events)")
+        dbHelper.getFriendsAttendingInEvent(nextEventId: evt.id!){
+            (attList, err) in
+            if let errr = err {
+                // Handle the error
+                print("Error retrieving attendingList: \(errr.localizedDescription)")
+            } else if var att = attList {
+               att.removeAll(where: {$0.id == self.selectedUser.id})
+//                self.attendingList? += att.filter{ $0.id != self.selectedUser.id}
+                                self.attendingList = att
+                                // print("%%%%%%%%%\(att) and \(evt.id)")
+                            } //else if let
+                        } //getFriendsAttendingInEvent
+                    } // else if let
                 }
-                Spacer()
+                checkfriendship()
             }
-            .padding()
-        }.onAppear(){
-            dbHelper.getNearbyEvents(selectedUser: self.selectedUser) { (events, error) in
-                if let error = error {
-                    // Handle the error
-                    print("Error retrieving nearby events: \(error.localizedDescription)")
-                } else if let evt = events {
-                    // Use the retrieved events
-                    self.nextEvent = evt
-                    //print("Event: \(events)")
-                    dbHelper.getFriendsAttendingInEvent(nextEventId: evt.id!){ (attList, err) in
-                        if let errr = err {
-                            // Handle the error
-                            print("Error retrieving attendingList: \(errr.localizedDescription)")
-                        } else if var att = attList {
-                            att.removeAll(where: {$0.id == self.selectedUser.id})
-                            self.attendingList = att
-                            //print("%%%%%%%%%\(att)")
-                        } //else if let
-                    } //getFriendsAttendingInEvent
-                } // else if let
-            }
+            .alert(isPresented: $showAlert, content: {
+                Alert(title: Text("Friend Status"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+            })
         }
-        .alert(isPresented: $showAlert, content: {
-            Alert(title: Text("Friend Status"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
-        })
     }
-    
     func addFriend() {
         dbHelper.addFriend(newFriend: selectedUser)
     }
@@ -139,5 +145,8 @@ struct UserProfileView: View {
     func removeFriend() {
         dbHelper.removeFriend(friendDelet: selectedUser)
         
+    }
+    func checkfriendship(){
+        isFriend = dbHelper.isUserFriend(selectedUser)
     }
 }

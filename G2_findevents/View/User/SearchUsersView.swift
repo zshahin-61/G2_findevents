@@ -25,9 +25,10 @@ struct SearchUsersView: View {
                 
                 Button(action: {
                     performSearch()
+
                 }) {
                     Image(systemName: "magnifyingglass")
-
+                    
                 }
                 Button(action: {
                     searchQuery = ""
@@ -53,9 +54,10 @@ struct SearchUsersView: View {
         .navigationTitle("Search")
     }
     
-    private func performSearch() {
+   private func performSearch() {
         dbHelper.searchUserProfiles(withName: searchQuery) { results in
             DispatchQueue.main.async {
+                print("$$$$$$$$$$$$$$check\(searchResults)")
                 searchResults = results
             }
         }
