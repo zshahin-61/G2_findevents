@@ -57,7 +57,6 @@ struct SearchUsersView: View {
    private func performSearch() {
         dbHelper.searchUserProfiles(withName: searchQuery) { results in
             DispatchQueue.main.async {
-                print("$$$$$$$$$$$$$$check\(searchResults)")
                 searchResults = results
             }
         }

@@ -474,9 +474,8 @@ class FirestoreController: ObservableObject {
     }
     func searchUserProfiles(withName searchText: String, completion: @escaping ([UserProfile]) -> Void) {
             
-            let lowercaseSearchText = searchText.lowercased()
+            let lowercaseSearchText = searchText
             let searchQuery = lowercaseSearchText + "z"
-            
             // Get the email address of the currently logged in user
             guard let loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL"), !loggedInUserEmail.isEmpty else {
                 print(#function, "Logged in user's email address not available. Can't search.")
@@ -492,15 +491,25 @@ class FirestoreController: ObservableObject {
                         completion([])
                     } else {
                         var results: [UserProfile] = []
-                        for document in querySnapshot!.documents {
+                        print("querySnapshot: \(querySnapshot)")
+
+                     //   for document in querySnapshot!.documents
+                        if let documents = querySnapshot?.documents {
+                            print("documents count: \(documents.count)")
+                        for document in documents{
                             do {
+                                print("@@@@@@@@2\(querySnapshot?.documents)")
+
                                 if let userProfile = try document.data(as: UserProfile?.self) {
+                                    print("@@@@@@@@3\(userProfile)")
+
                                     if userProfile.id != loggedInUserEmail{
                                         results.append(userProfile)
                                     }
                                 }
                             } catch {
                                 print("Error decoding user profile data: \(error.localizedDescription)")
+                            }
                             }
                         }
                         completion(results)
