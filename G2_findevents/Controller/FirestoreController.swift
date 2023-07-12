@@ -457,10 +457,13 @@ class FirestoreController: ObservableObject {
                             // Handle the error if needed
                             return
                         }
-                        
                         if querySnapshot?.exists == true {
+                        if !friendsAttendList.contains(where: { $0.id == friend.id }) {
                             friendsAttendList.append(friend)
                         }
+                    }
+                        
+
                     } // end
         } // end for
         

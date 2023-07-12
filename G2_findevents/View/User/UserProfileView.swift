@@ -124,7 +124,6 @@ struct UserProfileView: View {
                 print("Error retrieving attendingList: \(errr.localizedDescription)")
             } else if var att = attList {
                att.removeAll(where: {$0.id == self.selectedUser.id})
-//                self.attendingList? += att.filter{ $0.id != self.selectedUser.id}
                                 self.attendingList = att
                                 // print("%%%%%%%%%\(att) and \(evt.id)")
                             } //else if let
@@ -148,5 +147,6 @@ struct UserProfileView: View {
     }
     func checkfriendship(){
         isFriend = dbHelper.isUserFriend(selectedUser)
+        
     }
 }
