@@ -2,7 +2,7 @@
 //  SignUpView.swift
 //  G2_findevents
 //
-//  Created by Golnaz Chehrazi on 2023-06-23.
+//  Created by Created by Zahra Shahin - Golnaz Chehrazi on 2023-06-25 on 2023-06-23.
 //
 
 import SwiftUI
@@ -11,6 +11,8 @@ import PhotosUI
 struct SignUpView: View {
     @EnvironmentObject var authHelper : FireAuthController
     @EnvironmentObject var dbHelper : FirestoreController
+    
+    @StateObject private var photoLibraryManager = PhotoLibraryManager()
     
     @State private var email : String = ""
     @State private var password : String = ""
@@ -22,7 +24,7 @@ struct SignUpView: View {
     
     @Binding var rootScreen : RootView
     
-    @State private var showImagePicker = false
+    @State private var isShowingPicker = false
     @State private var selectedImage: UIImage?
     
     var body: some View {
@@ -54,18 +56,32 @@ struct SignUpView: View {
                     .textFieldStyle(.roundedBorder)
                 
                 VStack {
-                    Button("Select Image") {
-                        showImagePicker = true
-                    }
-                    if let image = selectedImage {
-                        Image(uiImage: image)
-                            .resizable()
-                            .scaledToFit()
-                    }
-                }
-                .sheet(isPresented: $showImagePicker) {
-                    ImagePickerView(selectedImage: $selectedImage)
-                }
+                            if photoLibraryManager.isAuthorized {
+                                Button(action: {
+                                    isShowingPicker = true
+                                }) {
+                                    Text("Select Image")
+                                }
+                                if let image = selectedImage {
+                                    Image(uiImage: image)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                }
+                            } else {
+                                Button(action: {
+                                    photoLibraryManager.requestPermission()
+                                }) {
+                                    Text("Request Access")
+                                }
+                            }
+                        }
+                .sheet(isPresented: $isShowingPicker) {
+                            if photoLibraryManager.isAuthorized {
+                                ImagePickerView(selectedImage: $selectedImage)
+                            } else {
+                                Text("Access to photo library is not authorized.")
+                            }
+                        }
             }
             .autocorrectionDisabled(true)
             
@@ -116,4 +132,6 @@ struct SignUpView: View {
                     })
         }
     }
+    
+    
 }

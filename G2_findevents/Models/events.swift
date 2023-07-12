@@ -2,7 +2,7 @@
 //  events.swift
 //  G2_findevents
 //
-//  Created by Zahra SHAHIN - Golnaz Chehrazi on 2023-06-25.
+//  Created by Created by Zahra Shahin - Golnaz Chehrazi on 2023-06-25 on 2023-06-25.
 //
 
 import Foundation
