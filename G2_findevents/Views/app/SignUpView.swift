@@ -55,8 +55,9 @@ struct SignUpView: View {
                     .textInputAutocapitalization(.never)
                     .textFieldStyle(.roundedBorder)
                 
-                VStack {
-                            if photoLibraryManager.isAuthorized {
+                VStack{
+                  Text("User Profile Picture")
+                    if photoLibraryManager.isAuthorized {
                                 Button(action: {
                                     isShowingPicker = true
                                 }) {
@@ -71,7 +72,7 @@ struct SignUpView: View {
                                 Button(action: {
                                     photoLibraryManager.requestPermission()
                                 }) {
-                                    Text("Request Access")
+                                    Text("Request Access For Photo Library")
                                 }
                             }
                         }
