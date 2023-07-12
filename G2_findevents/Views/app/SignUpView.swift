@@ -14,9 +14,9 @@ struct SignUpView: View {
     
     @StateObject private var photoLibraryManager = PhotoLibraryManager()
     
-    @State private var email : String = ""
-    @State private var password : String = ""
-    @State private var confirmPassword : String = ""
+    @State private var emailFromUI : String = ""
+    @State private var passwordFromUI : String = ""
+    @State private var confirmPasswordFromUI : String = ""
     @State private var addressFromUI : String = ""
     @State private var phoneFromUI : String = ""
     @State private var nameFromUI : String = ""
@@ -31,15 +31,15 @@ struct SignUpView: View {
         
         VStack{
             Form{
-                TextField("Enter Email", text: self.$email)
+                TextField("Enter Email", text: self.$emailFromUI)
                     .textInputAutocapitalization(.never)
                     .textFieldStyle(.roundedBorder)
                 
-                SecureField("Enter Password", text: self.$password)
+                SecureField("Enter Password", text: self.$passwordFromUI)
                     .textInputAutocapitalization(.never)
                     .textFieldStyle(.roundedBorder)
                 
-                SecureField("Confirm Password", text: self.$confirmPassword)
+                SecureField("Confirm Password", text: self.$confirmPasswordFromUI)
                     .textInputAutocapitalization(.never)
                     .textFieldStyle(.roundedBorder)
                 
@@ -87,7 +87,7 @@ struct SignUpView: View {
             .autocorrectionDisabled(true)
             
             Button(action: {
-                self.authHelper.signUp(email: self.email.lowercased(), password: self.password, withCompletion: { isSuccessful in
+                self.authHelper.signUp(email: self.emailFromUI.lowercased(), password: self.passwordFromUI, withCompletion: { isSuccessful in
                     
                     if (isSuccessful){
                         // MARK: USER IMAGE
@@ -101,7 +101,7 @@ struct SignUpView: View {
                             imageData = image.jpegData(compressionQuality: 0.1)
                         }
                         
-                        let user : UserProfile = UserProfile(id: self.email.lowercased(), name: self.nameFromUI, contactNumber: self.phoneFromUI, address: self.addressFromUI, image: imageData,friends: [], numberOfEventsAttending: 0)
+                        let user : UserProfile = UserProfile(id: self.emailFromUI.lowercased(), name: self.nameFromUI, contactNumber: self.phoneFromUI, address: self.addressFromUI, image: imageData,friends: [], numberOfEventsAttending: 0)
                         
                         self.dbHelper.createUserProfile(newUser: user)
                         //Load User Data
@@ -121,7 +121,7 @@ struct SignUpView: View {
             }){
                 Text("Create Account")
             }.buttonStyle(.borderedProminent)
-                .disabled(self.password != self.confirmPassword || self.email.isEmpty || self.password.isEmpty || self.confirmPassword.isEmpty)
+                .disabled(self.passwordFromUI != self.confirmPasswordFromUI || self.emailFromUI.isEmpty || self.passwordFromUI.isEmpty || self.confirmPasswordFromUI.isEmpty || !isEmailValid())
             
                 .navigationBarTitle("Sign Up Form", displayMode: .inline)
                 .navigationBarItems(
@@ -134,5 +134,10 @@ struct SignUpView: View {
         }
     }
     
-    
+    // MARK: func for check if the form is valid
+    func isEmailValid()-> Bool {
+        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+        let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
+        return emailPredicate.evaluate(with: emailFromUI)
+    }
 }

@@ -83,6 +83,7 @@ struct SignInView: View {
                         .padding()
                         .background(Color.blue)
                 }
+                .cornerRadius(8)
             }
            
         }
