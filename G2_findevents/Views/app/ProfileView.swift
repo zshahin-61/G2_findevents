@@ -7,12 +7,13 @@
 
 import SwiftUI
 import PhotosUI
-//import URLImage
 
 struct ProfileView: View {
     
     @EnvironmentObject var authHelper : FireAuthController
     @EnvironmentObject var dbHelper : FirestoreController
+    
+    @StateObject private var photoLibraryManager = PhotoLibraryManager()
     
     @State private var emailFromUI : String = ""
     @State private var addressFromUI : String = ""
@@ -25,7 +26,7 @@ struct ProfileView: View {
     
     @Binding var rootScreen : RootView
     
-    @State private var showImagePicker = false
+    @State private var isShowingPicker = false
     @State private var selectedImage: UIImage?
     @State private var imageData: Data?
     
@@ -47,18 +48,32 @@ struct ProfileView: View {
                     .textFieldStyle(.roundedBorder)
                 
                 VStack{
-                    Button("Select Image") {
-                        showImagePicker = true
-                    }
-                    if let image = selectedImage {
-                        Image(uiImage: image)
-                            .resizable()//.frame(width: 150)
-                            .scaledToFit()
-                        
+                    Text("User Profile Picture")
+                    if photoLibraryManager.isAuthorized {
+                        Button(action: {
+                            isShowingPicker = true
+                        }) {
+                            Text("Select Image")
+                        }
+                        if let image = selectedImage {
+                            Image(uiImage: image)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                        }
+                    } else {
+                        Button(action: {
+                            photoLibraryManager.requestPermission()
+                        }) {
+                            Text("Request Access For Photo Library")
+                        }
                     }
                 }
-                .sheet(isPresented: $showImagePicker) {
-                    ImagePickerView(selectedImage: $selectedImage)
+                .sheet(isPresented: $isShowingPicker) {
+                    if photoLibraryManager.isAuthorized {
+                        ImagePickerView(selectedImage: $selectedImage)
+                    } else {
+                        Text("Access to photo library is not authorized.")
+                    }
                 }
                 
                 if let data = imageData,
@@ -113,7 +128,33 @@ struct ProfileView: View {
             
             Spacer()
             Button(action:{
-                // TODO: Delete Account
+                if(dbHelper.myEventsList.count > 0)
+                {
+                    //errorMsg = "before deleting your account you have to remove all cars in parking lots"
+                    self.showAlert = true
+                    return
+                }
+                if(dbHelper.myFriendsList.count > 0 ){
+                    self.showAlert = true
+                    return
+                }
+                self.dbHelper.deleteUser(withCompletion: { isSuccessful in
+                    if (isSuccessful){
+                        self.authHelper.deleteAccountFromAuth(withCompletion: { isSuccessful2 in
+                            if (isSuccessful2){
+                                //sign out using Auth
+                                self.authHelper.signOut()
+                                
+                                //self.selectedLink = 1
+                                //dismiss current screen and show login screen
+                                self.rootScreen = .Login
+                            }
+                            
+                        }
+                        )}
+                })
+                
+                
             }){
                 Image(systemName: "multiply.circle").foregroundColor(Color.white)
                 Text("Delete User Account")
@@ -129,8 +170,7 @@ struct ProfileView: View {
                     })
         }.padding()
             .onAppear(){
-                //dbHelper.getUserProfile(withCompletion: { isSuccessful in
-                //if (isSuccessful){
+                
                 if let currentUser = dbHelper.userProfile{
                     self.emailFromUI = currentUser.id!
                     self.addressFromUI = currentUser.address
@@ -139,14 +179,12 @@ struct ProfileView: View {
                     self.contactNumberFromUI = currentUser.contactNumber
                     self.errorMsg = nil
                     
-                    // TODO: Show image from db
+                    // MARK: Show image from db
                     if let imageData = currentUser.image as? Data {
                         self.imageData = imageData
                     } else {
                         print("Invalid image data format")
                     }
-                    //}
-                    //})
                 }
             }
     }
