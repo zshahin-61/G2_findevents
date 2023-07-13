@@ -12,6 +12,8 @@ struct EventsListView: View {
     
     @EnvironmentObject var dbHelper: FirestoreController
     @EnvironmentObject var authHelper: FireAuthController
+    @EnvironmentObject var locationHelper: LocationHelper
+    
     @State var evntList: [Event] = []
     @State private var selectedCity = ""
     
@@ -89,10 +91,22 @@ struct EventsListView: View {
         self.evntList = [Event]()
         print("Getting data from API")
         
-        // 1. Specify the API URL
-        let apiUrlString = "https://api.seatgeek.com/2/events?geoip=true&datetime_utc.gt=\(getCurrentDate())&client_id=MzQ1MjY2NjN8MTY4Nzc0MzYxNi45MzE5NzMy"
+        // get location from user
+        let sourceCoordinates : CLLocationCoordinate2D
+        //let region : MKCoordinateRegion
         
-        print("%%%%%$$$$######\(apiUrlString)")
+        if (self.locationHelper.currentLocation != nil){
+            sourceCoordinates = self.locationHelper.currentLocation!.coordinate
+        }else{
+            sourceCoordinates = CLLocationCoordinate2D(latitude: 43.64732, longitude: -79.38279)
+        }
+        
+        
+        
+        // 1. Specify the API URL
+        let apiUrlString = "https://api.seatgeek.com/2/events?lat=\(sourceCoordinates.latitude)&lon=\(sourceCoordinates.longitude)&datetime_utc.gt=\(getCurrentDate())&client_id=MzQ1MjY2NjN8MTY4Nzc0MzYxNi45MzE5NzMy" //"https://api.seatgeek.com/2/events?geoip=true&datetime_utc.gt=\(getCurrentDate())&client_id=MzQ1MjY2NjN8MTY4Nzc0MzYxNi45MzE5NzMy"
+        
+        //print("%%%%%$$$$######\(apiUrlString)")
         
         guard let apiUrl = URL(string: apiUrlString) else {
             print("ERROR: Cannot convert API address to a URL object")

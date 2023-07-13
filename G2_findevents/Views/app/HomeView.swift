@@ -10,6 +10,8 @@ struct HomeView: View {
     @EnvironmentObject var authHelper: FireAuthController
     @EnvironmentObject var dbHelper: FirestoreController
     
+    let locationHelper = LocationHelper()
+    
     @Binding var rootScreen: RootView
     
     @State private var selectedLink: Int? = nil
@@ -17,7 +19,7 @@ struct HomeView: View {
     var body: some View {
         //NavigationView {
             TabView {
-                EventsListView()
+                EventsListView().environmentObject(locationHelper)
                     .tabItem {
                         Image(systemName: "list.bullet")
                         Text("Events")

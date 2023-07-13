@@ -31,6 +31,7 @@
 		5A9C4E6D2A48A50C001F7388 /* FireAuthController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9C4E6C2A48A50C001F7388 /* FireAuthController.swift */; };
 		5A9C4E6F2A48A572001F7388 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9C4E6E2A48A572001F7388 /* UserProfile.swift */; };
 		5F66F3BA2A5F2D6B0042482A /* PhotoLibraryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F66F3B92A5F2D6B0042482A /* PhotoLibraryManager.swift */; };
+		5F66F3BC2A5F83060042482A /* LocationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F66F3BB2A5F83060042482A /* LocationHelper.swift */; };
 		5F8805192A4A3E45001A8C44 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8805182A4A3E45001A8C44 /* MapView.swift */; };
 		5F88051F2A4A84F7001A8C44 /* MyEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F88051E2A4A84F7001A8C44 /* MyEvent.swift */; };
 		5F8805302A4B5AA6001A8C44 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5F88052F2A4B5AA6001A8C44 /* GoogleService-Info.plist */; };
@@ -60,6 +61,7 @@
 		5A9C4E6C2A48A50C001F7388 /* FireAuthController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireAuthController.swift; sourceTree = "<group>"; };
 		5A9C4E6E2A48A572001F7388 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		5F66F3B92A5F2D6B0042482A /* PhotoLibraryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibraryManager.swift; sourceTree = "<group>"; };
+		5F66F3BB2A5F83060042482A /* LocationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationHelper.swift; sourceTree = "<group>"; };
 		5F8805182A4A3E45001A8C44 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		5F88051E2A4A84F7001A8C44 /* MyEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyEvent.swift; sourceTree = "<group>"; };
 		5F88052F2A4B5AA6001A8C44 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "G2_findevents/GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -189,6 +191,7 @@
 			isa = PBXGroup;
 			children = (
 				5F66F3B92A5F2D6B0042482A /* PhotoLibraryManager.swift */,
+				5F66F3BB2A5F83060042482A /* LocationHelper.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -287,6 +290,7 @@
 				5F8805322A4B6783001A8C44 /* ImagePickerView.swift in Sources */,
 				5A95590A2A49254800A47D02 /* events.swift in Sources */,
 				5A9559272A49EA4200A47D02 /* ProfileView.swift in Sources */,
+				5F66F3BC2A5F83060042482A /* LocationHelper.swift in Sources */,
 				5F8805192A4A3E45001A8C44 /* MapView.swift in Sources */,
 				5F88051F2A4A84F7001A8C44 /* MyEvent.swift in Sources */,
 				5A9C4E672A48A274001F7388 /* SignUpView.swift in Sources */,
@@ -428,6 +432,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "G2-findevents-Info.plist";
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need to access camera for better application services.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "App wants to access location to provide more functionalities";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "App wants to access location to provide optimized user experience";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "For better services in the app we need to access your librarary.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -459,6 +465,8 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "G2-findevents-Info.plist";
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need to access camera for better application services.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "App wants to access location to provide more functionalities";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "App wants to access location to provide optimized user experience";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "For better services in the app we need to access your librarary.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

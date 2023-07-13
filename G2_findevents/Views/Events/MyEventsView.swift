@@ -6,8 +6,11 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct MyEventsView: View {
+    
+    @EnvironmentObject var locationHelper : LocationHelper
     
     @EnvironmentObject var authHelper : FireAuthController
     @EnvironmentObject var dbHelper : FirestoreController
@@ -66,8 +69,9 @@ struct MyEventsView: View {
             Spacer()
         }//VSTACK
         .onAppear {
-            //dbHelper.myEventsList.removeAll()
-            //dbHelper.getMyEventsList()
+            //check/request for permissions
+            self.locationHelper.checkPermission()
+            
         }
     }
     func dateFormatter(date: Date) -> String {

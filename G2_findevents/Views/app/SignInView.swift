@@ -73,8 +73,6 @@ struct SignInView: View {
                 
                 Button(action: {
                     self.rootScreen = .SignUp
-                    
-                    
                 }){
                     Text("Sign Up")
                         .font(.title2)
@@ -85,7 +83,6 @@ struct SignInView: View {
                 }
                 .cornerRadius(8)
             }
-           
         }
     }
     
