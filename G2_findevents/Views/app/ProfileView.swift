@@ -131,12 +131,14 @@ struct ProfileView: View {
                 if(dbHelper.myEventsList.count > 0)
                 {
                     //errorMsg = "before deleting your account you have to remove all cars in parking lots"
-                    self.showAlert = true
-                    return
+                    //self.showAlert = true
+                    dbHelper.deleteAllMyEvents()
+                    //return
                 }
                 if(dbHelper.myFriendsList.count > 0 ){
-                    self.showAlert = true
-                    return
+                    //self.showAlert = true
+                    //return
+                    dbHelper.deleteAllMyFriends()
                 }
                 self.dbHelper.deleteUser(withCompletion: { isSuccessful in
                     if (isSuccessful){
