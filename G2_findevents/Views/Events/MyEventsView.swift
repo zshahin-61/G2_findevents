@@ -69,11 +69,8 @@ struct MyEventsView: View {
         }//VSTACK
         .onAppear {
             //check/request for permissions
-<<<<<<< HEAD
-           self.locationHelper.checkPermission()
-=======
+       //    self.locationHelper.checkPermission()
             //self.locationHelper.checkPermission()
->>>>>>> b3cf2c31e46156bab685bc87e2b98959eff929d8
             
         }
     }
