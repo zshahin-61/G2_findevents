@@ -2,7 +2,7 @@
 //  MyEventsView.swift
 //  G2_findevents
 //
-//  Created by zahra SHAHIN on 2023-06-25.
+//  Created by Zahra Shahin - Golnaz Chehrazi on 2023-06-25.
 //
 
 import SwiftUI
@@ -15,7 +15,6 @@ struct MyEventsView: View {
     var body: some View {
         VStack {
             Button(action:{
-                //dbHelper.myEventsList.removeAll()
                 self.dbHelper.deleteAllMyEvents()
                 if let currUser = self.dbHelper.userProfile{
                     self.dbHelper.userProfile!.numberOfEventsAttending = 0
@@ -33,16 +32,21 @@ struct MyEventsView: View {
                 
                 ForEach(dbHelper.myEventsList, id:\.id){
                     myEvt in
-                    VStack{
-                        //VStack{
-                        Text(myEvt.title)
-                        Text("\(myEvt.date)")
-                        Text(myEvt.location)
-                        //                        }
-                        Spacer()
-                        //                        VStack{
-                        //AsyncImage(url: URL(string: myEvt.image)).frame(width: 100, height: 50)
-                        //}
+                    Section{
+                        Text(myEvt.title).bold().foregroundColor(Color.blue)
+                        AsyncImage(url: URL(string: myEvt.image)){ image in
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                        } placeholder: {
+                            ProgressView()
+                        }
+                        
+                        HStack{
+                            Text("\(dateFormatter(date: myEvt.date))")
+                            Spacer()
+                            Text(myEvt.location)
+                        }
                     }
                 } //FOREACH
                 .onDelete(perform: { indexSet in
@@ -66,7 +70,14 @@ struct MyEventsView: View {
             //dbHelper.getMyEventsList()
         }
     }
-    
+    func dateFormatter(date: Date) -> String {
+        
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        
+        return formatter.string(from: date)
+    }
 }
 
 

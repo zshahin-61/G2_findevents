@@ -2,7 +2,7 @@
 //  FireAuthController.swift
 //  G2_findevents
 //
-//  Created by zahra SHAHIN on 2023-06-25.
+//  Created by Created by Zahra Shahin - Golnaz Chehrazi on 2023-06-25 on 2023-06-25.
 //
 import Foundation
 import FirebaseAuth
@@ -113,17 +113,22 @@ class FireAuthController : ObservableObject{
         }
     }
     
-    func deleteAccountFromAuth() {
+    func deleteAccountFromAuth(withCompletion completion: @escaping (Bool) -> Void) {
         if let currentUser = Auth.auth().currentUser {
             currentUser.delete { error in
                 if let error = error {
                     print("Error deleting user account from Firebase Authentication: \(error.localizedDescription)")
+                    DispatchQueue.main.async {
+                        completion(false)
+                    }
                 } else {
                     print("User account deleted from Firebase Authentication successfully.")
+                    DispatchQueue.main.async {
+                        completion(true)
+                    }
                 }
             }
         }
     }
-
 }
 

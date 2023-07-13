@@ -2,7 +2,7 @@
 //  UserprofileView.swift
 //  G2_findevents
 //
-//  Created by zahra SHAHIN on 2023-06-28.
+//  Created by Created by Zahra Shahin - Golnaz Chehrazi on 2023-06-25 on 2023-06-28.
 //
 
 import SwiftUI
@@ -140,11 +140,12 @@ struct UserProfileView: View {
     }
     func addFriend() {
         dbHelper.addFriend(newFriend: selectedUser)
+        isFriend = true
     }
     
     func removeFriend() {
         dbHelper.removeFriend(friendDelet: selectedUser)
-        
+        isFriend = false
     }
     func checkfriendship(){
         isFriend = dbHelper.isUserFriend(selectedUser)

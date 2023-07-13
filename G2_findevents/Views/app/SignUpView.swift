@@ -2,7 +2,7 @@
 //  SignUpView.swift
 //  G2_findevents
 //
-//  Created by Golnaz Chehrazi on 2023-06-23.
+//  Created by Created by Zahra Shahin - Golnaz Chehrazi on 2023-06-25 on 2023-06-23.
 //
 
 import SwiftUI
@@ -12,9 +12,11 @@ struct SignUpView: View {
     @EnvironmentObject var authHelper : FireAuthController
     @EnvironmentObject var dbHelper : FirestoreController
     
-    @State private var email : String = ""
-    @State private var password : String = ""
-    @State private var confirmPassword : String = ""
+    @StateObject private var photoLibraryManager = PhotoLibraryManager()
+    
+    @State private var emailFromUI : String = ""
+    @State private var passwordFromUI : String = ""
+    @State private var confirmPasswordFromUI : String = ""
     @State private var addressFromUI : String = ""
     @State private var phoneFromUI : String = ""
     @State private var nameFromUI : String = ""
@@ -22,22 +24,22 @@ struct SignUpView: View {
     
     @Binding var rootScreen : RootView
     
-    @State private var showImagePicker = false
+    @State private var isShowingPicker = false
     @State private var selectedImage: UIImage?
     
     var body: some View {
         
         VStack{
             Form{
-                TextField("Enter Email", text: self.$email)
+                TextField("Enter Email", text: self.$emailFromUI)
                     .textInputAutocapitalization(.never)
                     .textFieldStyle(.roundedBorder)
                 
-                SecureField("Enter Password", text: self.$password)
+                SecureField("Enter Password", text: self.$passwordFromUI)
                     .textInputAutocapitalization(.never)
                     .textFieldStyle(.roundedBorder)
                 
-                SecureField("Confirm Password", text: self.$confirmPassword)
+                SecureField("Confirm Password", text: self.$confirmPasswordFromUI)
                     .textInputAutocapitalization(.never)
                     .textFieldStyle(.roundedBorder)
                 
@@ -53,24 +55,39 @@ struct SignUpView: View {
                     .textInputAutocapitalization(.never)
                     .textFieldStyle(.roundedBorder)
                 
-                VStack {
-                    Button("Select Image") {
-                        showImagePicker = true
-                    }
-                    if let image = selectedImage {
-                        Image(uiImage: image)
-                            .resizable()
-                            .scaledToFit()
-                    }
-                }
-                .sheet(isPresented: $showImagePicker) {
-                    ImagePickerView(selectedImage: $selectedImage)
-                }
+                VStack{
+                  Text("User Profile Picture")
+                    if photoLibraryManager.isAuthorized {
+                                Button(action: {
+                                    isShowingPicker = true
+                                }) {
+                                    Text("Select Image")
+                                }
+                                if let image = selectedImage {
+                                    Image(uiImage: image)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                }
+                            } else {
+                                Button(action: {
+                                    photoLibraryManager.requestPermission()
+                                }) {
+                                    Text("Request Access For Photo Library")
+                                }
+                            }
+                        }
+                .sheet(isPresented: $isShowingPicker) {
+                            if photoLibraryManager.isAuthorized {
+                                ImagePickerView(selectedImage: $selectedImage)
+                            } else {
+                                Text("Access to photo library is not authorized.")
+                            }
+                        }
             }
             .autocorrectionDisabled(true)
             
             Button(action: {
-                self.authHelper.signUp(email: self.email.lowercased(), password: self.password, withCompletion: { isSuccessful in
+                self.authHelper.signUp(email: self.emailFromUI.lowercased(), password: self.passwordFromUI, withCompletion: { isSuccessful in
                     
                     if (isSuccessful){
                         // MARK: USER IMAGE
@@ -84,7 +101,7 @@ struct SignUpView: View {
                             imageData = image.jpegData(compressionQuality: 0.1)
                         }
                         
-                        let user : UserProfile = UserProfile(id: self.email.lowercased(), name: self.nameFromUI, contactNumber: self.phoneFromUI, address: self.addressFromUI, image: imageData,friends: [], numberOfEventsAttending: 0)
+                        let user : UserProfile = UserProfile(id: self.emailFromUI.lowercased(), name: self.nameFromUI, contactNumber: self.phoneFromUI, address: self.addressFromUI, image: imageData,friends: [], numberOfEventsAttending: 0)
                         
                         self.dbHelper.createUserProfile(newUser: user)
                         //Load User Data
@@ -104,7 +121,7 @@ struct SignUpView: View {
             }){
                 Text("Create Account")
             }.buttonStyle(.borderedProminent)
-                .disabled(self.password != self.confirmPassword || self.email.isEmpty || self.password.isEmpty || self.confirmPassword.isEmpty)
+                .disabled(self.passwordFromUI != self.confirmPasswordFromUI || self.emailFromUI.isEmpty || self.passwordFromUI.isEmpty || self.confirmPasswordFromUI.isEmpty || !isEmailValid())
             
                 .navigationBarTitle("Sign Up Form", displayMode: .inline)
                 .navigationBarItems(
@@ -115,5 +132,12 @@ struct SignUpView: View {
                         Text("Back")
                     })
         }
+    }
+    
+    // MARK: func for check if the form is valid
+    func isEmailValid()-> Bool {
+        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
+        let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
+        return emailPredicate.evaluate(with: emailFromUI)
     }
 }
