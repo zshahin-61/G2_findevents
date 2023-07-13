@@ -22,12 +22,13 @@ struct MyFriendsView: View {
                 Text("Remove All")
             }
             .buttonStyle(.borderedProminent)
+           
             
             List {
                 if dbHelper.myFriendsList.isEmpty {
                     Text("No Friends exist to Show")
                 }
-                ForEach(dbHelper.myFriendsList, id:\.id) { myFrnd in
+                ForEach(dbHelper.myFriendsList, id:\.self) { myFrnd in
                     HStack {
                         VStack(alignment: .leading) {
                             Text(myFrnd.name)
@@ -35,8 +36,8 @@ struct MyFriendsView: View {
                             Text(myFrnd.contactNumber)
                                 .font(.subheadline)
                         }
-                        Spacer()
-                        Text("\(dbHelper.myFriendsList.count)")
+                    
+                       // Text("\(dbHelper.myFriendsList.count)")
                         
                         Spacer()
                         if let imageData = myFrnd.image {
@@ -47,22 +48,24 @@ struct MyFriendsView: View {
                     }
                 }.onDelete(perform: { indexSet in
                     for index in indexSet {
-                        
                         if let friendID = dbHelper.myFriendsList[index].id {
                             dbHelper.deleteMyFriend(friendID: friendID)
                             print("Friend removed at index: \(index)")
+                            dbHelper.myEventsList.removeAll()
+
                         } else {
                             print("Friend ID is nil at index: \(index)")
                         }
+                    
                     }
-                })
+                 })
+
+
             }
             Spacer()
         }//VSTACK
         .onAppear {
-            print("I am here OnAppear")
-          dbHelper.myFriendsList.removeAll()
-           dbHelper.getFriends()
+           dbHelper.reloadFriends()
         }
     }
 }
