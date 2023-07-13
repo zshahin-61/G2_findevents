@@ -70,6 +70,9 @@ struct EventsListView: View {
                             calculateMapRegion()
                         }
                     }
+                    else{
+                        Text("Sorry, There are no events near you").foregroundColor(Color.red).bold()
+                    }
                 }
                 .padding()
             }
@@ -77,7 +80,15 @@ struct EventsListView: View {
         .padding()
         .onAppear {
             locationHelper.checkPermission()
-            loadDataFromAPI()
+            evntList.removeAll()
+            if(!self.selectedCity.isEmpty)
+            {
+                loadDataFromAPIbyCity()
+            }
+            else
+            {
+                loadDataFromAPI()
+            }
         }
     }
     
