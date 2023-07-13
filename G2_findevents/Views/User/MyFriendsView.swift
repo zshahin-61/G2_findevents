@@ -49,8 +49,13 @@ struct MyFriendsView: View {
                     for index in indexSet {
                         
                         if let friendID = dbHelper.myFriendsList[index].id {
-                            dbHelper.deleteMyFriend(friendID: friendID)
-                            print("Friend removed at index: \(index)")
+                            dbHelper.deleteMyFriend(friendID: friendID){ isSuccessful in
+                                if(isSuccessful){
+                                    print("Friend removed at index: \(index)")
+                                    dbHelper.myFriendsList.removeAll()
+                                    dbHelper.getFriends()
+                                }
+                            }
                         } else {
                             print("Friend ID is nil at index: \(index)")
                         }
@@ -62,7 +67,7 @@ struct MyFriendsView: View {
         .onAppear {
             print("I am here OnAppear")
           dbHelper.myFriendsList.removeAll()
-           dbHelper.getFriends()
+        dbHelper.getFriends()
         }
     }
 }

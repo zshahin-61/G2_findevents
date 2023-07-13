@@ -566,13 +566,15 @@ class FirestoreController: ObservableObject {
         }
     }
 
-    func deleteMyFriend(friendID: String) {
+    func deleteMyFriend(friendID: String,  completion: @escaping (Bool) -> Void) {
         print(#function, "Deleting Friend with ID: \(friendID)")
 
         self.loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL") ?? ""
 
         if self.loggedInUserEmail.isEmpty {
             print(#function, "Logged in user's email address not available. Can't delete friend")
+            completion(false)
+            return
         } else {
             let userProfileRef = self.db.collection(COLLECTION_USER_PROFILES).document(self.loggedInUserEmail)
 
@@ -581,8 +583,12 @@ class FirestoreController: ObservableObject {
             ]) { error in
                 if let err = error {
                     print(#function, "Unable to remove friend from the user profile: \(err)")
+                    completion(false)
+                    return
                 } else {
                     print(#function, "Friend with ID \(friendID) successfully removed from the user profile")
+                    completion(true)
+                    return
                 }
             }
         }
@@ -643,7 +649,7 @@ class FirestoreController: ObservableObject {
                 }})}
     }
     
-    func addFriend(newFriend: UserProfile) {
+    func addFriend(newFriend: UserProfile, completion: @escaping (Bool) -> Void) {
         
         print(#function, "Trying to get all Friends List.")
         
@@ -653,6 +659,8 @@ class FirestoreController: ObservableObject {
         
         if (self.loggedInUserEmail.isEmpty){
             print(#function, "Logged in user's email address not available. Can't show my Events")
+            completion(false)
+            return
         }
         else{
             
@@ -668,8 +676,12 @@ class FirestoreController: ObservableObject {
             ]) { error in
                 if let error = error {
                     print("Error adding friend: \(error)")
+                    completion(false)
+                    return
                 } else {
                     print("Friend added successfully")
+                    completion(true)
+                    return
                 }
             }
         }
