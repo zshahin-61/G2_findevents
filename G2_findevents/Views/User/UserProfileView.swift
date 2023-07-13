@@ -139,13 +139,21 @@ struct UserProfileView: View {
         }
     }
     func addFriend() {
-        dbHelper.addFriend(newFriend: selectedUser)
-        isFriend = true
+        dbHelper.addFriend(newFriend: selectedUser){
+            isSuccessful in
+            if(isSuccessful){
+                isFriend = true
+            }
+        }
     }
     
     func removeFriend() {
-        dbHelper.removeFriend(friendDelet: selectedUser)
-        isFriend = false
+        dbHelper.removeFriend(friendToDelete: selectedUser){
+            isSuccessful in
+            if(isSuccessful){
+                isFriend = false
+            }
+        }
     }
     func checkfriendship(){
         isFriend = dbHelper.isUserFriend(selectedUser)

@@ -22,13 +22,12 @@ struct MyFriendsView: View {
                 Text("Remove All")
             }
             .buttonStyle(.borderedProminent)
-           
             
             List {
                 if dbHelper.myFriendsList.isEmpty {
                     Text("No Friends exist to Show")
                 }
-                ForEach(dbHelper.myFriendsList, id:\.self) { myFrnd in
+                ForEach(dbHelper.myFriendsList, id:\.id) { myFrnd in
                     HStack {
                         VStack(alignment: .leading) {
                             Text(myFrnd.name)
@@ -36,8 +35,8 @@ struct MyFriendsView: View {
                             Text(myFrnd.contactNumber)
                                 .font(.subheadline)
                         }
-                    
-                       // Text("\(dbHelper.myFriendsList.count)")
+                        Spacer()
+                        Text("\(dbHelper.myFriendsList.count)")
                         
                         Spacer()
                         if let imageData = myFrnd.image {
@@ -48,24 +47,27 @@ struct MyFriendsView: View {
                     }
                 }.onDelete(perform: { indexSet in
                     for index in indexSet {
+                        
                         if let friendID = dbHelper.myFriendsList[index].id {
-                            dbHelper.deleteMyFriend(friendID: friendID)
-                            print("Friend removed at index: \(index)")
-                            dbHelper.myEventsList.removeAll()
-
+                            dbHelper.deleteMyFriend(friendID: friendID){ isSuccessful in
+                                if(isSuccessful){
+                                    print("Friend removed at index: \(index)")
+                                    dbHelper.myFriendsList.removeAll()
+                                    dbHelper.getFriends()
+                                }
+                            }
                         } else {
                             print("Friend ID is nil at index: \(index)")
                         }
-                    
                     }
-                 })
-
-
+                })
             }
             Spacer()
         }//VSTACK
         .onAppear {
-           dbHelper.reloadFriends()
+            print("I am here OnAppear")
+          dbHelper.myFriendsList.removeAll()
+        dbHelper.getFriends()
         }
     }
 }
