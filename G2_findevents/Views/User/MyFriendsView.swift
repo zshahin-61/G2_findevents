@@ -17,6 +17,8 @@ struct MyFriendsView: View {
             
             Button(action: {
                 dbHelper.deleteAllMyFriends()
+                dbHelper.myFriendsList.removeAll()
+                dbHelper.getFriends()
                
             }) {
                 Text("Remove All")
