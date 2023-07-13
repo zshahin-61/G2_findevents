@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5A72C2CA2A4D1248002607D2 /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A72C2C92A4D1248002607D2 /* UserProfileView.swift */; };
-		5A95590A2A49254800A47D02 /* events.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9559092A49254800A47D02 /* events.swift */; };
+		5A95590A2A49254800A47D02 /* Events.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9559092A49254800A47D02 /* Events.swift */; };
 		5A95590D2A4927E800A47D02 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 5A95590C2A4927E800A47D02 /* FirebaseAuth */; };
 		5A95590F2A4927E800A47D02 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 5A95590E2A4927E800A47D02 /* FirebaseDatabase */; };
 		5A9559112A4927E800A47D02 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 5A9559102A4927E800A47D02 /* FirebaseFirestore */; };
@@ -31,9 +31,10 @@
 		5A9C4E6D2A48A50C001F7388 /* FireAuthController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9C4E6C2A48A50C001F7388 /* FireAuthController.swift */; };
 		5A9C4E6F2A48A572001F7388 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9C4E6E2A48A572001F7388 /* UserProfile.swift */; };
 		5AFB399F2A5FB1E900F18892 /* G2-findevents-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5AFB399E2A5FB1E900F18892 /* G2-findevents-Info.plist */; };
-		5AFB39A32A5FB74500F18892 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5AFB39A22A5FB74500F18892 /* GoogleService-Info.plist */; };
 		5F66F3BA2A5F2D6B0042482A /* PhotoLibraryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F66F3B92A5F2D6B0042482A /* PhotoLibraryManager.swift */; };
 		5F66F3BC2A5F83060042482A /* LocationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F66F3BB2A5F83060042482A /* LocationHelper.swift */; };
+		5F66F3C22A60600F0042482A /* FriendsFirestroeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F66F3C12A60600F0042482A /* FriendsFirestroeController.swift */; };
+		5F66F3C42A6063D50042482A /* Friend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F66F3C32A6063D50042482A /* Friend.swift */; };
 		5F8805192A4A3E45001A8C44 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8805182A4A3E45001A8C44 /* MapView.swift */; };
 		5F88051F2A4A84F7001A8C44 /* MyEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F88051E2A4A84F7001A8C44 /* MyEvent.swift */; };
 		5F8805322A4B6783001A8C44 /* ImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8805312A4B6783001A8C44 /* ImagePickerView.swift */; };
@@ -42,7 +43,7 @@
 
 /* Begin PBXFileReference section */
 		5A72C2C92A4D1248002607D2 /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
-		5A9559092A49254800A47D02 /* events.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = events.swift; sourceTree = "<group>"; };
+		5A9559092A49254800A47D02 /* Events.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Events.swift; sourceTree = "<group>"; };
 		5A9559142A4929B900A47D02 /* EventsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsListView.swift; sourceTree = "<group>"; };
 		5A9559162A4929CD00A47D02 /* MyEventsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyEventsView.swift; sourceTree = "<group>"; };
 		5A9559182A4929DD00A47D02 /* SearchUsersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUsersView.swift; sourceTree = "<group>"; };
@@ -62,9 +63,10 @@
 		5A9C4E6C2A48A50C001F7388 /* FireAuthController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FireAuthController.swift; sourceTree = "<group>"; };
 		5A9C4E6E2A48A572001F7388 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		5AFB399E2A5FB1E900F18892 /* G2-findevents-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "G2-findevents-Info.plist"; sourceTree = "<group>"; };
-		5AFB39A22A5FB74500F18892 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../G2_findevents 2/G2_findevents/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5F66F3B92A5F2D6B0042482A /* PhotoLibraryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibraryManager.swift; sourceTree = "<group>"; };
 		5F66F3BB2A5F83060042482A /* LocationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationHelper.swift; sourceTree = "<group>"; };
+		5F66F3C12A60600F0042482A /* FriendsFirestroeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsFirestroeController.swift; sourceTree = "<group>"; };
+		5F66F3C32A6063D50042482A /* Friend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Friend.swift; sourceTree = "<group>"; };
 		5F8805182A4A3E45001A8C44 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		5F88051E2A4A84F7001A8C44 /* MyEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyEvent.swift; sourceTree = "<group>"; };
 		5F8805312A4B6783001A8C44 /* ImagePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerView.swift; sourceTree = "<group>"; };
@@ -89,7 +91,6 @@
 		5A9C4E492A48A084001F7388 = {
 			isa = PBXGroup;
 			children = (
-				5AFB39A22A5FB74500F18892 /* GoogleService-Info.plist */,
 				5AFB399E2A5FB1E900F18892 /* G2-findevents-Info.plist */,
 				5A9C4E542A48A084001F7388 /* G2_findevents */,
 				5A9C4E532A48A084001F7388 /* Products */,
@@ -130,8 +131,9 @@
 			isa = PBXGroup;
 			children = (
 				5A9C4E6E2A48A572001F7388 /* UserProfile.swift */,
-				5A9559092A49254800A47D02 /* events.swift */,
+				5A9559092A49254800A47D02 /* Events.swift */,
 				5F88051E2A4A84F7001A8C44 /* MyEvent.swift */,
+				5F66F3C32A6063D50042482A /* Friend.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -141,6 +143,7 @@
 			children = (
 				5A9C4E6A2A48A3D3001F7388 /* FirestoreController.swift */,
 				5A9C4E6C2A48A50C001F7388 /* FireAuthController.swift */,
+				5F66F3C12A60600F0042482A /* FriendsFirestroeController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -269,7 +272,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				5A9C4E5D2A48A085001F7388 /* Preview Assets.xcassets in Resources */,
-				5AFB39A32A5FB74500F18892 /* GoogleService-Info.plist in Resources */,
 				5A9C4E5A2A48A085001F7388 /* Assets.xcassets in Resources */,
 				5AFB399F2A5FB1E900F18892 /* G2-findevents-Info.plist in Resources */,
 			);
@@ -292,7 +294,7 @@
 				5A9559192A4929DD00A47D02 /* SearchUsersView.swift in Sources */,
 				5A9C4E6F2A48A572001F7388 /* UserProfile.swift in Sources */,
 				5F8805322A4B6783001A8C44 /* ImagePickerView.swift in Sources */,
-				5A95590A2A49254800A47D02 /* events.swift in Sources */,
+				5A95590A2A49254800A47D02 /* Events.swift in Sources */,
 				5A9559272A49EA4200A47D02 /* ProfileView.swift in Sources */,
 				5F66F3BC2A5F83060042482A /* LocationHelper.swift in Sources */,
 				5F8805192A4A3E45001A8C44 /* MapView.swift in Sources */,
@@ -301,9 +303,11 @@
 				5A9559172A4929CD00A47D02 /* MyEventsView.swift in Sources */,
 				5A9C4E692A48A2BA001F7388 /* SignInView.swift in Sources */,
 				5A9C4E562A48A084001F7388 /* G2_findeventsApp.swift in Sources */,
+				5F66F3C42A6063D50042482A /* Friend.swift in Sources */,
 				5A9559212A49E13F00A47D02 /* EventDetailsView.swift in Sources */,
 				5A9C4E6D2A48A50C001F7388 /* FireAuthController.swift in Sources */,
 				5A9559252A49E50500A47D02 /* RootView.swift in Sources */,
+				5F66F3C22A60600F0042482A /* FriendsFirestroeController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
