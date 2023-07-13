@@ -76,6 +76,7 @@ struct EventsListView: View {
         }
         .padding()
         .onAppear {
+            locationHelper.checkPermission()
             loadDataFromAPI()
         }
     }
