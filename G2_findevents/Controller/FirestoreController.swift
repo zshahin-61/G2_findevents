@@ -675,32 +675,39 @@ class FirestoreController: ObservableObject {
         }
     }//
 
-    func removeFriend(friendToDelete: UserProfile ){
-        print(#function, "Trying to remove a  Friend \(friendToDelete.name).")
-        
+    func removeFriend(friendToDelete: UserProfile , completion: @escaping (Bool) -> Void) {
+        print(#function, "Trying to remove a friend: \(friendToDelete.name).")
         
         self.loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL") ?? ""
         
-        
-        if (self.loggedInUserEmail.isEmpty){
-            print(#function, "Logged in user's email address not available. Can't show my Events")
+        if self.loggedInUserEmail.isEmpty {
+            print(#function, "Logged in user's email address not available. Can't remove friend.")
+            completion(false)
+            return
         }
-        else{
-            
-            let friendID = friendToDelete.id ?? ""
-            
-            // Update the current user's profile in Firestore
-            let userProfilesCollection = db.collection(COLLECTION_USER_PROFILES)
-            let currentUserProfileRef = userProfilesCollection.document(loggedInUserEmail)
-            
-            currentUserProfileRef.updateData([
-                "friends": FieldValue.arrayRemove([friendID])
-            ]) { error in
-                if let error = error {
-                    print("Error removing friend: \(error)")
-                } else {
-                    print("Friend removed successfully")
-                }
+        
+        guard let friendID = friendToDelete.id else {
+            print(#function, "Friend ID not available. Can't remove friend.")
+            completion(false)
+            return
+        }
+        
+        // Update the current user's profile in Firestore
+        let userProfilesCollection = db.collection(COLLECTION_USER_PROFILES)
+        let currentUserProfileRef = userProfilesCollection.document(loggedInUserEmail)
+        
+        currentUserProfileRef.updateData([
+            "friends": FieldValue.arrayRemove([friendID])
+        ]) { error in
+            if let error = error {
+                print("Error removing friend: \(error)")
+                completion(false)
+            } else {
+                print("Friend removed successfully")
+                            
+                            
+                            
+                            completion(true)
             }
         }
     }
