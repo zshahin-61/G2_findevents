@@ -66,7 +66,7 @@ struct MyFriendsView: View {
         }//VSTACK
         .onAppear {
             print("I am here OnAppear")
-          dbHelper.myFriendsList.removeAll()
+         dbHelper.myFriendsList.removeAll()
         dbHelper.getFriends()
         }
     }
