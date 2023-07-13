@@ -17,6 +17,7 @@ struct MyFriendsView: View {
             
             Button(action: {
                 dbHelper.deleteAllMyFriends()
+               
             }) {
                 Text("Remove All")
             }
@@ -26,43 +27,42 @@ struct MyFriendsView: View {
                 if dbHelper.myFriendsList.isEmpty {
                     Text("No Friends exist to Show")
                 }
-                
                 ForEach(dbHelper.myFriendsList, id:\.id) { myFrnd in
                     HStack {
                         VStack(alignment: .leading) {
-                                                Text(myFrnd.name)
-                                                    .font(.headline)
-                                                Text(myFrnd.contactNumber)
-                                                    .font(.subheadline)
-                                            }
+                            Text(myFrnd.name)
+                                .font(.headline)
+                            Text(myFrnd.contactNumber)
+                                .font(.subheadline)
+                        }
+                        Spacer()
+                        Text("\(dbHelper.myFriendsList.count)")
+                        
                         Spacer()
                         if let imageData = myFrnd.image {
                             Image(uiImage: UIImage(data: imageData)!)
                                 .resizable()
                                 .frame(width: 100, height: 100)
                         }
-                      
                     }
                 }.onDelete(perform: { indexSet in
-                    for index in indexSet{
-                        //get the  object to delete
-                        let friend = self.dbHelper.myFriendsList[index]
-                        //delete the document from database
+                    for index in indexSet {
                         
-                        if let friendID = friend.id {
-                                   self.dbHelper.deleteMyFriend(friendID: friendID)
-                                   print("friendID: \(friendID)")
-                               } else {
-                                   print("Friend ID is nil")
-                               }
+                        if let friendID = dbHelper.myFriendsList[index].id {
+                            dbHelper.deleteMyFriend(friendID: friendID)
+                            print("Friend removed at index: \(index)")
+                        } else {
+                            print("Friend ID is nil at index: \(index)")
+                        }
                     }
                     
                 })
             }
             Spacer()
-        }
+        }//VSTACK
         .onAppear {
-            dbHelper.myFriendsList.removeAll()
+            print("I am here OnAppear")
+          dbHelper.myFriendsList.removeAll()
             dbHelper.getFriends()
         }
     }

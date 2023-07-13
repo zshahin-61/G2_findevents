@@ -565,17 +565,18 @@ class FirestoreController: ObservableObject {
             }
         }
     }
+    
 
     func deleteMyFriend(friendID: String) {
         print(#function, "Deleting Friend with ID: \(friendID)")
-        
+
         self.loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL") ?? ""
-        
+
         if self.loggedInUserEmail.isEmpty {
             print(#function, "Logged in user's email address not available. Can't delete friend")
         } else {
             let userProfileRef = self.db.collection(COLLECTION_USER_PROFILES).document(self.loggedInUserEmail)
-            
+
             userProfileRef.updateData([
                 "friends": FieldValue.arrayRemove([friendID])
             ]) { error in
