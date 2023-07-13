@@ -565,7 +565,6 @@ class FirestoreController: ObservableObject {
             }
         }
     }
-    
 
     func deleteMyFriend(friendID: String) {
         print(#function, "Deleting Friend with ID: \(friendID)")
@@ -588,6 +587,7 @@ class FirestoreController: ObservableObject {
             }
         }
     }
+   
     func isUserFriend(_ selectedUser: UserProfile) -> Bool {
         guard let loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL"), !loggedInUserEmail.isEmpty else {
             print(#function, "Logged in user's email address not available. Can't check friend status.")
@@ -675,8 +675,8 @@ class FirestoreController: ObservableObject {
         }
     }//
 
-    func removeFriend(friendDelet: UserProfile){
-        print(#function, "Trying to remove a  Friend \(friendDelet.name).")
+    func removeFriend(friendToDelete: UserProfile ){
+        print(#function, "Trying to remove a  Friend \(friendToDelete.name).")
         
         
         self.loggedInUserEmail = UserDefaults.standard.string(forKey: "KEY_EMAIL") ?? ""
@@ -687,7 +687,7 @@ class FirestoreController: ObservableObject {
         }
         else{
             
-            let friendID = friendDelet.id ?? ""
+            let friendID = friendToDelete.id ?? ""
             
             // Update the current user's profile in Firestore
             let userProfilesCollection = db.collection(COLLECTION_USER_PROFILES)
