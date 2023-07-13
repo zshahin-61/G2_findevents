@@ -41,7 +41,7 @@ struct EventsListView: View {
                         //calculateMapRegion()
                         
                     }){
-                        Text("Search")
+                        Image(systemName: "magnifyingglass")
                     }
                 }
                 VStack {
@@ -70,13 +70,27 @@ struct EventsListView: View {
                             calculateMapRegion()
                         }
                     }
+                    else{
+                        Text("Sorry, There are no events near you")
+                            //.foregroundColor(Color.red)
+                            .bold()
+                    }
                 }
                 .padding()
             }
         }
         .padding()
         .onAppear {
-            loadDataFromAPI()
+            locationHelper.checkPermission()
+            evntList.removeAll()
+            if(!self.selectedCity.isEmpty)
+            {
+                loadDataFromAPIbyCity()
+            }
+            else
+            {
+                loadDataFromAPI()
+            }
         }
     }
     
