@@ -10,7 +10,6 @@ import MapKit
 
 struct MyEventsView: View {
     
-    @EnvironmentObject var locationHelper : LocationHelper
     
     @EnvironmentObject var authHelper : FireAuthController
     @EnvironmentObject var dbHelper : FirestoreController
@@ -70,7 +69,7 @@ struct MyEventsView: View {
         }//VSTACK
         .onAppear {
             //check/request for permissions
-            self.locationHelper.checkPermission()
+            //self.locationHelper.checkPermission()
             
         }
     }

@@ -101,7 +101,7 @@ struct EventsListView: View {
             sourceCoordinates = CLLocationCoordinate2D(latitude: 43.64732, longitude: -79.38279)
         }
         
-        
+        print(#function, self.locationHelper.currentLocation)
         
         // 1. Specify the API URL
         let apiUrlString = "https://api.seatgeek.com/2/events?lat=\(sourceCoordinates.latitude)&lon=\(sourceCoordinates.longitude)&datetime_utc.gt=\(getCurrentDate())&client_id=MzQ1MjY2NjN8MTY4Nzc0MzYxNi45MzE5NzMy" //"https://api.seatgeek.com/2/events?geoip=true&datetime_utc.gt=\(getCurrentDate())&client_id=MzQ1MjY2NjN8MTY4Nzc0MzYxNi45MzE5NzMy"
