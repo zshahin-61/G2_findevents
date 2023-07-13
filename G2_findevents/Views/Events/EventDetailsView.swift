@@ -35,23 +35,46 @@ struct EventDetailsView: View {
                         }
                     }
                 }
-                Text("Local Date:\(event.datetime_local)")
+                
+                HStack{
+                    Text("Local Date:")
+                    Spacer()
+                    Text("\(dateFormatterForShow(date: event.datetime_local))")
+                }
+                
                 
                 if let price = event.stats.average_price{
-                    Text("Price: $\(price)")
+                    HStack{
+                        Text("Price:")
+                        Spacer()
+                        Text("$\(price)")
+                    }
                 }
                 Section(header:Text("Venue")){
                     if let  name = event.venue.name{
-                        Text("Name: \(name)")
+                        HStack{
+                            Text("Name:")
+                            Spacer()
+                            Text("\(name)")
+                        }
                     }
                     if let location = event.venue.display_location{
-                        Text("Location: \(location)")
+                                    HStack{
+                                        Text("Location:")
+                                        Spacer()
+                                        Text("\(location)")
+                                    }
                     }
+                    
                     if let city = event.venue.city{
-                        Text("City: \(city)")
+                        HStack{
+                            Text("City:")
+                            Spacer()
+                            Text("\(city)")
+                        }
                     }
-                }
-            }//List
+                } // section
+            } //List
             Spacer()
             Button(action:{
                 var counter = 0
@@ -105,5 +128,18 @@ struct EventDetailsView: View {
         } else {
             return nil
         }
+    }
+    
+    func dateFormatterForShow(date: String) -> String {
+        
+        guard let myDate = formattedDate(dateString: date) else{
+            return date
+        }
+        
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        
+        return formatter.string(from: myDate)
     }
 }

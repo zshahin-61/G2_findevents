@@ -71,7 +71,9 @@ struct EventsListView: View {
                         }
                     }
                     else{
-                        Text("Sorry, There are no events near you").foregroundColor(Color.red).bold()
+                        Text("Sorry, There are no events near you")
+                            //.foregroundColor(Color.red)
+                            .bold()
                     }
                 }
                 .padding()
