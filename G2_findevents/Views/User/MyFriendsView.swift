@@ -55,7 +55,6 @@ struct MyFriendsView: View {
                             print("Friend ID is nil at index: \(index)")
                         }
                     }
-                    
                 })
             }
             Spacer()
@@ -63,7 +62,7 @@ struct MyFriendsView: View {
         .onAppear {
             print("I am here OnAppear")
           dbHelper.myFriendsList.removeAll()
-            dbHelper.getFriends()
+           dbHelper.getFriends()
         }
     }
 }
