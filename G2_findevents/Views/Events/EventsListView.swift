@@ -95,11 +95,11 @@ struct EventsListView: View {
         let sourceCoordinates : CLLocationCoordinate2D
         //let region : MKCoordinateRegion
         
-//        if (self.locationHelper.currentLocation != nil){
-//            sourceCoordinates = self.locationHelper.currentLocation!.coordinate
-//        }else{
+        if (self.locationHelper.currentLocation != nil){
+            sourceCoordinates = self.locationHelper.currentLocation!.coordinate
+        }else{
             sourceCoordinates = CLLocationCoordinate2D(latitude: 43.64732, longitude: -79.38279)
-       // }
+        }
         
         
         
