@@ -491,17 +491,16 @@ class FirestoreController: ObservableObject {
                         completion([])
                     } else {
                         var results: [UserProfile] = []
-                        print("querySnapshot: \(querySnapshot)")
+                        print("querySnapshot-----:--- \(querySnapshot)")
 
                      //   for document in querySnapshot!.documents
                         if let documents = querySnapshot?.documents {
-                            print("documents count: \(documents.count)")
+                            print("documents count--:--- \(documents.count)")
                         for document in documents{
                             do {
-                                print("@@@@@@@@2\(querySnapshot?.documents)")
 
                                 if let userProfile = try document.data(as: UserProfile?.self) {
-                                    print("@@@@@@@@3\(userProfile)")
+                                    print("@--2-2-2-2-2--2\(userProfile)")
 
                                     if userProfile.id != loggedInUserEmail{
                                         results.append(userProfile)
