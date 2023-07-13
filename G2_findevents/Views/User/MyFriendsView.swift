@@ -35,8 +35,7 @@ struct MyFriendsView: View {
                             Text(myFrnd.contactNumber)
                                 .font(.subheadline)
                         }
-                        Spacer()
-                        Text("\(dbHelper.myFriendsList.count)")
+                    
                         
                         Spacer()
                         if let imageData = myFrnd.image {

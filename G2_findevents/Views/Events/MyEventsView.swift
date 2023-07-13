@@ -34,7 +34,7 @@ struct MyEventsView: View {
                 
                 ForEach(dbHelper.myEventsList, id:\.id){
                     myEvt in
-                    Section{
+                    VStack{
                         Text(myEvt.title).bold().foregroundColor(Color.blue)
                         AsyncImage(url: URL(string: myEvt.image)){ image in
                             image
