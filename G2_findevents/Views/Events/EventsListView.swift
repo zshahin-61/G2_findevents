@@ -41,7 +41,7 @@ struct EventsListView: View {
                         //calculateMapRegion()
                         
                     }){
-                        Text("Search")
+                        Image(systemName: "magnifyingglass")
                     }
                 }
                 VStack {
