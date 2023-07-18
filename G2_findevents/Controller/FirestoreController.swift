@@ -491,9 +491,8 @@ class FirestoreController: ObservableObject {
                         completion([])
                     } else {
                         var results: [UserProfile] = []
-                        print("querySnapshot-----:--- \(querySnapshot)")
+                      
 
-                     //   for document in querySnapshot!.documents
                         if let documents = querySnapshot?.documents {
                             print("documents count--:--- \(documents.count)")
                         for document in documents{
